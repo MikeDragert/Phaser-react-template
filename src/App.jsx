@@ -87,6 +87,9 @@ function App ()
                     <button className="button" onClick={addSprite}>Add New Sprite</button>
                 </div>
             </div>
+            <div>
+              Workbench Open
+            </div>
         </div>
     )
 }

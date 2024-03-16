@@ -31,8 +31,6 @@ export class Game extends Player {
     this.cameras.main.setBounds(0, 0, ground.width, ground.height);
     this.cameras.main.startFollow(this.player);
 
-   
-
     EventBus.emit("current-scene-ready", this);
   }
 

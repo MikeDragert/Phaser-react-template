@@ -87,6 +87,12 @@ export class Player extends Scene {
       -500,
       500
     );
+
+    player.body.velocity.y = Phaser.Math.Clamp(
+      player.body.velocity.y,
+      -1000,
+      1000
+    );
   }
 
   changeScene() {
