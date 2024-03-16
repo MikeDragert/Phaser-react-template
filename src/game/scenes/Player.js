@@ -1,9 +1,9 @@
 import { EventBus } from "../EventBus";
 import { Scene } from "phaser";
 
-export class myScene extends Scene {
-  constructor() {
-    super("myScene");
+export class Player extends Scene {
+  constructor(sceneName) {
+    super(sceneName);
   }
 
 
@@ -13,57 +13,14 @@ export class myScene extends Scene {
 
   jumpCount = 0;
   jumpPower = 0;
+
   create() {
     
-    this.player = this.physics.add.sprite(120, 980, "NinjaCat");
-    this.player.setBounce(0.2);
-    this.player.body.setSize(80, 190);
-    this.player.setOffset(40, 20);
-    this.player.setCollideWorldBounds(true);
-
-    this.cameras.main.setBounds(0, 0, ground.width, ground.height);
-    this.cameras.main.startFollow(this.player);
-
-   
-
     this.cursors = this.input.keyboard.createCursorKeys();
 
-    this.anims.create({
-      key: "player-walk",
-      framreate: 30,
-      frames: this.anims.generateFrameNames("NinjaCat", {
-        start: 1,
-        end: 8,
-        prefix: "NinjaCat_walk_0",
-        suffix: ".png",
-      }),
-      repeat: -1,
-    });
+    
 
-    this.anims.create({
-      key: "player-idle",
-      framreate: 10,
-      frames: this.anims.generateFrameNames("NinjaCat", {
-        start: 1,
-        end: 2,
-        prefix: "NinjaCat_idle_0",
-        suffix: ".png",
-      }),
-      repeat: -1,
-    });
-
-    this.anims.create({
-      key: "player-jump",
-      framrate: 30,
-      frames: this.anims.generateFrameNames("NinjaCat", {
-        start: 1,
-        end: 6,
-        prefix: "NinjaCat_jump_0",
-        suffix: ".png",
-      }),
-    });
-
-    EventBus.emit("current-scene-ready", this);
+    
   }
 
   update() {
@@ -112,8 +69,6 @@ export class myScene extends Scene {
 
     if (this.cursors.up.isDown && this.jumpCount <= 2 && this.jumpPower < 600) {
       this.jumpPower += 50;
-      console.log("HERERER");
-      console.log(this.jumpCount);
       if (upJustPressed) {
         this.jumpCount++
       }
@@ -125,8 +80,6 @@ export class myScene extends Scene {
       player.anims.play("player-jump", true);
       player.anims.msPerFrame = 30;
       this.jumpPower = 0;
-      console.log("Heree");
-      console.log(this.jumpCount);
     }
 
     player.body.velocity.x = Phaser.Math.Clamp(
