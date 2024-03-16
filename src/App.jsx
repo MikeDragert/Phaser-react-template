@@ -8,13 +8,15 @@ function App ()
     //  References to the PhaserGame component (game and scene are exposed)
     const phaserRef = useRef();
    
-    const changeScene = () => {
+    const changeScene = (event) => {
 
         const scene = phaserRef.current.scene;
 
         if (scene)
         {
             scene.changeScene();
+            console.log('button pressed')
+            event.target.blur()
         }
     }
 
