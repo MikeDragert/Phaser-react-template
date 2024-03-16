@@ -1,12 +1,11 @@
 import { EventBus } from "../EventBus";
 import { Scene } from "phaser";
 
-export class Game extends Scene {
+export class myScene extends Scene {
   constructor() {
-    super("Game");
+    super("myScene");
   }
 
-  #player = Phaser.Physics.Arcade.Sprite;
 
   init() {
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -15,16 +14,7 @@ export class Game extends Scene {
   jumpCount = 0;
   jumpPower = 0;
   create() {
-    this.add.image(400, 300, "sky").setScale(20);
-
-    const map = this.make.tilemap({ key: "tilemap" });
-    const groundTileSet = map.addTilesetImage("spritesheet_ground", "ground");
-    const ground = map.createLayer("ground", groundTileSet, 0, 0);
-    ground.setCollisionByExclusion([-1]);
-
-    this.physics.world.bounds.width = ground.width;
-    this.physics.world.bounds.height = ground.height;
-
+    
     this.player = this.physics.add.sprite(120, 980, "NinjaCat");
     this.player.setBounce(0.2);
     this.player.body.setSize(80, 190);
@@ -34,7 +24,7 @@ export class Game extends Scene {
     this.cameras.main.setBounds(0, 0, ground.width, ground.height);
     this.cameras.main.startFollow(this.player);
 
-    this.physics.add.collider(this.player, ground);
+   
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -139,7 +129,6 @@ export class Game extends Scene {
       console.log(this.jumpCount);
     }
 
-    // Cap the player's horizontal velocity to avoid unrealistic speeds
     player.body.velocity.x = Phaser.Math.Clamp(
       player.body.velocity.x,
       -500,
@@ -151,4 +140,3 @@ export class Game extends Scene {
     this.scene.start("GameOver");
   }
 }
-

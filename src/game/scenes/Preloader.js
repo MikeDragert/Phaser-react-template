@@ -34,6 +34,18 @@ export class Preloader extends Scene
 
         this.load.image('logo', 'logo.png');
         this.load.image('star', 'star.png');
+        this.load.image('sky', 'skies/sky.png')
+        this.load.atlas(
+          "NinjaCat",
+          "sprites/JsonArrayCat.png",
+          "sprites/JsonArrayCat.json",
+          { frameWidth: 20, frameHeight: 48 }
+        );
+        this.load.image("ground", "ground/spritesheet_ground.png");
+        this.load.tilemapTiledJSON(
+          "tilemap",
+          "maps/FirstAttempt.json"
+        );
     }
 
     create ()
