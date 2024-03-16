@@ -12,6 +12,12 @@ const config = {
     width: 1024,
     height: 768,
     parent: 'game-container',
+    physics: {
+      default: 'arcade',
+      arcade: {
+          gravity: { y: 800 }
+      }
+    },
     backgroundColor: '#028af8',
     scene: [
         Boot,
