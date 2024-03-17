@@ -6,7 +6,6 @@ export class Player extends Scene {
     super(sceneName);
   }
 
-
   init() {
     this.cursors = this.input.keyboard.createCursorKeys();
   }
@@ -15,18 +14,13 @@ export class Player extends Scene {
   jumpPower = 0;
 
   create() {
-    
     this.cursors = this.input.keyboard.createCursorKeys();
-
-    
-
-    
   }
 
   update() {
     let player = this.player;
     const upJustReleased = Phaser.Input.Keyboard.JustUp(this.cursors.up);
-    const upJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.up)
+    const upJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.up);
     const right = this.cursors.right.isDown;
     const left = this.cursors.left.isDown;
     const onFloor = player.body.onFloor();
@@ -67,18 +61,20 @@ export class Player extends Scene {
       }
     }
 
-    if (this.cursors.up.isDown && this.jumpCount <= 2 && this.jumpPower < 600) {
-      this.jumpPower += 50;
-      if (upJustPressed) {
-        this.jumpCount++
+    if (this.cursors.up.isDown) {
+      if (this.cursors.up.isDown && this.jumpCount <= 2 && this.jumpPower === 0) {
+        
+        player.anims.play("player-jump", true);
+        player.anims.msPerFrame = 30;
+        this.jumpPower = 1;
+        player.body.velocity.y = -400;
+      } else if (this.jumpPower > 0 && this.jumpPower < 31) {
+        
+        this.jumpPower++;
+        player.body.velocity.y = -400 + this.jumpPower * 7;
       }
-    }
-
-    if (upJustReleased && this.jumpCount < 2) {
-      let jumpVelocity = this.jumpPower + 200
-      player.body.setVelocityY(-jumpVelocity); // Apply vertical velocity to jump
-      player.anims.play("player-jump", true);
-      player.anims.msPerFrame = 30;
+    } else {
+      
       this.jumpPower = 0;
     }
 
