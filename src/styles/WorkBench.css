@@ -1,0 +1,34 @@
+.codeBlock-Number {
+  background-color: pink;
+  width: 50px;
+  border: 1px;
+  border-color: black;
+  border-style: solid;
+}
+
+.codeBlock-Operator {
+  background-color: rgb(116, 211, 92);
+  width: 50px;
+  border: 1px;
+  border-color: black;
+  border-style: solid;
+  
+}
+
+.codeBlock-Function {
+  background-color:rgb(34, 172, 236);
+  width: 100px;
+  border: 1px;
+  border-color: black;
+  border-style: solid;
+  
+}
+
+.workbench {
+  background-color: rgb(235, 234, 234);
+  width: 200px;
+  height: 300px;
+  border: 1px;
+  border-color: black;
+  border-style: solid;
+}

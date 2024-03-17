@@ -7,10 +7,13 @@ export class Game extends Scene {
   }
 
   playerStats = {
-    jumpPower: 500,
+    jumpPower: 100,
     speed: 4
   };
 
+  setJumpPower(newJumpPower) {
+    this.playerStats.jumpPower = newJumpPower;
+  }
 
   create() {
     const map = this.make.tilemap({ key: "map", tileWidth: 64, tileHeight: 64 });
@@ -46,7 +49,46 @@ export class Game extends Scene {
     this.seven = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SEVEN);
     this.eight = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.EIGHT);
 
+    //watch for key down and trigger message to app.jsx
+    this.input.keyboard.on('keydown', (event) => {
+      if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ONE){
+       this.sendKeyPressMessage(event.keyCode, true)
+      }
+    })
+
+    //watch for key up and trigger message to app.jsx
+    this.input.keyboard.on('keyup', (event) => {
+      if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ONE){
+       this.sendKeyPressMessage(event.keyCode, false)
+      }
+    })
+
     EventBus.emit('current-scene-ready', this);
+  }
+  
+  //key events stored for app.jsx to consume
+  sendKeyEvents = [];
+  //track state changes on keypress for toggleKey method
+  keyToggles = {};
+
+  //can be used to track if key state has changed (up vs down) and only return true if it has changed
+  toggleKey = function(keyCode, isDown) {
+  if ((this.keyToggles[keyCode] === undefined) ||
+      (this.keyToggles[keyCode] !== isDown)) {
+      this.keyToggles[keyCode] = isDown;
+      return true; 
+    }
+    return false;
+  }
+
+  //this logs the keypress in an scene array, and then sends an event
+  // to the react side of things to notify it that there is a key press to handle
+  //app.jsx will see the keyEvent and check the contents of sendKeyEvents array
+  sendKeyPressMessage = function(keyCode, isDown) {
+    if (this.toggleKey(keyCode, isDown)) {
+      this.sendKeyEvents.push({keyCode: keyCode, isDown: isDown})
+      EventBus.emit('keyEvent', this);
+    }
   }
 
   update(now, delta) {
