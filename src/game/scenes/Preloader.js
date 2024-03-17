@@ -36,6 +36,7 @@ export class Preloader extends Scene {
       { frameWidth: 20, frameHeight: 48 }
     );
     this.load.image("ground", "ground/spritesheet_ground.png");
+    this.load.image("items", "items/spritesheet_items.png")
     this.load.tilemapTiledJSON("tilemap", "maps/FirstAttempt.json");
   }
 
