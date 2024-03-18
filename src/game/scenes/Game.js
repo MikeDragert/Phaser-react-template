@@ -22,6 +22,8 @@ export class Game extends Player {
   score = 0;
   scoreText;
 
+  collectedItems = [];
+
   create() {
     this.isPaused = false;
 
@@ -91,6 +93,7 @@ export class Game extends Player {
       coins.removeTileAt(tile.x, tile.y);
       this.score++;
       this.scoreText.setText(this.score);
+      this.collectedItems.push({"x": tile.x, "y": tile.y})
       return false;
     }
 
@@ -102,11 +105,14 @@ export class Game extends Player {
   update() {
     if (Phaser.Input.Keyboard.JustDown(this.s)) {
       console.log("SSSSSSSS");
-      console.log(this.map.layers);
+      localStorage.setItem("items", JSON.stringify(this.collectedItems));
     }
 
     if (Phaser.Input.Keyboard.JustDown(this.r)) {
       console.log("RRRRR");
+      const Items = JSON.parse(localStorage.getItem("items"));
+      localStorage.removeItem("items")
+      console.log(Items);
     }
 
     super.update();

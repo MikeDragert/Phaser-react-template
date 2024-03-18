@@ -8,7 +8,7 @@ export class Tutorial extends Player {
   changeScene() {
     this.scene.start("Game");
   }
-  
+
   triggerCheckpoint(sprite, tile) {
     this.text.setText("Press E to open inventory");
     console.log("HERE");
@@ -24,9 +24,16 @@ export class Tutorial extends Player {
 
   score = 0;
   scoreText;
-  collectedCoins = {
 
-  };
+  collectedItems = [];
+  spritePosition = JSON.parse(localStorage.getItem(this.spritePosition)) ||{"spriteX": 300, "spriteY": 5500}
+
+  saveProgress(sprite, tile) {
+    console.log(sprite.x, sprite.y);
+    this.spritePosition = { "spriteX": sprite.x, "spriteY": sprite.y}
+    localStorage.setItem("items", JSON.stringify(this.collectedItems));
+    localStorage.setItem("spritePosition", JSON.stringify(this.spritePosition))
+  }
 
   create() {
     this.isPaused = false;
@@ -40,7 +47,7 @@ export class Tutorial extends Player {
 
     this.add.image(400, 300, "sky").setScale(20);
 
-    this.player = this.physics.add.sprite(300, 5500, "NinjaCat");
+    this.player = this.physics.add.sprite(this.spritePosition.spriteX, this.spritePosition.spriteY, "NinjaCat");
     this.player.setBounce(0.2);
     this.player.body.setSize(80, 190);
     this.player.setOffset(40, 20);
@@ -52,11 +59,11 @@ export class Tutorial extends Player {
       "ground"
     );
     const itemsTileSet = this.map.addTilesetImage("spritesheet_items", "items");
-    const tilesTileSet = this.map.addTilesetImage("spritesheet_tiles", "tiles")
+    const tilesTileSet = this.map.addTilesetImage("spritesheet_tiles", "tiles");
     const ground = this.map.createLayer("ground", groundTileSet, 0, 0);
     const items = this.map.createLayer("checkpoints", itemsTileSet, 0, 0);
     const coins = this.map.createLayer("coinLayer", itemsTileSet, 0, 0);
-    const tiles = this.map.createLayer("tileLayer", tilesTileSet, 0,0)
+    const tiles = this.map.createLayer("tileLayer", tilesTileSet, 0, 0);
     ground.setCollisionByExclusion([-1]);
 
     this.physics.world.bounds.width = ground.width;
@@ -72,6 +79,8 @@ export class Tutorial extends Player {
       this.triggerCheckpoint,
       this
     );
+
+    items.setTileIndexCallback([145, 155, 154, 138], this.saveProgress, this);
 
     this.physics.add.overlap(this.player, items);
     this.physics.add.overlap(this.player, coins);
@@ -94,25 +103,43 @@ export class Tutorial extends Player {
     this.scoreText.setScrollFactor(0);
 
     function collectCoins(sprite, tile) {
-      console.log("COINS");
-      console.log(this.map.layers[2].data);
       coins.removeTileAt(tile.x, tile.y);
       this.score++;
       this.scoreText.setText(this.score);
-      console.log(tile.x, tile.y);
-      
+      const cords = {
+        x: tile.x,
+        y: tile.y,
+      };
+      this.collectedItems.push(cords);
       return false;
     }
 
     coins.setTileIndexCallback(158, collectCoins, this);
+
+    let itemsToRemove = JSON.parse(localStorage.getItem("items")) || false;
+    if (itemsToRemove) {
+      for (let item of itemsToRemove) {
+        console.log(item.x, item.y);
+
+        coins.removeTileAt(item.x, item.y);
+      }
+      console.log(itemsToRemove);
+    }
 
     EventBus.emit("current-scene-ready", this);
   }
 
   update() {
     
+    if (Phaser.Input.Keyboard.JustDown(this.r)) {
+      console.log("RRRRR");
+      const Items = JSON.parse(localStorage.getItem("items"));
+      localStorage.removeItem("items");
+      this.collectedItems = [];
+      console.log(Items);
+    }
 
     super.update();
   }
-
 }
+
