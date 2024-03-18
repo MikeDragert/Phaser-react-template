@@ -4,6 +4,7 @@ import { GameOver } from './scenes/GameOver';
 import { MainMenu } from './scenes/MainMenu';
 import Phaser from 'phaser';
 import { Preloader } from './scenes/Preloader';
+import { Tutorial } from './scenes/Tutorial'
 
 
 // Find out more information about the Game Config at:
@@ -19,7 +20,8 @@ const config = {
         Preloader,
         MainMenu,
         Game,
-        GameOver
+        GameOver,
+        Tutorial
     ],
     physics: {
       default: "arcade",

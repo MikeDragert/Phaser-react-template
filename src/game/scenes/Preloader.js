@@ -35,9 +35,14 @@ export class Preloader extends Scene {
       "sprites/JsonArrayCat.json",
       { frameWidth: 20, frameHeight: 48 }
     );
+
     this.load.image("ground", "ground/spritesheet_ground.png");
     this.load.image("items", "items/spritesheet_items.png")
+    this.load.image("hud", "tiles/spritesheet_tiles.png");
+    this.load.image("tiles", "tiles/spritesheet_tiles.png");
+
     this.load.tilemapTiledJSON("tilemap", "maps/FirstAttempt.json");
+    this.load.tilemapTiledJSON("tutorial", "maps/tutorial.json");
   }
 
   create() {

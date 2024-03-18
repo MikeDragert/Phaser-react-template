@@ -1,16 +1,19 @@
 import { EventBus } from "../EventBus";
-import { Scene } from "phaser";
 import { Player } from "./Player";
 
-export class Game extends Player {
+export class Tutorial extends Player {
   constructor() {
-    super("Game");
+    super("Tutorial");
   }
-
+  changeScene() {
+    this.scene.start("Game");
+  }
+  
   triggerCheckpoint(sprite, tile) {
     this.text.setText("Press E to open inventory");
     console.log("HERE");
     if (this.e.isDown) {
+      // this.changeScene()
       EventBus.emit("touch-flag", tile);
     }
     setTimeout(() => {
@@ -21,6 +24,9 @@ export class Game extends Player {
 
   score = 0;
   scoreText;
+  collectedCoins = {
+
+  };
 
   create() {
     this.isPaused = false;
@@ -34,21 +40,23 @@ export class Game extends Player {
 
     this.add.image(400, 300, "sky").setScale(20);
 
-    this.player = this.physics.add.sprite(300, 6000, "NinjaCat");
+    this.player = this.physics.add.sprite(300, 5500, "NinjaCat");
     this.player.setBounce(0.2);
     this.player.body.setSize(80, 190);
     this.player.setOffset(40, 20);
     this.player.setCollideWorldBounds(true);
 
-    this.map = this.make.tilemap({ key: "tilemap" });
+    this.map = this.make.tilemap({ key: "tutorial" });
     const groundTileSet = this.map.addTilesetImage(
       "spritesheet_ground",
       "ground"
     );
     const itemsTileSet = this.map.addTilesetImage("spritesheet_items", "items");
+    const tilesTileSet = this.map.addTilesetImage("spritesheet_tiles", "tiles")
     const ground = this.map.createLayer("ground", groundTileSet, 0, 0);
     const items = this.map.createLayer("checkpoints", itemsTileSet, 0, 0);
     const coins = this.map.createLayer("coinLayer", itemsTileSet, 0, 0);
+    const tiles = this.map.createLayer("tileLayer", tilesTileSet, 0,0)
     ground.setCollisionByExclusion([-1]);
 
     this.physics.world.bounds.width = ground.width;
@@ -91,6 +99,8 @@ export class Game extends Player {
       coins.removeTileAt(tile.x, tile.y);
       this.score++;
       this.scoreText.setText(this.score);
+      console.log(tile.x, tile.y);
+      
       return false;
     }
 
@@ -100,20 +110,9 @@ export class Game extends Player {
   }
 
   update() {
-    if (Phaser.Input.Keyboard.JustDown(this.s)) {
-      console.log("SSSSSSSS");
-      console.log(this.map.layers);
-    }
-
-    if (Phaser.Input.Keyboard.JustDown(this.r)) {
-      console.log("RRRRR");
-    }
+    
 
     super.update();
   }
 
-  changeScene() {
-    this.scene.start("GameOver");
-  }
 }
-
