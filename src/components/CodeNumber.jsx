@@ -3,10 +3,14 @@ import { PARAMTYPES, ObjectParameter } from './ObjectParameter.js'
 import { CodeObject } from './CodeObject.jsx'
 import Draggable from './Draggable.jsx';
 
-class Number extends CodeObject {
-  constructor(name) {
+class CodeNumber extends CodeObject {
+  constructor(name, value) {
     super(name);
-    this._params = [new ObjectParameter("value", PARAMTYPES.NUMBER, 0)];
+    if (Number.isNaN(value)) {
+      this._params = [new ObjectParameter("value", PARAMTYPES.NUMBER, 0)];
+    } else {
+      this._params = [new ObjectParameter("value", PARAMTYPES.NUMBER, value)];
+    }
     this._returnType = PARAMTYPES.NUMBER;
   };
 
@@ -59,4 +63,4 @@ class Number extends CodeObject {
   }
 }
 
-export {Number};
+export {CodeNumber};

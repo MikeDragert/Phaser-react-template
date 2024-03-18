@@ -7,7 +7,7 @@ import { PARAMTYPES, ObjectParameter } from './ObjectParameter.js'
 import { CodeObject } from './CodeObject.jsx'
 import { CodeFunction } from './CodeFunction.jsx'
 import { Operator} from './Operator.jsx'
-import { Number } from './Number.jsx'
+import { CodeNumber } from './CodeNumber.jsx'
 import Droppable from './Droppable.jsx'
 import Draggable from './Draggable.jsx'
 
@@ -28,10 +28,17 @@ class WorkBench extends React.Component {
       let divideOperator = new Operator('divideOp', '/');
       let modulusOperator = new Operator('modulusOp', '%');
 
-      let number1 = new Number('num1');
-      let number2 = new Number('num2');
-      number1.setParamValue(200);
-      number2.setParamValue(300);
+      let number1 = new CodeNumber('num1', 1);
+      let number2 = new CodeNumber('num2', 2);
+      let number3 = new CodeNumber('num3', 3);
+      let number4 = new CodeNumber('num4', 4);
+      let number5 = new CodeNumber('num5', 5);
+      let number6 = new CodeNumber('num6', 6);
+      let number7 = new CodeNumber('num7', 7);
+      let number8 = new CodeNumber('num8', 8);
+      let number9 = new CodeNumber('num9', 9);
+      let number10 = new CodeNumber('num10', 10);
+
 
       this.addCodeObjectToBench(plusOperator);
       this.addCodeObjectToBench(minusOperator);
@@ -40,6 +47,14 @@ class WorkBench extends React.Component {
       this.addCodeObjectToBench(modulusOperator);
       this.addCodeObjectToBench(number1);
       this.addCodeObjectToBench(number2);
+      this.addCodeObjectToBench(number3);
+      this.addCodeObjectToBench(number4);
+      this.addCodeObjectToBench(number5);
+      this.addCodeObjectToBench(number6);
+      this.addCodeObjectToBench(number7);
+      this.addCodeObjectToBench(number8);
+      this.addCodeObjectToBench(number9);
+      this.addCodeObjectToBench(number10);
 
       functionList.forEach(codeFunction => {
         this.createFunction(codeFunction.name, codeFunction.callback, []);
