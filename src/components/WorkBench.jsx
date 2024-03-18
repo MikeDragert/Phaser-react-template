@@ -22,7 +22,11 @@ class WorkBench extends React.Component {
     
     if (!this.loaded) {
       //for a test, let's set up some params!
-      let plusOperator = new Operator('plusOp');
+      let plusOperator = new Operator('plusOp', '+');
+      let minusOperator = new Operator('minusOp', '-');
+      let multiplyOperator = new Operator('multiplyOp', '*');
+      let divideOperator = new Operator('divideOp', '/');
+      let modulusOperator = new Operator('modulusOp', '%');
 
       let number1 = new Number('num1');
       let number2 = new Number('num2');
@@ -30,6 +34,10 @@ class WorkBench extends React.Component {
       number2.setParamValue(300);
 
       this.addCodeObjectToBench(plusOperator);
+      this.addCodeObjectToBench(minusOperator);
+      this.addCodeObjectToBench(multiplyOperator);
+      this.addCodeObjectToBench(divideOperator);
+      this.addCodeObjectToBench(modulusOperator);
       this.addCodeObjectToBench(number1);
       this.addCodeObjectToBench(number2);
 
