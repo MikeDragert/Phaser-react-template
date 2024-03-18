@@ -16,6 +16,7 @@ function App ()
      //array at 0 is the workbench
   // then keys 1 to 8
   const [loaded, setLoaded] = useState(false);
+  const [workbenchOpen, setWorkbenchOpen] = useState(false);
 
   const initialState = {
     keys: [[],
@@ -30,7 +31,7 @@ function App ()
     count: 0
   }
 
-  const updateCodeListItem = function(keys, arrayIndexMap, callbacks) {
+  const executeOnCodeListItem = function(keys, arrayIndexMap, callbacks) {
     if ((Array.isArray(arrayIndexMap)) && (arrayIndexMap.length > 0)) {
       if ((arrayIndexMap[0] >= 0) && (arrayIndexMap[0] < keys.length)) {
         let index = arrayIndexMap.shift();
@@ -40,18 +41,18 @@ function App ()
         }
         if ((arrayIndexMap[0] >= 0) && (arrayIndexMap[0] < keys.length)) {
           let index2 = arrayIndexMap.shift();
-          return updateCodeListParamItem(keys[index][index2], arrayIndexMap, callbacks.codeObject)
+          return executeOnCodeListParamItem(keys[index][index2], arrayIndexMap, callbacks.codeObject)
         }
       }
     }
     return;
   }
 
-  const updateCodeListParamItem = function(codeObject, arrayIndexMap, callback) {
+  const executeOnCodeListParamItem = function(codeObject, arrayIndexMap, callback) {
     if ((Array.isArray(arrayIndexMap)) && (arrayIndexMap.length > 0)) {
       if ((arrayIndexMap[0] >= 0) && (arrayIndexMap[0] < codeObject.getParamsLength())) {
         let index = arrayIndexMap.shift();
-        return updateCodeListParamItem(codeObject.getParam(index).getValueObject(), arrayIndexMap, callback)
+        return executeOnCodeListParamItem(codeObject.getParam(index).getValueObject(), arrayIndexMap, callback)
       }
     }
     callback(codeObject);
@@ -65,9 +66,34 @@ function App ()
     let newState = {keys: [...state.keys], count:state.count};
     let countChange = 0
 
+    if (toIndexArrayMap.length > 0) {
+      // find the container that has it
+      executeOnCodeListItem(newState.keys, toIndexArrayMap, {
+        key: (keyArray) => {
+          countChange += keyArray.length;
+          let objIndex = keyArray.indexOf(codeObject);
+          if (objIndex > -1) {
+            keyArray.splice(objIndex, 1)
+          }
+          keyArray.push(codeObject);
+          countChange -= keyArray.length;
+        },
+        codeObject: (foundCodeObject) => {
+          //todo: update counts
+          console.log('to:', foundCodeObject)
+          if (foundCodeObject) {
+            foundCodeObject.removeParamObject(codeObject)
+            if (foundCodeObject instanceof CodeObject) {
+              foundCodeObject.setParamValue(codeObject)
+            }
+          }
+        }
+      });
+    }
+
     if (fromIndexArrayMap.length > 0) {
       // find the container that has it
-      updateCodeListItem(newState.keys, fromIndexArrayMap, {
+      executeOnCodeListItem(newState.keys, fromIndexArrayMap, {
         key: (keyArray) => {
           countChange -= keyArray.length;
           let objIndex = keyArray.indexOf(codeObject);
@@ -82,29 +108,6 @@ function App ()
         }
       });
     }
-
-    if (toIndexArrayMap.length > 0) {
-      // find the container that has it
-      updateCodeListItem(newState.keys, toIndexArrayMap, {
-        key: (keyArray) => {
-          countChange += keyArray.length;
-          let objIndex = keyArray.indexOf(codeObject);
-          if (objIndex > -1) {
-            keyArray.splice(objIndex, 1)
-          }
-          keyArray.push(codeObject);
-          countChange -= keyArray.length;
-        },
-        codeObject: (foundCodeObject) => {
-          //todo: update counts
-          foundCodeObject.removeParamObject(codeObject)
-          if (foundCodeObject instanceof CodeObject) {
-            foundCodeObject.setParamValue(codeObject)
-          }
-        }
-      });
-    }
-
     newState.count -= countChange;
     return newState;
   }
@@ -121,12 +124,41 @@ function App ()
     return undefined;
   }
 
-  const moveCodeObject = function(codeObject, fromListName, toListName) {
+  const moveCodeObject = function(codeObject, fromName, toName) {
     
-    // console.log('From: ',fromListName, getCodeItemArrayMap(fromListName));
-    // console.log('To: ', toListName, getCodeItemArrayMap(toListName));
+    let fromArrayMap = getCodeItemArrayMap(fromName)
+    let toArrayMap = getCodeItemArrayMap(toName);
+    let canMove = false;
 
-    dispatch({type: 'dont care', value: {fromIndexArrayMap: getCodeItemArrayMap(fromListName), toIndexArrayMap: getCodeItemArrayMap(toListName), codeObject}});
+    //need to check if there is actually a change
+
+    if (fromArrayMap.length === toArrayMap.length) {
+      for(let index = 0; index < fromArrayMap.length; index++) {
+        if (fromArrayMap[index] !== toArrayMap[index]) {
+          canMove = true;
+          break;
+        }
+      }
+    } else {
+      canMove = true;
+    }
+
+    if (canMove) {
+      //console.log('Can we move item from: ', fromArrayMap, 'To: ', toArrayMap)
+      executeOnCodeListItem(codeList.keys, [...toArrayMap], {
+        key: (keyArray) => {
+          canMove = true
+        },
+        codeObject: (foundCodeObject) => {
+          canMove = foundCodeObject.canAcceptValue(codeObject)
+        }
+      });
+    }
+
+    if (canMove) {
+      console.log('Moving item from: ', fromArrayMap, 'To: ', toArrayMap)
+      dispatch({type: 'dont care', value: {fromIndexArrayMap: fromArrayMap, toIndexArrayMap: toArrayMap, codeObject}});
+    }
   }
 
   const getItemArrayMapCheckParam = function(codeItemName, codeObject, indexMap) {
@@ -198,6 +230,14 @@ function App ()
         }
     }
 
+    const openWorkbench = (event) => {
+      setWorkbenchOpen(true);
+    }
+
+    const closeWorkbench = (event) => {
+      setWorkbenchOpen(false);
+    }
+
     //this allows key events from the game to trigger the built workbench functions
     // we could also use this to change the drawn react components from an action in the game
     useEffect(() => {
@@ -209,27 +249,33 @@ function App ()
           }
         }
       })
+
+      EventBus.on("touch-flag", (data) => {
+        setWorkBenchState(true);
+      })
     }, [phaserRef])
 
     // Event emitted from the PhaserGame component
     const currentScene = (scene) => {      
     }
+    
+    //{(!workbenchOpen) && <button className="button" onClick={openWorkbench}>Open Workbench</button>}
+    // {(workBenchOpen !== undefined) && 
+    //   <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
+    //   }
+    let gameOpen = !workbenchOpen;
 
     return (
         <div id="app">
+            
+            {workbenchOpen && <div>{workBench.getReactBench()}</div>}
+            {workbenchOpen && <button className="button" onClick={closeWorkbench}>Close Workbench</button>}
             <div>
-              <div>
-                {workBench.getReactBench()}
-              </div>
-              <button type="button" onClick={() => workBench.execute1()}>Run 1
-              </button>
-            </div>
-            <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
-            <div>
-                <div>
-                    <button className="button" onClick={changeScene}>Change Scene</button>
-                </div>
-                
+              {gameOpen && <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />}
+              {gameOpen && <button className="button" onClick={openWorkbench}>Open Workbench</button>}
+            
+              {gameOpen && <button className="button" onClick={changeScene}>Change Scene</button>}
+              {gameOpen && <button type="button" onClick={() => workBench.execute1()}>Run 1</button>}
             </div>
         </div>
     )

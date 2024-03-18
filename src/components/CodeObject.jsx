@@ -172,6 +172,19 @@ class CodeObject {
     return 0;
   }
 
+  canAcceptValue = function (codeObject) {
+    if (codeObject instanceof CodeObject) {
+      let canAccept = false;
+      this._params.forEach( param => {
+        if (!param.hasValue() && codeObject.matchesType(param.type)) {
+          canAccept = true;
+        }
+      })
+      return canAccept;
+    }
+    return false;
+  }
+
   //this will create a react object to display
   reactDisplay = function (currentContainerName) {
     // const {attributes, listeners, setNodeRef, transform} = useDraggable({
