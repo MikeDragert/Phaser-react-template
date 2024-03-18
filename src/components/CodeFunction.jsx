@@ -34,9 +34,9 @@ class CodeFunction extends CodeObject {
 
     // <button ref={setNodeRef} style={style} {...listeners} {...attributes} className="codeBlock-Function">{this._params[0].value}({this._params[1].value})</button>
     return (
-      <Draggable this={this} currentContainerName={currentContainerName} id={this._name} className="codeBlock-Function">
+      <Draggable this={this} currentContainerName={currentContainerName} id={this._name} className="codeBlock codeBlock-Function">
           <Droppable id={this._name}>
-            {this._name}({this._params[0].reactDisplay(this._name)})
+            {this._name}( {this._params[0].reactDisplay(this._name)} )
           </Droppable>
       </Draggable>
     )

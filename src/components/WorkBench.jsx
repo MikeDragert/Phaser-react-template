@@ -90,16 +90,18 @@ class WorkBench extends React.Component {
   getReactBench = function() {   
     return (
       <DndContext onDragEnd={(event) => this.handleDragEnd(event)}>
-        <Droppable id="key1" className="workbench">
-          {this.codeList.keys[1].map(codeObject => {
-            return codeObject.reactDisplay("key1")
-          })}
-        </Droppable>
-        <Droppable id="bench" className="workbench">
-          {this.codeList.keys[0].map(codeObject => {
-            return codeObject.reactDisplay("bench")
-          })}
-        </Droppable>
+        <div className='benchContainer'>
+          <Droppable id="key1" className="workbench workbench-left">
+            {this.codeList.keys[1].map(codeObject => {
+              return codeObject.reactDisplay("key1")
+            })}
+          </Droppable>
+          <Droppable id="bench" className="workbench workbench-right">
+            {this.codeList.keys[0].map(codeObject => {
+              return codeObject.reactDisplay("bench")
+            })}
+          </Droppable>
+        </div>
       </DndContext>
     )
   }

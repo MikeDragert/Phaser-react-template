@@ -24,7 +24,7 @@ class Operator extends CodeObject {
   reactDisplay = function (currentContainerName) {
 
     return (
-      <Draggable this={this} currentContainerName={currentContainerName} id={this._name} className="codeBlock-Operator">
+      <Draggable this={this} currentContainerName={currentContainerName} id={this._name} className="codeBlock codeBlock-Operator">
         <Droppable id={this._name}>
           {this._params[0].reactDisplay(this._name)} + {this._params[1].reactDisplay(this._name)}
         </Droppable>

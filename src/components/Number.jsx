@@ -49,7 +49,7 @@ class Number extends CodeObject {
     // });
 
     return (
-      <Draggable this={this} currentContainerName={currentContainerName} id={this._name} className='codeBlock-Number'>{this._params[0].value}</Draggable>
+      <Draggable this={this} currentContainerName={currentContainerName} id={this._name} className='codeBlock codeBlock-Number'>{this._params[0].value}</Draggable>
     )
   }
 
