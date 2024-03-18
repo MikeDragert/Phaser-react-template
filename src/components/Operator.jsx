@@ -1,4 +1,5 @@
-import {PARAMTYPES, ObjectParameter, CodeObject} from './CodeObject.jsx'
+import { PARAMTYPES, ObjectParameter } from './ObjectParameter.js'
+import { CodeObject } from './CodeObject.jsx'
 import Draggable from './Draggable.jsx';
 import Droppable from './Droppable.jsx';
 

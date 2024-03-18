@@ -1,17 +1,13 @@
 import React from 'react';
-import {DndContext, useDraggable, useDroppable} from '@dnd-kit/core';
+import { DndContext } from '@dnd-kit/core';
 
 import '../styles/WorkBench.css'
 
-
-//the intent here is to have 8 key functions
-// and also an array of potential objects
-
-//const {PARAMTYPES, ObjectParameter, CodeObject, Operator, Number} = require('./CodeObject.js')
-import {PARAMTYPES, ObjectParameter, CodeObject } from './CodeObject.jsx'
-import {CodeFunction} from './CodeFunction.jsx'
-import {Operator} from './Operator.jsx'
-import {Number} from './Number.jsx'
+import { PARAMTYPES, ObjectParameter } from './ObjectParameter.js'
+import { CodeObject } from './CodeObject.jsx'
+import { CodeFunction } from './CodeFunction.jsx'
+import { Operator} from './Operator.jsx'
+import { Number } from './Number.jsx'
 import Droppable from './Droppable.jsx'
 import Draggable from './Draggable.jsx'
 
@@ -85,9 +81,6 @@ class WorkBench extends React.Component {
     if (event) {
       const {active, over} = event;
       if (active && over) {
-
-        //todo:  need to check if it was dropped in a valid place, if not then don't do the move!!!
-
         // console.log(active, over)
         // console.log('Move',active.data.current.this, 'From', active.data.current.currentContainerName, 'To', over.data.current.id)
         this.moveCodeObject(active.data.current.this, active.data.current.currentContainerName, over.data.current.id)

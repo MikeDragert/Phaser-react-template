@@ -1,9 +1,9 @@
 
-import {PARAMTYPES, ObjectParameter, CodeObject} from './CodeObject.jsx'
+import { PARAMTYPES, ObjectParameter } from './ObjectParameter.js'
+import { CodeObject } from './CodeObject.jsx'
 import Draggable from './Draggable.jsx';
 
 class Number extends CodeObject {
-  //todo:  we want some concept of a max, so that 0 to max are the only valid values for param[0]
   constructor(name) {
     super(name);
     this._params = [new ObjectParameter("value", PARAMTYPES.NUMBER, 0)];
@@ -11,7 +11,7 @@ class Number extends CodeObject {
   };
 
   //todo: we can maybe dry this up
-  // I have overriddent this, because it has to take an actual number and not a code object
+  // I have overridden this, because it has to take an actual number and not a code object
   setParamValue = function(number, position = -1) {
     if (typeof number === 'number'){
       let updatePosition = -1;
