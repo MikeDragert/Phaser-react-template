@@ -31,6 +31,22 @@ export class Game extends Player {
     this.cameras.main.setBounds(0, 0, ground.width, ground.height);
     this.cameras.main.startFollow(this.player);
 
+    //thise next 2 blocks were added for sending keys back to the app.jsx
+    //  if there is a better way to watch the phaser input we can adjust these
+    //watch for key down and trigger message to app.jsx
+    this.input.keyboard.on('keydown', (event) => {
+      if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ONE){
+       this.sendKeyPressMessage(event.keyCode, true)
+      }
+    })
+
+    //watch for key up and trigger message to app.jsx
+    this.input.keyboard.on('keyup', (event) => {
+      if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ONE){
+       this.sendKeyPressMessage(event.keyCode, false)
+      }
+    })
+
     EventBus.emit("current-scene-ready", this);
   }
 

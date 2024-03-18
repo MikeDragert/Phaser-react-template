@@ -1,11 +1,53 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect, useReducer } from 'react';
 
 import Phaser from 'phaser';
 import { PhaserGame } from './game/PhaserGame';
+import WorkBench from './components/WorkBench.jsx';
+import { reducer, moveCodeObject } from './helpers/workbenchStateHelpers.js';
+import { EventBus } from './game/EventBus';
+
+import './styles/App.css';
+
+
 
 function App ()
 {
-    // The sprite can only be moved in the MainMenu Scene
+  const [showGame, setShowGame] = useState(true);
+  const [loaded, setLoaded] = useState(false);
+  const [workbenchOpen, setWorkbenchOpen] = useState(false);
+
+  const initialState = {
+    keys: [[],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            []],
+    count: 0
+  }
+
+  const [codeList, dispatch] = useReducer(reducer, initialState)
+
+  const moveCodeObjectJumper = function(codeObject, fromName, toName) {
+    return moveCodeObject(codeList, dispatch, codeObject, fromName, toName);
+  }
+
+  const getFunctionList = function() {
+    return [
+      {name: "jumpPower", callback: (jumpPower) => {
+        phaserRef.current.scene.setJumpPower(jumpPower);
+        return
+      }}
+    ];
+  }
+
+  let workBench = new WorkBench(codeList, moveCodeObjectJumper, loaded, setLoaded, getFunctionList());
+  
+  
+  // The sprite can only be moved in the MainMenu Scene
     const [canMoveSprite, setCanMoveSprite] = useState(true);
     
     //  References to the PhaserGame component (game and scene are exposed)
@@ -66,30 +108,54 @@ function App ()
     // Event emitted from the PhaserGame component
     const currentScene = (scene) => {
 
-        setCanMoveSprite(scene.scene.key !== 'MainMenu');
+        //setCanMoveSprite(scene.scene.key !== 'MainMenu');
         
     }
 
+    const openWorkbench = (event) => {
+      setWorkbenchOpen(true);
+      setShowGame(false);
+    }
+  
+    const closeWorkbench = (event) => {
+      setWorkbenchOpen(false);
+      setShowGame(true);
+    }
+
+
+    const changeShowGame = function(showGameValue) {
+      setShowGame(showGameValue);
+    }
+
+    useEffect(() => {
+      EventBus.on('keyEvent',  () => {
+        while(phaserRef.current.scene.sendKeyEvents.length > 0){
+          let keyEvent = phaserRef.current.scene.sendKeyEvents.pop();
+          if ((keyEvent.keyCode === Phaser.Input.Keyboard.KeyCodes.ONE) && (keyEvent.isDown))  {
+            workBench.execute1();
+          }
+        }
+      })
+  
+      EventBus.on("touch-flag", (data) => {
+        setWorkBenchState(true);
+      })
+    }, [phaserRef])
+
+    let gameOpen = !workbenchOpen;
+
     return (
         <div id="app">
-            <PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
-            <div>
-                <div>
-                    <button className="button" onClick={changeScene}>Change Scene</button>
-                </div>
-                <div>
-                    <button disabled={canMoveSprite} className="button" onClick={moveSprite}>Toggle Movement</button>
-                </div>
-                <div className="spritePosition">Sprite Position:
-                    <pre>{`{\n  x: ${spritePosition.x}\n  y: ${spritePosition.y}\n}`}</pre>
-                </div>
-                <div>
-                    <button className="button" onClick={addSprite}>Add New Sprite</button>
-                </div>
-            </div>
-            <div>
-              Workbench Open
-            </div>
+          {workbenchOpen && <div>{workBench.getReactBench()}</div>}
+          {workbenchOpen && <button className="button" onClick={closeWorkbench}>Close Workbench</button>}
+
+          <div>
+             <PhaserGame ref={phaserRef} currentActiveScene={currentScene} className={ showGame? '' : 'appHidden'}/>
+            {gameOpen && <button className="button" onClick={openWorkbench}>Open Workbench</button>}
+            {gameOpen && <button className="button" onClick={changeScene}>Change Scene</button>}
+            {gameOpen && <button type="button" onClick={() => workBench.execute1()}>Run 1</button>} 
+            
+          </div>
         </div>
     )
 }

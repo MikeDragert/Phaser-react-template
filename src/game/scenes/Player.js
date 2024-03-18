@@ -94,4 +94,36 @@ export class Player extends Scene {
   changeScene() {
     this.scene.start("GameOver");
   }
+
+  setJumpPower(newJumpPower) {
+    //todo:  this needs to be updated to change the actual character jump power that the game uses!!
+    console.log('set jump power', newJumpPower)
+    let jumpPower= newJumpPower;
+  }
+
+  //key events stored for app.jsx to consume
+  sendKeyEvents = [];
+  //track state changes on keypress for toggleKey method
+  keyToggles = {};
+
+    //can be used to track if key state has changed (up vs down) and only return true if it has changed
+    toggleKey = function(keyCode, isDown) {
+      if ((this.keyToggles[keyCode] === undefined) ||
+          (this.keyToggles[keyCode] !== isDown)) {
+          this.keyToggles[keyCode] = isDown;
+          return true; 
+        }
+        return false;
+      }
+    
+  //this logs the keypress in an scene array, and then sends an event
+  // to the react side of things to notify it that there is a key press to handle
+  //app.jsx will see the keyEvent and check the contents of sendKeyEvents array
+  sendKeyPressMessage = function(keyCode, isDown) {
+    if (this.toggleKey(keyCode, isDown)) {
+      this.sendKeyEvents.push({keyCode: keyCode, isDown: isDown})
+      EventBus.emit('keyEvent', this);
+    }
+  }
+
 }
