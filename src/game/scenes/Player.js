@@ -68,10 +68,10 @@ export class Player extends Scene {
         player.anims.msPerFrame = 30;
         this.jumpPower = 1;
         player.body.velocity.y = -400;
-      } else if (this.jumpPower > 0 && this.jumpPower < 31) {
+      } else if (this.jumpPower > 0 && this.jumpPower < 20) {
         
         this.jumpPower++;
-        player.body.velocity.y = -400 + this.jumpPower * 7;
+        player.body.velocity.y = -400 - this.jumpPower * 2;
       }
     } else {
       

@@ -8,10 +8,11 @@ export class Game extends Player {
   }
 
   triggerCheckpoint(sprite, tile) {
-    this.text.setText("Press E to open inventory");
+    this.setText("Press E to open inventory");
     console.log("HERE");
     if (this.e.isDown) {
       EventBus.emit("touch-flag", tile);
+      console.log("HERE");
     }
     setTimeout(() => {
       this.text.setText("");
@@ -26,11 +27,6 @@ export class Game extends Player {
 
   create() {
     this.isPaused = false;
-
-    EventBus.on("unPause", () => {
-      this.isPaused = false;
-      console.log(this.isPaused);
-    });
 
     super.create();
 
@@ -111,7 +107,7 @@ export class Game extends Player {
     if (Phaser.Input.Keyboard.JustDown(this.r)) {
       console.log("RRRRR");
       const Items = JSON.parse(localStorage.getItem("items"));
-      localStorage.removeItem("items")
+      localStorage.removeItem()
       console.log(Items);
     }
 

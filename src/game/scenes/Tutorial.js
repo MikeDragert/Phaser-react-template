@@ -9,7 +9,7 @@ export class Tutorial extends Player {
     this.scene.start("Game");
   }
 
-  triggerCheckpoint(sprite, tile) {
+  triggerWorkbench(sprite, tile) {
     this.text.setText("Press E to open inventory");
     console.log("HERE");
     if (this.e.isDown) {
@@ -22,7 +22,7 @@ export class Tutorial extends Player {
     return false;
   }
 
-  score = 0;
+  score = JSON.parse(localStorage.getItem("score"));
   scoreText;
 
   collectedItems = [];
@@ -33,6 +33,7 @@ export class Tutorial extends Player {
     this.spritePosition = { "spriteX": sprite.x, "spriteY": sprite.y}
     localStorage.setItem("items", JSON.stringify(this.collectedItems));
     localStorage.setItem("spritePosition", JSON.stringify(this.spritePosition))
+    localStorage.setItem("score", JSON.stringify(this.score));
   }
 
   create() {
@@ -43,9 +44,11 @@ export class Tutorial extends Player {
       console.log(this.isPaused);
     });
 
+
     super.create();
 
     this.add.image(400, 300, "sky").setScale(20);
+    this.scoreText = JSON.parse(localStorage.getItem("score"));
 
     this.player = this.physics.add.sprite(this.spritePosition.spriteX, this.spritePosition.spriteY, "NinjaCat");
     this.player.setBounce(0.2);
@@ -74,16 +77,19 @@ export class Tutorial extends Player {
     this.cameras.main.setBounds(0, 0, ground.width, ground.height);
     this.cameras.main.startFollow(this.player);
 
-    items.setTileIndexCallback(
-      [145, 155, 154, 138],
-      this.triggerCheckpoint,
+    this.physics.add.overlap(this.player, items);
+    this.physics.add.overlap(this.player, coins);
+    this.physics.add.overlap(this.player, tiles)
+
+    tiles.setTileIndexCallback(
+      257,
+      this.triggerWorkbench,
       this
     );
 
     items.setTileIndexCallback([145, 155, 154, 138], this.saveProgress, this);
 
-    this.physics.add.overlap(this.player, items);
-    this.physics.add.overlap(this.player, coins);
+    
 
     this.e = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
     this.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
@@ -94,7 +100,7 @@ export class Tutorial extends Player {
       fill: "ffffff",
     });
 
-    this.scoreText = this.add.text(320, 700, "0", {
+    this.scoreText = this.add.text(50, 60, "0", {
       fontSize: "20px",
       fill: "ffffff",
     });
@@ -105,7 +111,7 @@ export class Tutorial extends Player {
     function collectCoins(sprite, tile) {
       coins.removeTileAt(tile.x, tile.y);
       this.score++;
-      this.scoreText.setText(this.score);
+      
       const cords = {
         x: tile.x,
         y: tile.y,
@@ -130,13 +136,18 @@ export class Tutorial extends Player {
   }
 
   update() {
-    
-    if (Phaser.Input.Keyboard.JustDown(this.r)) {
-      console.log("RRRRR");
-      const Items = JSON.parse(localStorage.getItem("items"));
+
+    this.scoreText.setText(this.score);
+    if (Phaser.Input.Keyboard.JustDown(this.s)) {
       localStorage.removeItem("items");
-      this.collectedItems = [];
-      console.log(Items);
+      localStorage.removeItem("score");
+      localStorage.removeItem("spritePosition")
+      this.score = 0
+      console.log("--------RESET--------");
+    }
+
+    if (Phaser.Input.Keyboard.JustDown(this.r)) {
+      this.scene.restart()   
     }
 
     super.update();
