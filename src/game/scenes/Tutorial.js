@@ -51,7 +51,11 @@ export class Tutorial extends Player {
     const items = this.map.createLayer("checkpoints", itemsTileSet, 0, 0);
     const coins = this.map.createLayer("coinLayer", itemsTileSet, 0, 0);
     const tiles = this.map.createLayer("tileLayer", tilesTileSet, 0, 0);
-    const tutorial = this.map.createLayer("tutorial", itemsTileSet, 0, 0);
+    const tutorialObjects = this.map.getObjectLayer("tutorial")["objects"]
+
+    tutorialObjects.forEach(obj => {
+      const sprite = this.physics.add.sprite(obj.x, obj.y, "tutorial_flag");
+    })
     ground.setCollisionByExclusion([-1]);
 
     this.physics.world.bounds.width = ground.width;
@@ -62,7 +66,6 @@ export class Tutorial extends Player {
     this.physics.add.overlap(this.player, items);
     this.physics.add.overlap(this.player, coins);
     this.physics.add.overlap(this.player, tiles);
-    this.physics.add.overlap(this.player, tutorial);
 
     this.cameras.main.setBounds(0, 0, ground.width, ground.height);
     this.cameras.main.startFollow(this.player);
@@ -105,7 +108,7 @@ export class Tutorial extends Player {
     this.scoreText.setScrollFactor(0);
 
     this.progressTracker.removeItems(coins);
-
+    
     EventBus.emit("current-scene-ready", this);
   }
 

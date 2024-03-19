@@ -38,6 +38,7 @@ export class Preloader extends Scene {
 
     this.load.image("ground", "ground/spritesheet_ground.png");
     this.load.image("items", "items/spritesheet_items.png")
+    this.load.image("tutorial_flag", "items/tutorial_flag.png")
     this.load.image("hud", "tiles/spritesheet_tiles.png");
     this.load.image("tiles", "tiles/spritesheet_tiles.png");
 

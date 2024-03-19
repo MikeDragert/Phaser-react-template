@@ -19,8 +19,6 @@ export class Player extends Scene {
 
   update() {
     let player = this.player;
-    const upJustReleased = Phaser.Input.Keyboard.JustUp(this.cursors.up);
-    const upJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.up);
     const right = this.cursors.right.isDown;
     const left = this.cursors.left.isDown;
     const onFloor = player.body.onFloor();
