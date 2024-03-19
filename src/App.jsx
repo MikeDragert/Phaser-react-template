@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect, useReducer } from 'react';
 
-import Phaser from 'phaser';
+import Phaser, { Game } from "phaser";
 import { PhaserGame } from './game/PhaserGame';
 import WorkBench from './components/WorkBench.jsx';
 import { reducer, moveCodeObject, changeMaxCurrency } from './helpers/workbenchStateHelpers.js';
@@ -63,59 +63,62 @@ function App ()
 
         const scene = phaserRef.current.scene;
 
-        if (scene)
-        {
-            scene.changeScene();
-        }
+    if (scene) {
+      scene.changeScene();
     }
+  };
 
-    const moveSprite = () => {
+  const moveSprite = () => {
+    const scene = phaserRef.current.scene;
 
-        const scene = phaserRef.current.scene;
-
-        if (scene && scene.scene.key === 'MainMenu')
-        {
-            // Get the update logo position
-            scene.moveLogo(({ x, y }) => {
-
-                setSpritePosition({ x, y });
-
-            });
-        }
+    if (scene && scene.scene.key === "MainMenu") {
+      // Get the update logo position
+      scene.moveLogo(({ x, y }) => {
+        setSpritePosition({ x, y });
+      });
     }
+  };
 
-    const addSprite = () => {
+  const addSprite = () => {
+    const scene = phaserRef.current.scene;
 
-        const scene = phaserRef.current.scene;
+    if (scene) {
+      // Add more stars
+      const x = Phaser.Math.Between(64, scene.scale.width - 64);
+      const y = Phaser.Math.Between(64, scene.scale.height - 64);
 
-        if (scene)
-        {
-            // Add more stars
-            const x = Phaser.Math.Between(64, scene.scale.width - 64);
-            const y = Phaser.Math.Between(64, scene.scale.height - 64);
+      //  `add.sprite` is a Phaser GameObjectFactory method and it returns a Sprite Game Object instance
+      const star = scene.add.sprite(x, y, "star");
 
-            //  `add.sprite` is a Phaser GameObjectFactory method and it returns a Sprite Game Object instance
-            const star = scene.add.sprite(x, y, 'star');
-
-            //  ... which you can then act upon. Here we create a Phaser Tween to fade the star sprite in and out.
-            //  You could, of course, do this from within the Phaser Scene code, but this is just an example
-            //  showing that Phaser objects and systems can be acted upon from outside of Phaser itself.
-            scene.add.tween({
-                targets: star,
-                duration: 500 + Math.random() * 1000,
-                alpha: 0,
-                yoyo: true,
-                repeat: -1
-            });
-        }
+      //  ... which you can then act upon. Here we create a Phaser Tween to fade the star sprite in and out.
+      //  You could, of course, do this from within the Phaser Scene code, but this is just an example
+      //  showing that Phaser objects and systems can be acted upon from outside of Phaser itself.
+      scene.add.tween({
+        targets: star,
+        duration: 500 + Math.random() * 1000,
+        alpha: 0,
+        yoyo: true,
+        repeat: -1,
+      });
     }
+  };
 
-    // Event emitted from the PhaserGame component
-    const currentScene = (scene) => {
 
-        //setCanMoveSprite(scene.scene.key !== 'MainMenu');
-        
-    }
+  useEffect(() => {
+    EventBus.on("touch-flag", (data) => {
+      setWorkBenchState(true)
+      console.log(data);
+    });
+
+    return () => {
+      EventBus.removeListener("touch-flag");
+    };
+  }, []);
+
+  // Event emitted from the PhaserGame component
+  const currentScene = (scene) => {
+    //setCanMoveSprite(scene.scene.key !== "MainMenu");
+  };
 
     const openWorkbench = (event) => {
       setWorkbenchOpen(true);
@@ -165,4 +168,5 @@ function App ()
     )
 }
 
-export default App
+export default App;
+

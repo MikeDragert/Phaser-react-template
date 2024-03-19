@@ -62,16 +62,16 @@ export class Player extends Scene {
     }
 
     if (this.cursors.up.isDown) {
-      if (this.cursors.up.isDown && this.jumpCount <= 2 && this.jumpPower === 0) {
-        
+      if (this.cursors.up.isDown && this.jumpCount < 20 && this.jumpPower === 0) {
+        this.jumpCount++
         player.anims.play("player-jump", true);
         player.anims.msPerFrame = 30;
         this.jumpPower = 1;
         player.body.velocity.y = -400;
-      } else if (this.jumpPower > 0 && this.jumpPower < 31) {
+      } else if (this.jumpPower > 0 && this.jumpPower < 20) {
         
         this.jumpPower++;
-        player.body.velocity.y = -400 + this.jumpPower * 7;
+        player.body.velocity.y = -400 - this.jumpPower * 2;
       }
     } else {
       
@@ -87,7 +87,7 @@ export class Player extends Scene {
     player.body.velocity.y = Phaser.Math.Clamp(
       player.body.velocity.y,
       -1000,
-      1000
+      3000
     );
   }
 
