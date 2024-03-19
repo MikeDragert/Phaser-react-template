@@ -7,7 +7,8 @@ import Droppable from './Droppable.jsx';
 class CodeFunction extends CodeObject {
   constructor(name, callback) {
     super(name);
-    this.callback = callback;
+    this._displayName = name.split('-')[0];
+    this._callback = callback;
     this._params = [
       new ObjectParameter("value", PARAMTYPES.NUMBER, 0)
     ];
@@ -15,9 +16,23 @@ class CodeFunction extends CodeObject {
     this._cost = 4;
   };
 
+  clone = function(appendToName) {
+    let newObject = new CodeFunction(this.name + (appendToName ? appendToName : ''))
+    newObject._displayName = this._displayName;
+    newObject._cost = this._cost;
+    newObject._used = this._used;
+    newObject._returnType = this._returnType;
+    newObject._params = [];
+    this._params.forEach(param => {
+      newObject._params.push(param.clone());
+    })
+    return newObject;
+  }
+
+
   // this will execute the logic of the code objects
   execute = function() {
-    return this.callback(this._params[0].value)
+    return this._callback(this._params[0].value)
   }
 
 
@@ -37,7 +52,7 @@ class CodeFunction extends CodeObject {
     return (
       <Draggable this={this} currentContainerName={currentContainerName} id={this._name} className="codeBlock codeBlock-Function">
           <Droppable id={this._name}>
-            {this._name}( {this._params[0].reactDisplay(this._name)} )
+            {this._displayName}( {this._params[0].reactDisplay(this._name)} )
           </Droppable>
       </Draggable>
     )
@@ -45,7 +60,7 @@ class CodeFunction extends CodeObject {
 
   //this can write it out as a text string 
   toString = function() {
-    return `${this._name}, + ${this._params[0].reactDisplay}: ${this._params[0].value}`;
+    return `${this._displayName}, + ${this._params[0].reactDisplay}: ${this._params[0]._name}`;
   }
 }
 

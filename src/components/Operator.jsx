@@ -20,6 +20,19 @@ class Operator extends CodeObject {
     this._cost = 1;
   };
 
+  clone = function(appendToName) {
+    let newObject = new Operator(this.name + (appendToName ? appendToName : ''), this._operator)
+    newObject._displayName = this._displayName;
+    newObject._cost = this._cost;
+    newObject._used = this._used;
+    newObject._returnType = this._returnType;
+    newObject._params = [];
+    this._params.forEach(param => {
+      newObject._params.push(param.clone());
+    })
+    return newObject;
+  }
+
   // this will execute the logic of the code objects
   execute = function(player) {
     switch (this._operator){

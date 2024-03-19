@@ -27,7 +27,8 @@ function App ()
             [],
             []],
     maxCurrency: 0,
-    currentCurrency: 0
+    currentCurrency: 0,
+    copyCounter: 0
   }
 
   const [codeList, dispatch] = useReducer(reducer, initialState)

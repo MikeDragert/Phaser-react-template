@@ -47,44 +47,55 @@ export const reducer = (state, action) => {
   let newState = {...state, keys: [...state.keys]};
   if (action.type === ACTION.MOVECODEOBJECTS) {
     
-    let {fromIndexArrayMap, toIndexArrayMap, codeObject, currencyCost} = action.value;
-    // find the container that has it
-    executeOnCodeListItem(newState, toIndexArrayMap, {
-      key: (keyArray) => {
-        let objIndex = keyArray.indexOf(codeObject);
-        if (objIndex > -1) {
-          keyArray.splice(objIndex, 1)
+    let {fromIndexArrayMap, toIndexArrayMap, codeObject, currencyCost, indicators, copyCounter} = action.value;
+    
+    let codeObjectToMove = codeObject;
+    if (indicators.fromBench) {{
+      newState.copyCounter = copyCounter + 1;
+      codeObjectToMove = codeObject.clone(`-${newState.copyCounter}`) //todo:  this has to be unique!!
+    }}
+
+    // find the container that it is going to
+    if ((!indicators.toBench) || (indicators.newElement)) {
+      executeOnCodeListItem(newState, toIndexArrayMap, {
+        key: (keyArray) => {
+          let objIndex = keyArray.indexOf(codeObjectToMove);
+          if (objIndex > -1) {
+            keyArray.splice(objIndex, 1)
+          }
+          keyArray.push(codeObjectToMove);
+          return;
+        },
+        codeObject: (foundCodeObject) => {
+          if (foundCodeObject) {
+            if (foundCodeObject instanceof CodeObject) {
+              foundCodeObject.removeParamObject(codeObjectToMove)
+              foundCodeObject.setParamValue(codeObjectToMove)
+            }
+          }
+          return;
         }
-        keyArray.push(codeObject);
-        return;
-      },
-      codeObject: (foundCodeObject) => {
-        if (foundCodeObject) {
+      });
+    }
+    
+    if (!indicators.fromBench) {
+      // find the container that it came from
+      executeOnCodeListItem(newState, fromIndexArrayMap, {
+        key: (keyArray) => {
+          let objIndex = keyArray.indexOf(codeObject);
+          if (objIndex > -1) {
+            keyArray.splice(objIndex, 1)
+          } 
+          return;
+        },
+        codeObject: (foundCodeObject) => {
           if (foundCodeObject instanceof CodeObject) {
             foundCodeObject.removeParamObject(codeObject)
-            foundCodeObject.setParamValue(codeObject)
           }
+          return;
         }
-        return;
-      }
-    });
-    
-    // find the container that has it
-    executeOnCodeListItem(newState, fromIndexArrayMap, {
-      key: (keyArray) => {
-        let objIndex = keyArray.indexOf(codeObject);
-        if (objIndex > -1) {
-          keyArray.splice(objIndex, 1)
-        } 
-        return;
-      },
-      codeObject: (foundCodeObject) => {
-        if (foundCodeObject instanceof CodeObject) {
-          foundCodeObject.removeParamObject(codeObject)
-        }
-        return;
-      }
-    });
+      });
+    }
 
     newState.currentCurrency -= currencyCost;
     if (newState.currentCurrency > newState.maxCurrency) {
@@ -130,6 +141,10 @@ const areMapsDifferent = function(fromArrayMap, toArrayMap) {
 //check if the move of codeobject from fromArrayMap to toArrayMap is actually valid
 const canMoveCodeObject = function(codeList, codeObject, fromArrayMap, toArrayMap) {
   let canMove = areMapsDifferent(fromArrayMap, toArrayMap);
+  //disallow building objects in the bench side
+  if ((toArrayMap.length > 1) && (toArrayMap[0] === 0)) {
+    return false;
+  } 
   if (canMove) {
     executeOnCodeListItem(codeList, [...toArrayMap], {
       key: (keyArray) => {
@@ -145,35 +160,31 @@ const canMoveCodeObject = function(codeList, codeObject, fromArrayMap, toArrayMa
 
 // determine the currency cost of the move we are about to do
 //we need to do this BEFORE entering the dispatch to move the items
-const findCurrencyCostOfMove = function(codeList, codeObject, fromArrayMap, toArrayMap) {
+const findCurrencyCostOfMove = function(codeList, codeObject, fromArrayMap, toArrayMap, indicators) {
 
   let fromIndexArrayMap = [...fromArrayMap];
   let toIndexArrayMap = [...toArrayMap];
-  
-  const newElement = ((fromIndexArrayMap === undefined) || (fromIndexArrayMap.length === 0));
-  const toBench = ((toIndexArrayMap.length === 1) && (toIndexArrayMap[0] === 0));
-  const fromBench = ((fromIndexArrayMap.length === 1) && (fromIndexArrayMap[0] === 0));
 
-  if (newElement) return 0;  //this is intilization and should not affect currencyCount
+  if (indicators.newElement) return 0;  //this is intilization and should not affect currencyCount
 
   let currencyCost = 0;
   //if it's not already there, then refund cost
-  if (toBench) {
+  if (indicators.toBench) {
     currencyCost += executeOnCodeListItem(codeList, toIndexArrayMap, {
       key: (keyArray) => {
         //if it's not already there, then refund cost
-        return (keyArray.includes(codeObject)) ? 0 : -codeObject.cost;
+        return (keyArray.includes(codeObject)) ? 0 : -codeObject.getFullCost();
       },
       codeObject: (foundCodeObject) => {
         return (foundCodeObject) && (foundCodeObject instanceof CodeObject) && foundCodeObject.hasParamCodeObject(codeObject) 
           ? 0 
-          : -codeObject.cost; 
+          : -codeObject.getFullCost(); 
       }
     });
   }
 
   //if it's still on the bench, then charge cost
-  if (fromBench) {
+  if (indicators.fromBench) {
     currencyCost += executeOnCodeListItem(codeList, fromIndexArrayMap, {
       key: (keyArray) => {
         return (keyArray.includes(codeObject)) ?  codeObject.cost : 0;
@@ -192,11 +203,30 @@ const findCurrencyCostOfMove = function(codeList, codeObject, fromArrayMap, toAr
 export const moveCodeObject = function(codeList, dispatch, codeObject, fromName, toName) {
   let fromArrayMap = getCodeItemArrayMap(codeList, fromName)
   let toArrayMap = getCodeItemArrayMap(codeList, toName);
+
+  let indicators = {
+    newElement: ((fromArrayMap === undefined) || (fromArrayMap.length === 0)),
+    fromBench: ((fromArrayMap.length === 1) && (fromArrayMap[0] === 0)),
+    toBench: ((toArrayMap.length === 1) && (toArrayMap[0] === 0))
+  }
+
   if (canMoveCodeObject(codeList, codeObject, fromArrayMap, toArrayMap)) {
-    let currencyCost = findCurrencyCostOfMove(codeList, codeObject, fromArrayMap, toArrayMap);
+    let currencyCost = findCurrencyCostOfMove(codeList, codeObject, fromArrayMap, toArrayMap, indicators);
     
     if (currencyCost <= codeList.currentCurrency) {
-      dispatch({type: ACTION.MOVECODEOBJECTS, value: {fromIndexArrayMap: fromArrayMap, toIndexArrayMap: toArrayMap, codeObject, currencyCost}});
+      dispatch({
+        type: ACTION.MOVECODEOBJECTS, 
+        value: {
+          fromIndexArrayMap: 
+          fromArrayMap, 
+          toIndexArrayMap: 
+          toArrayMap, 
+          codeObject, 
+          currencyCost, 
+          indicators, 
+          copyCounter: codeList.copyCounter
+        }
+      });
     }
   }
 }

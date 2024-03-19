@@ -59,6 +59,9 @@ class WorkBench extends React.Component {
       this.addCodeObjectToBench(number9);
       this.addCodeObjectToBench(number10);
 
+      let newNumber = number10.clone('-CLONE')
+      console.log('cloned', number10,newNumber)
+
       functionList.forEach(codeFunction => {
         this.createFunction(codeFunction.name, codeFunction.callback, []);
       });

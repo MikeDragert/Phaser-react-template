@@ -12,8 +12,22 @@ export class CodeObject {
 
   constructor(name) {
     this._name = name;
+    this._displayName = name;
     this._cost = 0;
   };
+
+  clone = function(appendToName) { 
+      let newObject = new CodeObject(this.name + (appendToName ? appendToName : ''))
+      newObject._displayName = this._displayName;
+      newObject._cost = this._cost;
+      newObject._used = this._used;
+      newObject._returnType = this._returnType;
+      newObject._params = [];
+      this._params.forEach(param => {
+        newObject._params.push(param.clone());
+      })
+      return newObject;
+  }
 
   get name() {
     return this._name;
@@ -21,15 +35,17 @@ export class CodeObject {
 
   get cost() {
     return this._cost;
-    //I originally thought I would sum the cost of all the objects, but I don't think we need to...
-    // return this._params.reduce(
-    //   (accum, param) => {
-    //     if (param._value instanceof CodeObject) {
-    //       return accum + param._value.cost;
-    //     }
-    //     return accum;
-    //   }, this._cost
-    // )
+  }
+  
+  getFullCost = function() {
+    return this._params.reduce(
+      (accum, param) => {
+        if (param._value instanceof CodeObject) {
+          return accum + param._value.getFullCost();
+        }
+        return accum;
+      }, this._cost
+    )
   }
 
   getParamsLength = function() {

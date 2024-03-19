@@ -22,6 +22,12 @@ export class ObjectParameter {
     this._defaultValue = defaultValue;
   };
 
+  clone = function() {
+    let newParameter = new ObjectParameter(this._name, this._type, this._defaultValue)
+    newParameter._value = this._value;
+    return newParameter;
+  }
+
   get name() {
     return this._name;
   }

@@ -17,6 +17,19 @@ class CodeNumber extends CodeObject {
 
   };
 
+  clone = function(appendToName) {
+    let newObject = new CodeNumber(this.name + (appendToName ? appendToName : ''))
+    newObject._displayName = this._displayName;
+    newObject._cost = this._cost;
+    newObject._used = this._used;
+    newObject._returnType = this._returnType;
+    newObject._params = [];
+    this._params.forEach(param => {
+      newObject._params.push(param.clone());
+    })
+    return newObject;
+  }
+
   //todo: we can maybe dry this up
   // I have overridden this, because it has to take an actual number and not a code object
   setParamValue = function(number, position = -1) {
