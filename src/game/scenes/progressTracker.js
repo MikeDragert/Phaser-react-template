@@ -1,11 +1,12 @@
 import { Scene } from "phaser";
 
 export class ProgressTracker extends Scene {
-  
-  constructor(score, spritePosition, items) {
+  constructor(score, spritePosition, items, level) {
     super({ key: "ProgressTracker" });
     // default data, set in creating a new tracker:
     // this.progressTracker = new ProgressTracker(0, { x: 300, y: 5900 }, []);
+    this.level = level;
+
     this.progressData = {
       score: score,
       spritePosition: spritePosition,
@@ -76,7 +77,10 @@ export class ProgressTracker extends Scene {
       this.updatePosition(sprite);
     }
 
-    localStorage.setItem("progress", JSON.stringify(this.progressData));
+    localStorage.setItem(
+      `progress_${this.level}`,
+      JSON.stringify(this.progressData)
+    );
     console.log("--------PROGRESS SAVED----------------");
   }
   // loads progress from local store/db call :
@@ -86,8 +90,12 @@ export class ProgressTracker extends Scene {
   // then get what you want from progressData
 
   loadProgress() {
-    let storedData = JSON.parse(localStorage.getItem("progress"));
-    this.progressData = storedData;
+    let storedData = JSON.parse(localStorage.getItem(`progress_${this.level}`));
+    if (storedData) {
+      this.progressData = storedData;
+    }
+    console.log("Level", this.level);
+    console.log("DATTA", this.progressData);
     return this.progressData;
   }
 
@@ -101,3 +109,4 @@ export class ProgressTracker extends Scene {
     }
   }
 }
+

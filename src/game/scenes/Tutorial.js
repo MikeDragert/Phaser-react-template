@@ -28,7 +28,7 @@ export class Tutorial extends Player {
   create() {
     super.create();
 
-    this.progressTracker = new ProgressTracker(0, { x: 300, y: 5900 }, []);
+    this.progressTracker = new ProgressTracker(0, { x: 300, y: 5900 }, [], "Tutorial");
     this.progressData = this.progressTracker.loadProgress();
     const position = this.progressData.spritePosition;
 

@@ -25,7 +25,7 @@ export class Game extends Player {
 
     super.create();
 
-    this.progressTracker = new ProgressTracker(0, { x: 300, y: 5900 }, []);
+    this.progressTracker = new ProgressTracker(0, { x: 300, y: 5900 }, [], "Game");
     this.progressData = this.progressTracker.loadProgress();
     const position = this.progressData.spritePosition;
 
