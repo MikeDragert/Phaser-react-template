@@ -105,16 +105,33 @@ function App ()
   };
 
 
-  useEffect(() => {
-    EventBus.on("touch-flag", (data) => {
-      setWorkBenchState(true)
-      console.log(data);
-    });
+  // useEffect(() => {
+  //   EventBus.on("touch-flag", (data) => {
+  //     setWorkBenchState(true)
+  //     console.log(data);
+  //   });
 
-    return () => {
-      EventBus.removeListener("touch-flag");
-    };
-  }, []);
+  //   return () => {
+  //     EventBus.removeListener("touch-flag");
+  //   };
+  // }, []);
+
+  useEffect(() => {
+    EventBus.on('keyEvent',  (data) => {
+      //we get two keyEvent on the bus even though it was only sent once.  So, this triggers a read from the SendKeyEventsArray instead
+      // of trusting the keyEvent message      
+      while(phaserRef.current.scene.sendKeyEvents.length > 0){
+        let keyEvent = phaserRef.current.scene.sendKeyEvents.pop();
+        if ((keyEvent.keyCode === Phaser.Input.Keyboard.KeyCodes.ONE) && (keyEvent.isDown))  {
+          workBench.execute1();
+        }
+      }
+    })
+
+    EventBus.on("touch-flag", (data) => {
+      setWorkBenchState(true);
+    })
+  }, [phaserRef])
 
   // Event emitted from the PhaserGame component
   const currentScene = (scene) => {
@@ -136,20 +153,7 @@ function App ()
       setShowGame(showGameValue);
     }
 
-    useEffect(() => {
-      EventBus.on('keyEvent',  () => {
-        while(phaserRef.current.scene.sendKeyEvents.length > 0){
-          let keyEvent = phaserRef.current.scene.sendKeyEvents.pop();
-          if ((keyEvent.keyCode === Phaser.Input.Keyboard.KeyCodes.ONE) && (keyEvent.isDown))  {
-            workBench.execute1();
-          }
-        }
-      })
-  
-      EventBus.on("touch-flag", (data) => {
-        setWorkBenchState(true);
-      })
-    }, [phaserRef])
+    
 
     let gameOpen = !workbenchOpen;
 
