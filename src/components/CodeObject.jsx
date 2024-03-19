@@ -8,14 +8,29 @@ export class CodeObject {
   _returnType = PARAMTYPES.UNKNOWN;
   _used = 0;
   _name = "";
+  _cost = 0;
 
   constructor(name) {
     this._name = name;
+    this._cost = 0;
   };
 
   get name() {
     return this._name;
   };
+
+  get cost() {
+    return this._cost;
+    //I originally thought I would sum the cost of all the objects, but I don't think we need to...
+    // return this._params.reduce(
+    //   (accum, param) => {
+    //     if (param._value instanceof CodeObject) {
+    //       return accum + param._value.cost;
+    //     }
+    //     return accum;
+    //   }, this._cost
+    // )
+  }
 
   getParamsLength = function() {
     return this._params.length;
@@ -28,14 +43,32 @@ export class CodeObject {
     return undefined;
   };
 
-  removeParamObject = function(codeObject) {
+  hasParamCodeObject = function(codeObject) {
     if (codeObject instanceof CodeObject){
+      let found = false;
       this._params.forEach((param, index) => {
         if (param.getValueObject() === codeObject) {
           this._params[index].clearValue()
+          found = true;
         } 
       });
+      return found;
     }
+    return false;
+  }
+
+  removeParamObject = function(codeObject) {
+    if (codeObject instanceof CodeObject){
+      let removed = false;
+      this._params.forEach((param, index) => {
+        if (param.getValueObject() === codeObject) {
+          this._params[index].clearValue()
+          removed = true;
+        } 
+      });
+      return removed;
+    }
+    return false;
   };
 
 

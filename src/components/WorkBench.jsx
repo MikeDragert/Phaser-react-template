@@ -13,14 +13,17 @@ import Draggable from './Draggable.jsx'
 
 // and by building the objects together to create behaviour for a key
 class WorkBench extends React.Component {
-  constructor(codeList, moveCodeObject, loaded, setLoaded, functionList){
+  constructor(codeList, moveCodeObject, changeMaxCurrency, loaded, setLoaded, functionList) {
     super();
     this.codeList = codeList;
-    this.moveCodeObject = moveCodeObject;    
+    this.baseMoveCodeObject = moveCodeObject;  
+    this.changeMaxCurrency = changeMaxCurrency;   
     this.loaded = loaded;
     this.setLoaded = setLoaded;
     
     if (!this.loaded) {
+      //for testing, lets set a max currency
+      this.changeMaxCurrency(10);
       //for a test, let's set up some params!
       let plusOperator = new Operator('plusOp', '+');
       let minusOperator = new Operator('minusOp', '-');
@@ -66,6 +69,10 @@ class WorkBench extends React.Component {
 
   }
 
+  moveCodeObject = function(codeObject, fromName, toName) {
+    this.baseMoveCodeObject(codeObject, fromName, toName);
+  }
+
   execute1 = function() {
     this.codeList.keys[1].forEach(codeItem => {
       codeItem.execute()
@@ -76,7 +83,7 @@ class WorkBench extends React.Component {
     console.log('My current codeList is', this.codeList)
   }
 
-  createFunction(name, callback, params) {
+  createFunction = function(name, callback, params) {
     let codeFunction = new CodeFunction(name, callback)
     if (params) {
       params.forEach((param, index) => codeFunction.setParamValue(param, index+1));
@@ -85,11 +92,8 @@ class WorkBench extends React.Component {
   }
 
   setCodeList = function (newCodeList) {
-    console.log('got updated codelist', newCodeList)
     this.codeList = {...newCodeList};
-        console.log('I changed my codelist to', this.codeList)
     this.logMyCodeList()
-    
   }
 
   addCodeObjectToBench = function(codeObject) {
@@ -102,8 +106,7 @@ class WorkBench extends React.Component {
     if (event) {
       const {active, over} = event;
       if (active && over) {
-        // console.log(active, over)
-        // console.log('Move',active.data.current.this, 'From', active.data.current.currentContainerName, 'To', over.data.current.id)
+        //console.log('Move',active.data.current.this, 'From', active.data.current.currentContainerName, 'To', over.data.current.id, 'codelist:', this.codeList)
         this.moveCodeObject(active.data.current.this, active.data.current.currentContainerName, over.data.current.id)
       }
     }
@@ -112,20 +115,23 @@ class WorkBench extends React.Component {
   //todo: need unique key
   getReactBench = function() {   
     return (
-      <DndContext onDragEnd={(event) => this.handleDragEnd(event)}>
-        <div className='benchContainer'>
-          <Droppable id="key1" className="workbench workbench-left">
-            {this.codeList.keys[1].map(codeObject => {
-              return codeObject.reactDisplay("key1")
-            })}
-          </Droppable>
-          <Droppable id="bench" className="workbench workbench-right">
-            {this.codeList.keys[0].map(codeObject => {
-              return codeObject.reactDisplay("bench")
-            })}
-          </Droppable>
-        </div>
-      </DndContext>
+      <>
+        <div><label>Currency:</label><span>{this.codeList.currentCurrency}</span></div>
+        <DndContext onDragEnd={(event) => this.handleDragEnd(event)}>
+          <div className='benchContainer'>
+            <Droppable id="key1" className="workbench workbench-left">
+              {this.codeList.keys[1].map(codeObject => {
+                return codeObject.reactDisplay("key1")
+              })}
+            </Droppable>
+            <Droppable id="bench" className="workbench workbench-right">
+              {this.codeList.keys[0].map(codeObject => {
+                return codeObject.reactDisplay("bench")
+              })}
+            </Droppable>
+          </div>
+        </DndContext>
+      </>
     )
   }
 } 

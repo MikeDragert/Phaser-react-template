@@ -12,6 +12,7 @@ class CodeFunction extends CodeObject {
       new ObjectParameter("value", PARAMTYPES.NUMBER, 0)
     ];
     this._returnType = PARAMTYPES.NONE;
+    this._cost = 4;
   };
 
   // this will execute the logic of the code objects

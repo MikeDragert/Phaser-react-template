@@ -97,8 +97,9 @@ export class Player extends Scene {
 
   setJumpPower(newJumpPower) {
     //todo:  this needs to be updated to change the actual character jump power that the game uses!!
-    console.log('set jump power', newJumpPower)
-    let jumpPower= newJumpPower;
+    //recommending a x10 on this, so that lower numbers like 1 to 10 are more noticable when used...eg jumpPower(9) becomes jumpPower(90) behind the scenes??
+    console.log('set jump power', newJumpPower * 10)
+    let jumpPower= newJumpPower * 10;
   }
 
   //key events stored for app.jsx to consume

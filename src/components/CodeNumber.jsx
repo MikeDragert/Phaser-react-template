@@ -8,10 +8,13 @@ class CodeNumber extends CodeObject {
     super(name);
     if (Number.isNaN(value)) {
       this._params = [new ObjectParameter("value", PARAMTYPES.NUMBER, 0)];
+      this._cost = 0;
     } else {
       this._params = [new ObjectParameter("value", PARAMTYPES.NUMBER, value)];
+      this._cost = value;
     }
     this._returnType = PARAMTYPES.NUMBER;
+
   };
 
   //todo: we can maybe dry this up
@@ -34,6 +37,7 @@ class CodeNumber extends CodeObject {
 
       if (updatePosition >= 0) {
         this._params[updatePosition].value = number;
+        this._cost = number;
         return true;
       }
     }

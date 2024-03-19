@@ -3,7 +3,7 @@ import { useRef, useState, useEffect, useReducer } from 'react';
 import Phaser from 'phaser';
 import { PhaserGame } from './game/PhaserGame';
 import WorkBench from './components/WorkBench.jsx';
-import { reducer, moveCodeObject } from './helpers/workbenchStateHelpers.js';
+import { reducer, moveCodeObject, changeMaxCurrency } from './helpers/workbenchStateHelpers.js';
 import { EventBus } from './game/EventBus';
 
 import './styles/App.css';
@@ -26,13 +26,18 @@ function App ()
             [],
             [],
             []],
-    count: 0
+    maxCurrency: 0,
+    currentCurrency: 0
   }
 
   const [codeList, dispatch] = useReducer(reducer, initialState)
 
   const moveCodeObjectJumper = function(codeObject, fromName, toName) {
     return moveCodeObject(codeList, dispatch, codeObject, fromName, toName);
+  }
+
+  const changeMaxCurrencyJumper = function(maxCurrency) {
+    return changeMaxCurrency(codeList, dispatch, maxCurrency);
   }
 
   const getFunctionList = function() {
@@ -44,7 +49,7 @@ function App ()
     ];
   }
 
-  let workBench = new WorkBench(codeList, moveCodeObjectJumper, loaded, setLoaded, getFunctionList());
+  let workBench = new WorkBench(codeList, moveCodeObjectJumper, changeMaxCurrencyJumper, loaded, setLoaded, getFunctionList());
   
   
   // The sprite can only be moved in the MainMenu Scene

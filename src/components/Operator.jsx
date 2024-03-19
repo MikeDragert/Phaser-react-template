@@ -17,7 +17,7 @@ class Operator extends CodeObject {
       this._operator = 'INVALID';
     }
     this._returnType = PARAMTYPES.NUMBER;
-    console.log(this._params)
+    this._cost = 1;
   };
 
   // this will execute the logic of the code objects
