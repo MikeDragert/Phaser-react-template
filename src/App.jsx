@@ -104,20 +104,7 @@ function App ()
     }
   };
 
-
-  // useEffect(() => {
-  //   EventBus.on("touch-flag", (data) => {
-  //     setWorkBenchState(true)
-  //     console.log(data);
-  //   });
-
-  //   return () => {
-  //     EventBus.removeListener("touch-flag");
-  //   };
-  // }, []);
-
   useEffect(() => {
-    let workBenchOpened = false;
     
     EventBus.on('keyEvent',  (data) => {
       //we get two keyEvent on the bus even though it was only sent once.  So, this triggers a read from the SendKeyEventsArray instead
@@ -131,14 +118,12 @@ function App ()
     })
 
     EventBus.on("touch-flag", (data) => {
-      workBenchOpened = true;
       openWorkbench();
     });
 
     return () => {
-      if (workBenchOpened) {
-        EventBus.removeListener("touch-flag");
-      }
+      EventBus.removeListener("touch-flag");
+      EventBus.removeListener("keyEvent");
     };
   }, []);
 
