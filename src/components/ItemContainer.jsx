@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../styles/ItemContainer.css'
-import player_items from '../mock_data/PlayerItems';
+import player_items from '../mock_data/playerItems';
 
 
     console.log(items);
