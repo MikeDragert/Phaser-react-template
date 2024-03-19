@@ -1,18 +1,13 @@
 import { EventBus } from "../EventBus";
 import { Player } from "./Player";
+import { ProgressTracker } from "./progressTracker";
 
 export class Tutorial extends Player {
   constructor() {
     super("Tutorial");
   }
 
-  score = JSON.parse(localStorage.getItem("score"));
-  scoreText;
-
-  collectedItems = [];
-  spritePosition = JSON.parse(localStorage.getItem(this.spritePosition)) ||{"spriteX": 300, "spriteY": 5500}
-  tutorialCount = 0;
-
+  
   changeScene() {
     this.scene.start("Game");
   }
@@ -30,36 +25,16 @@ export class Tutorial extends Player {
     return false;
   }
 
-  
-
-  saveProgress(sprite, tile) {
-    console.log(sprite.x, sprite.y);
-    this.spritePosition = { "spriteX": sprite.x, "spriteY": sprite.y}
-    localStorage.setItem("items", JSON.stringify(this.collectedItems));
-    localStorage.setItem("spritePosition", JSON.stringify(this.spritePosition))
-    localStorage.setItem("score", JSON.stringify(this.score));
-  }
-
-  writeTutorial(sprite, tile) {
-    console.log("here");
-    let increase = 0;
-  }
-
   create() {
-    this.isPaused = false;
-
-    EventBus.on("unPause", () => {
-      this.isPaused = false;
-      console.log(this.isPaused);
-    });
-
-
     super.create();
 
-    this.add.image(400, 300, "sky").setScale(20);
-    this.scoreText = JSON.parse(localStorage.getItem("score"));
+    this.progressTracker = new ProgressTracker(0, { x: 300, y: 5900 }, []);
+    this.progressData = this.progressTracker.loadProgress();
+    const position = this.progressData.spritePosition;
 
-    this.player = this.physics.add.sprite(this.spritePosition.spriteX, this.spritePosition.spriteY, "NinjaCat");
+    this.add.image(400, 300, "sky").setScale(20);
+
+    this.player = this.physics.add.sprite(position.x, position.y, "NinjaCat");
     this.player.setBounce(0.2);
     this.player.body.setSize(80, 190);
     this.player.setOffset(40, 20);
@@ -76,7 +51,7 @@ export class Tutorial extends Player {
     const items = this.map.createLayer("checkpoints", itemsTileSet, 0, 0);
     const coins = this.map.createLayer("coinLayer", itemsTileSet, 0, 0);
     const tiles = this.map.createLayer("tileLayer", tilesTileSet, 0, 0);
-    const tutorial = this.map.createLayer("tutorial", itemsTileSet, 0,0);
+    const tutorial = this.map.createLayer("tutorial", itemsTileSet, 0, 0);
     ground.setCollisionByExclusion([-1]);
 
     this.physics.world.bounds.width = ground.width;
@@ -89,18 +64,18 @@ export class Tutorial extends Player {
 
     this.physics.add.overlap(this.player, items);
     this.physics.add.overlap(this.player, coins);
-    this.physics.add.overlap(this.player, tiles)
+    this.physics.add.overlap(this.player, tiles);
     this.physics.add.overlap(this.player, tutorial);
 
-    tiles.setTileIndexCallback(
-      257,
-      this.triggerWorkbench,
+    tiles.setTileIndexCallback(257, this.triggerWorkbench, this);
+
+    items.setTileIndexCallback(
+      [145, 155, 154, 138],
+      (sprite, tile) => {
+        this.progressTracker.saveProgress(sprite);
+      },
       this
     );
-
-    items.setTileIndexCallback([145, 155, 154, 138], this.saveProgress, this);
-
-    // tutorial.setTileIndexCallback(130, this.writeTutorial, this);
 
     this.e = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
     this.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
@@ -119,46 +94,30 @@ export class Tutorial extends Player {
     this.text.setScrollFactor(0);
     this.scoreText.setScrollFactor(0);
 
-    function collectCoins(sprite, tile) {
-      coins.removeTileAt(tile.x, tile.y);
-      this.score++;
-      
-      const cords = {
-        x: tile.x,
-        y: tile.y,
-      };
-      this.collectedItems.push(cords);
-      return false;
-    }
+    coins.setTileIndexCallback(
+      158,
+      (sprite = null, tile, layer = coins) => {
+        this.progressTracker.collectCoins(sprite, tile, layer);
+      },
+      this
+    );
 
-    coins.setTileIndexCallback(158, collectCoins, this);
-
-    let itemsToRemove = JSON.parse(localStorage.getItem("items")) || false;
-    if (itemsToRemove) {
-      for (let item of itemsToRemove) {
-        console.log(item.x, item.y);
-
-        coins.removeTileAt(item.x, item.y);
-      }
-      console.log(itemsToRemove);
-    }
+    this.progressTracker.removeItems(coins);
 
     EventBus.emit("current-scene-ready", this);
   }
 
   update() {
 
-    this.scoreText.setText(this.score);
+    let score = this.progressTracker.progressData.score;
+    this.scoreText.setText(score);
+
     if (Phaser.Input.Keyboard.JustDown(this.s)) {
-      localStorage.removeItem("items");
-      localStorage.removeItem("score");
-      localStorage.removeItem("spritePosition")
-      this.score = 0
-      console.log("--------RESET--------");
+      this.progressTracker.resetProgress();
     }
 
     if (Phaser.Input.Keyboard.JustDown(this.r)) {
-      this.scene.restart()   
+      this.scene.restart();
     }
 
     super.update();

@@ -106,8 +106,7 @@ function App ()
 
   useEffect(() => {
     EventBus.on("touch-flag", (data) => {
-      setWorkBenchState(true)
-      console.log(data);
+      openWorkbench();
     });
 
     return () => {
@@ -146,7 +145,7 @@ function App ()
       })
   
       EventBus.on("touch-flag", (data) => {
-        setWorkBenchState(true);
+        openWorkbench
       })
     }, [phaserRef])
 
