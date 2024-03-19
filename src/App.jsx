@@ -7,6 +7,7 @@ import { reducer, moveCodeObject, changeMaxCurrency } from './helpers/workbenchS
 import { EventBus } from './game/EventBus';
 
 import './styles/App.css';
+import ItemContainer from './components/ItemContainer.jsx';
 
 
 
@@ -160,6 +161,9 @@ function App ()
             {gameOpen && <button className="button" onClick={changeScene}>Change Scene</button>}
             {gameOpen && <button type="button" onClick={() => workBench.execute1()}>Run 1</button>} 
             
+          </div>
+          <div>
+            <ItemContainer />
           </div>
         </div>
     )
