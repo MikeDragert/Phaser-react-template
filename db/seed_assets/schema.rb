@@ -18,6 +18,7 @@ end
 create_table "items", force: :cascade do |t|
     t.string "name"
     t.integer "type"
+    t.boolean "has_obtained"
 end
 
 create_table "player_achievements", force: :cascade do |t|
