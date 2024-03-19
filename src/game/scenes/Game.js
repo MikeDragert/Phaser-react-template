@@ -1,13 +1,13 @@
 import { EventBus } from "../EventBus";
-import { Scene } from "phaser";
 import { Player } from "./Player";
+import { ProgressTracker } from "./progressTracker";
 
 export class Game extends Player {
   constructor() {
     super("Game");
   }
 
-  triggerCheckpoint(sprite, tile) {
+  triggerWorkbench(sprite, tile) {
     this.text.setText("Press E to open inventory");
     console.log("HERE");
     if (this.e.isDown) {
@@ -20,19 +20,18 @@ export class Game extends Player {
     return false;
   }
 
-  score = 0;
-  scoreText;
-
-  collectedItems = [];
 
   create() {
-    this.isPaused = false;
 
     super.create();
 
+    this.progressTracker = new ProgressTracker(0, { x: 300, y: 5900 }, [], "Game");
+    this.progressData = this.progressTracker.loadProgress();
+    const position = this.progressData.spritePosition;
+
     this.add.image(400, 300, "sky").setScale(20);
 
-    this.player = this.physics.add.sprite(300, 6000, "NinjaCat");
+    this.player = this.physics.add.sprite(position.x, position.y, "NinjaCat");
     this.player.setBounce(0.2);
     this.player.body.setSize(80, 190);
     this.player.setOffset(40, 20);
@@ -54,8 +53,13 @@ export class Game extends Player {
 
     this.physics.add.collider(this.player, ground);
 
+    this.physics.add.overlap(this.player, items);
+    this.physics.add.overlap(this.player, coins);
+
     this.cameras.main.setBounds(0, 0, ground.width, ground.height);
     this.cameras.main.startFollow(this.player);
+
+    
 
     //thise next 2 blocks were added for sending keys back to the app.jsx
     //  if there is a better way to watch the phaser input we can adjust these
@@ -75,12 +79,25 @@ export class Game extends Player {
 
     items.setTileIndexCallback(
       [145, 155, 154, 138],
-      this.triggerCheckpoint,
+      this.triggerWorkbench,
       this
     );
 
-    this.physics.add.overlap(this.player, items);
-    this.physics.add.overlap(this.player, coins);
+    items.setTileIndexCallback(
+      [145, 155, 154, 138],
+      (sprite, tile) => {
+        this.progressTracker.saveProgress(sprite);
+      },
+      this
+    );
+
+    coins.setTileIndexCallback(
+      158,
+      (sprite = null, tile, layer = coins) => {
+        this.progressTracker.collectCoins(sprite, tile, layer);
+      },
+      this
+    );
 
     this.e = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
     this.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
@@ -99,32 +116,22 @@ export class Game extends Player {
     this.text.setScrollFactor(0);
     this.scoreText.setScrollFactor(0);
 
-    function collectCoins(sprite, tile) {
-      console.log("COINS");
-      console.log(this.map.layers[2].data);
-      coins.removeTileAt(tile.x, tile.y);
-      this.score++;
-      this.scoreText.setText(this.score);
-      this.collectedItems.push({"x": tile.x, "y": tile.y})
-      return false;
-    }
-
-    coins.setTileIndexCallback(158, collectCoins, this);
+    this.progressTracker.removeItems(coins);
 
     EventBus.emit("current-scene-ready", this);
   }
 
   update() {
+
+    let score = this.progressTracker.progressData.score;
+    this.scoreText.setText(score);
+
     if (Phaser.Input.Keyboard.JustDown(this.s)) {
-      console.log("SSSSSSSS");
-      localStorage.setItem("items", JSON.stringify(this.collectedItems));
+      this.progressTracker.resetProgress();
     }
 
     if (Phaser.Input.Keyboard.JustDown(this.r)) {
-      console.log("RRRRR");
-      const Items = JSON.parse(localStorage.getItem("items"));
-      localStorage.removeItem()
-      console.log(Items);
+      this.scene.restart();
     }
 
     super.update();
