@@ -8,7 +8,7 @@ export class Game extends Player {
   }
 
   triggerCheckpoint(sprite, tile) {
-    this.setText("Press E to open inventory");
+    this.text.setText("Press E to open inventory");
     console.log("HERE");
     if (this.e.isDown) {
       EventBus.emit("touch-flag", tile);
