@@ -5,6 +5,14 @@ export class Tutorial extends Player {
   constructor() {
     super("Tutorial");
   }
+
+  score = JSON.parse(localStorage.getItem("score"));
+  scoreText;
+
+  collectedItems = [];
+  spritePosition = JSON.parse(localStorage.getItem(this.spritePosition)) ||{"spriteX": 300, "spriteY": 5500}
+  tutorialCount = 0;
+
   changeScene() {
     this.scene.start("Game");
   }
@@ -22,11 +30,7 @@ export class Tutorial extends Player {
     return false;
   }
 
-  score = JSON.parse(localStorage.getItem("score"));
-  scoreText;
-
-  collectedItems = [];
-  spritePosition = JSON.parse(localStorage.getItem(this.spritePosition)) ||{"spriteX": 300, "spriteY": 5500}
+  
 
   saveProgress(sprite, tile) {
     console.log(sprite.x, sprite.y);
@@ -34,6 +38,11 @@ export class Tutorial extends Player {
     localStorage.setItem("items", JSON.stringify(this.collectedItems));
     localStorage.setItem("spritePosition", JSON.stringify(this.spritePosition))
     localStorage.setItem("score", JSON.stringify(this.score));
+  }
+
+  writeTutorial(sprite, tile) {
+    console.log("here");
+    let increase = 0;
   }
 
   create() {
@@ -67,6 +76,7 @@ export class Tutorial extends Player {
     const items = this.map.createLayer("checkpoints", itemsTileSet, 0, 0);
     const coins = this.map.createLayer("coinLayer", itemsTileSet, 0, 0);
     const tiles = this.map.createLayer("tileLayer", tilesTileSet, 0, 0);
+    const tutorial = this.map.createLayer("tutorial", itemsTileSet, 0,0);
     ground.setCollisionByExclusion([-1]);
 
     this.physics.world.bounds.width = ground.width;
@@ -80,6 +90,7 @@ export class Tutorial extends Player {
     this.physics.add.overlap(this.player, items);
     this.physics.add.overlap(this.player, coins);
     this.physics.add.overlap(this.player, tiles)
+    this.physics.add.overlap(this.player, tutorial);
 
     tiles.setTileIndexCallback(
       257,
@@ -89,7 +100,7 @@ export class Tutorial extends Player {
 
     items.setTileIndexCallback([145, 155, 154, 138], this.saveProgress, this);
 
-    
+    tutorial.setTileIndexCallback(130, this.writeTutorial, this);
 
     this.e = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
     this.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
