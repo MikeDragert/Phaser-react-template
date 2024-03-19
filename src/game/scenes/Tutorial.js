@@ -100,7 +100,7 @@ export class Tutorial extends Player {
 
     items.setTileIndexCallback([145, 155, 154, 138], this.saveProgress, this);
 
-    tutorial.setTileIndexCallback(130, this.writeTutorial, this);
+    // tutorial.setTileIndexCallback(130, this.writeTutorial, this);
 
     this.e = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
     this.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);

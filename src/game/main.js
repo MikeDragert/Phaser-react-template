@@ -5,7 +5,7 @@ import { MainMenu } from './scenes/MainMenu';
 import Phaser from 'phaser';
 import { Preloader } from './scenes/Preloader';
 import { Tutorial } from './scenes/Tutorial'
-
+import { ProgressTracker } from './scenes/progressTracker';
 
 // Find out more information about the Game Config at:
 // https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
@@ -21,7 +21,8 @@ const config = {
         MainMenu,
         Game,
         GameOver,
-        Tutorial
+        Tutorial,
+        ProgressTracker
     ],
     physics: {
       default: "arcade",
