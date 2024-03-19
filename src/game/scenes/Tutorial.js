@@ -59,13 +59,15 @@ export class Tutorial extends Player {
 
     this.physics.add.collider(this.player, ground);
 
-    this.cameras.main.setBounds(0, 0, ground.width, ground.height);
-    this.cameras.main.startFollow(this.player);
-
     this.physics.add.overlap(this.player, items);
     this.physics.add.overlap(this.player, coins);
     this.physics.add.overlap(this.player, tiles);
     this.physics.add.overlap(this.player, tutorial);
+
+    this.cameras.main.setBounds(0, 0, ground.width, ground.height);
+    this.cameras.main.startFollow(this.player);
+
+    
 
     tiles.setTileIndexCallback(257, this.triggerWorkbench, this);
 
@@ -73,6 +75,14 @@ export class Tutorial extends Player {
       [145, 155, 154, 138],
       (sprite, tile) => {
         this.progressTracker.saveProgress(sprite);
+      },
+      this
+    );
+
+    coins.setTileIndexCallback(
+      158,
+      (sprite = null, tile, layer = coins) => {
+        this.progressTracker.collectCoins(sprite, tile, layer);
       },
       this
     );
@@ -93,14 +103,6 @@ export class Tutorial extends Player {
 
     this.text.setScrollFactor(0);
     this.scoreText.setScrollFactor(0);
-
-    coins.setTileIndexCallback(
-      158,
-      (sprite = null, tile, layer = coins) => {
-        this.progressTracker.collectCoins(sprite, tile, layer);
-      },
-      this
-    );
 
     this.progressTracker.removeItems(coins);
 
