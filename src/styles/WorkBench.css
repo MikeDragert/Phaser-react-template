@@ -1,0 +1,59 @@
+.codeBlock {
+  border: 1px;
+  border-color: rgb(10, 10, 10, 0.1);
+  border-style: solid;
+  border-radius: 8px;
+  min-height: 26px;
+  color: whitesmoke;
+}
+
+
+.codeBlock-Number {
+  background-color: rgb(153, 60, 76);
+  width: 30px;
+}
+
+.codeBlock-Operator {
+  background-color: rgb(61, 134, 43);
+  width: 100px; 
+}
+
+.codeBlock-Function {
+  background-color:rgb(15, 104, 145);
+  width: 200px;
+}
+
+.workbench {
+  background-color: rgb(10, 10, 10, 0.03);
+  width: 200px;
+  height: 300px;
+  border: 0;
+  border-color: black;
+  border-style: none;
+
+}
+
+.workbench-left {
+  position:absolute;
+  top:43%;
+  left:28%;
+}
+
+.workbench-right {
+  position:absolute;
+  top:43%;
+  left:50%;
+}
+
+.benchContainer {
+  background-image: url('../assets/Workbench.png');
+  background-position: 'center';
+  background-size: 'cover';
+  background-repeat: none;
+  background-size:100% 100%;
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 1500px;
+  height: 800px;
+}
