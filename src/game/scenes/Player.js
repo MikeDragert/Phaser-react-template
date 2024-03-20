@@ -38,7 +38,7 @@ export class Player extends Scene {
     if (left) {
       if (onFloor) {
         player.setOffset(133, 20);
-        player.body.setVelocityX(-500);
+        player.body.setVelocityX(-1000);
         player.anims.play("player-walk", true);
         player.anims.msPerFrame = 100;
         player.setFlipX(true);
@@ -47,7 +47,7 @@ export class Player extends Scene {
       }
     } else if (right) {
       if (onFloor) {
-        player.body.setVelocityX(500);
+        player.body.setVelocityX(1000);
         player.setOffset(40, 20);
         player.anims.play("player-walk", true);
         player.anims.msPerFrame = 100;
@@ -64,11 +64,11 @@ export class Player extends Scene {
     }
 
     //jumping logic starts here
-    if (this.cursors.up.isDown) {
+    if (this.cursors.up.isDown || this.cursors.space.isDown) {
       if ((this.initialJumpAmount >= 0))  {
-        if (this.jumpCount < 10) {
+        if (this.jumpCount < 2) {
           //this starts tracking for the next jump
-          this.initialJumpAmount += 40;
+          this.initialJumpAmount += 400;
           if (this.jumpingTimingCount < 0) {
             this.jumpingTimingCount = 0;
           }
@@ -99,7 +99,7 @@ export class Player extends Scene {
       }
 
       // end jump on jump key release
-      if (!this.cursors.up.isDown) {
+      if (!this.cursors.up.isDown && !this.cursors.space.isDown) {
         this.jumpingTimingCount = -1;
         this.initialJumpAmount = 0;
       }
@@ -108,8 +108,8 @@ export class Player extends Scene {
 
     player.body.velocity.x = Phaser.Math.Clamp(
       player.body.velocity.x,
-      -500,
-      500
+      -10000,
+      10000
     );
 
     player.body.velocity.y = Phaser.Math.Clamp(

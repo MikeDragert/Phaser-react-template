@@ -57,7 +57,7 @@ export class ProgressTracker {
   resetProgress() {
     this.progressData = {
       score: 0,
-      spritePosition: { x: 300, y: 5900 },
+      spritePosition: { x: 300, y: 5700 },
       items: [],
     };
     this.saveProgress();

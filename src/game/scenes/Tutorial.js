@@ -33,17 +33,21 @@ export class Tutorial extends Player {
     }, 2000);
     return false;
   }
+
+  die() {
+    this.scene.restart();
+  }
   
   create() {
     super.create();
 
-    this.progressTracker = new ProgressTracker(0, { x: 300, y: 5900 }, [], "Tutorial");
+    this.progressTracker = new ProgressTracker(0, { x: 300, y: 1000 }, [], "Tutorial");
     this.progressData = this.progressTracker.loadProgress();
     const position = this.progressData.spritePosition;
 
     this.add.image(400, 300, "sky").setScale(20);
 
-    this.player = this.physics.add.sprite(position.x, position.y, "NinjaCat");
+    this.player = this.physics.add.sprite(position.x, position.y, "NinjaCat").setScale(2);
     this.player.setBounce(0.2);
     this.player.body.setSize(80, 190);
     this.player.setOffset(40, 20);
@@ -84,9 +88,11 @@ export class Tutorial extends Player {
     
 
     this.cameras.main.setBounds(0, 0, ground.width, ground.height);
+    this.cameras.main.setZoom(0.5, 0.5)
     this.cameras.main.startFollow(this.player);
 
     
+    tiles.setTileIndexCallback([226,234], this.die, this)
 
     tiles.setTileIndexCallback(257, this.triggerWorkbench, this);
     let previousSave = false;
@@ -120,19 +126,31 @@ export class Tutorial extends Player {
     this.r = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 
     this.text = this.add.text(320, 700, "", {
-      fontSize: "20px",
-      fill: "#ffffff",
-    });
+			fontFamily: 'Quicksand',
+			fontSize: '20px',
+			color: '#000000',
+			stroke: '#534848',
+			strokeThickness: 1
+		});
 
     this.scoreText = this.add.text(50, 60, "0", {
-      fontSize: "20px",
-      fill: "#ffffff",
-    });
+			fontFamily: 'Quicksand',
+			fontSize: '48px',
+			color: '#F8E71C',
+			fontStyle: 'normal',
+      stroke: '#000000',
+			strokeThickness: 12,
+			shadow: { offsetX: 2, offsetY: 2, color: '#FF0000', fill: true, blur: 2, stroke: true },
+			padding: { left: null }
+		});
 
-    this.tutorialText = this.add.text(50, 100, "", {
-      fontSize: "20px",
-      fill: "#ffffff",
-    })
+    this.tutorialText = this.add.text(50, 120, "", {
+			fontFamily: 'Quicksand',
+			fontSize: '20px',
+			color: '#000000',
+			stroke: '#534848',
+			strokeThickness: 1
+		})
 
     this.text.setScrollFactor(0);
     this.scoreText.setScrollFactor(0);
