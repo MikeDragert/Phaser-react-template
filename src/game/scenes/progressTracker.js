@@ -1,8 +1,8 @@
 import { Scene } from "phaser";
 
-export class ProgressTracker extends Scene {
+export class ProgressTracker {
   constructor(score, spritePosition, items, level) {
-    super({ key: "ProgressTracker" });
+    // super({ key: "ProgressTracker" });
     // default data, set in creating a new tracker:
     // this.progressTracker = new ProgressTracker(0, { x: 300, y: 5900 }, []);
     this.level = level;

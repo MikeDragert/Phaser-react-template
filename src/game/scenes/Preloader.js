@@ -38,6 +38,7 @@ export class Preloader extends Scene {
 
     this.load.image("ground", "ground/spritesheet_ground.png");
     this.load.image("items", "items/spritesheet_items.png")
+    this.load.image("tutorial_flag", "items/tutorial_flag.png")
     this.load.image("hud", "tiles/spritesheet_tiles.png");
     this.load.image("tiles", "tiles/spritesheet_tiles.png");
 
@@ -84,6 +85,17 @@ export class Preloader extends Scene {
         suffix: ".png",
       }),
     });
+
+    this.anims.create({
+      key: "spinning_coin",
+      framrate: 30,
+      frames: this.anims.generateFrameNames("spinning_coin", {
+        start: 1,
+        end: 6,
+        prefix: "NinjaCat_jump_0",
+        suffix: ".png",
+      }),
+    })
 
     this.scene.start("MainMenu");
   }

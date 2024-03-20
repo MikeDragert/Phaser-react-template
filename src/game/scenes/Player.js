@@ -43,8 +43,6 @@ export class Player extends Scene {
         player.anims.msPerFrame = 100;
         player.setFlipX(true);
       } else {
-        player.setFlipX(true);
-        player.setOffset(133, 20);
         player.body.velocity.x -= 10;
       }
     } else if (right) {
@@ -55,8 +53,6 @@ export class Player extends Scene {
         player.anims.msPerFrame = 100;
         player.setFlipX(false);
       } else {
-        player.setFlipX(false);
-        player.setOffset(40, 20);
         player.body.velocity.x += 10;
       }
     } else {
@@ -119,7 +115,7 @@ export class Player extends Scene {
     player.body.velocity.y = Phaser.Math.Clamp(
       player.body.velocity.y,
       -1000,
-      3000
+      2000
     );
   }
 
