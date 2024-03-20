@@ -1,11 +1,11 @@
-import react from 'react';
-// import './styles/Item.css';
+import React from 'react';
+import '../styles/DisplayItem.css';
 
 const DisplayItem = ({ items }) => {
     return (
         <div>
             {Object.values(items).map(item => (
-                <div key={item.type} className='grid-item'>
+                <div key={item.type} className={`grid-item ${item.has_obtained ? 'has-item' : ''}`}>
                     {item.has_obtained && <p>{item.name}</p>}
                 </div>
             ))}
@@ -13,4 +13,4 @@ const DisplayItem = ({ items }) => {
     );
 };
 
-        export default DisplayItem;
+export default DisplayItem;
