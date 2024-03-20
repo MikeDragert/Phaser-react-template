@@ -11,7 +11,15 @@ export class Player extends Scene {
   }
 
   jumpCount = 0;
-  jumpPower = 0;
+  jumpPowerIncrease = 0;
+  jumpingTimingCount = 0; //track how fare are through the jump process
+  initialJumpAmount = 0;
+  savedJumpAmount = 0;
+
+   //anything that has to be cleared upon returning from the workbench should go here
+   clearWorkbenchProperties() {
+    this.jumpPowerIncrease = 0;
+  }
 
   create() {
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -59,22 +67,48 @@ export class Player extends Scene {
       }
     }
 
+    //jumping logic starts here
     if (this.cursors.up.isDown) {
-      if (this.cursors.up.isDown && this.jumpCount < 20 && this.jumpPower === 0) {
+      if ((this.initialJumpAmount >= 0))  {
+        if (this.jumpCount < 10) {
+          //this starts tracking for the next jump
+          this.initialJumpAmount += 40;
+          if (this.jumpingTimingCount < 0) {
+            this.jumpingTimingCount = 0;
+          }
+        }
+      }
+    } 
+
+    if (this.jumpingTimingCount >= 0) {
+      this.jumpingTimingCount++;
+    }
+    
+    //we've waited long enough, start processing the jump
+    if (this.jumpingTimingCount >= 10) {
+      if (this.initialJumpAmount >= 0) {
+        //begin jump  
         this.jumpCount++
         player.anims.play("player-jump", true);
         player.anims.msPerFrame = 30;
-        this.jumpPower = 1;
-        player.body.velocity.y = -400;
-      } else if (this.jumpPower > 0 && this.jumpPower < 20) {
-        
-        this.jumpPower++;
-        player.body.velocity.y = -400 - this.jumpPower * 2;
+        this.savedJumpAmount = -this.initialJumpAmount - (20 * this.jumpPowerIncrease);
+        player.body.velocity.y = this.savedJumpAmount;
+        //this disables jumping again, until the jump button is release
+        this.initialJumpAmount = -1;
       }
-    } else {
       
-      this.jumpPower = 0;
+      //hold up velocity to continue jump until our sequence number hits max
+      if (this.jumpingTimingCount < (30)) {
+        player.body.velocity.y = this.savedJumpAmount;
+      }
+
+      // end jump on jump key release
+      if (!this.cursors.up.isDown) {
+        this.jumpingTimingCount = -1;
+        this.initialJumpAmount = 0;
+      }
     }
+    
 
     player.body.velocity.x = Phaser.Math.Clamp(
       player.body.velocity.x,
@@ -94,10 +128,7 @@ export class Player extends Scene {
   }
 
   setJumpPower(newJumpPower) {
-    //todo:  this needs to be updated to change the actual character jump power that the game uses!!
-    //recommending a x10 on this, so that lower numbers like 1 to 10 are more noticable when used...eg jumpPower(9) becomes jumpPower(90) behind the scenes??
-    console.log('set jump power', newJumpPower * 10)
-    let jumpPower= newJumpPower * 10;
+    this.jumpPowerIncrease = newJumpPower;
   }
 
   //key events stored for app.jsx to consume

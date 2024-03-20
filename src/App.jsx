@@ -140,6 +140,7 @@ function App ()
     const closeWorkbench = (event) => {
       setWorkbenchOpen(false);
       setShowGame(true);
+      phaserRef.current.scene.clearWorkbenchProperties();
     }
 
 
