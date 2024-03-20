@@ -114,6 +114,7 @@ export class Tutorial extends Player {
       this
     );
 
+    this.one = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
     this.e = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
     this.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     this.r = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
@@ -153,6 +154,14 @@ export class Tutorial extends Player {
     if (Phaser.Input.Keyboard.JustDown(this.r)) {
       this.scene.restart();
     }
+
+    if (Phaser.Input.Keyboard.JustDown(this.one)) {
+      this.sendKeyPressMessage(Phaser.Input.Keyboard.KeyCodes.ONE, true)
+    }
+
+    // if (Phaser.Input.Keyboard.JustUp(this.one)) {
+    //   this.sendKeyPressMessage(Phaser.Input.Keyboard.KeyCodes.ONE, false);
+    // }
 
     super.update();
   }

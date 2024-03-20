@@ -23,7 +23,7 @@ class WorkBench extends React.Component {
     
     if (!this.loaded) {
       //for testing, lets set a max currency
-      this.changeMaxCurrency(10);
+      this.changeMaxCurrency(20);
       //for a test, let's set up some params!
       let plusOperator = new Operator('plusOp', '+');
       let minusOperator = new Operator('minusOp', '-');

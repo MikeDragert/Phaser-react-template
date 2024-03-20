@@ -7,6 +7,9 @@ import { reducer, moveCodeObject, changeMaxCurrency } from './helpers/workbenchS
 import { EventBus } from './game/EventBus';
 
 import './styles/App.css';
+import ItemContainer from './components/ItemContainer.jsx';
+import player_items from './mock_data/player_items';
+import items from './mock_data/items';
 
 
 
@@ -15,6 +18,7 @@ function App ()
   const [showGame, setShowGame] = useState(true);
   const [loaded, setLoaded] = useState(false);
   const [workbenchOpen, setWorkbenchOpen] = useState(false);
+  const [itemsState, setItemsState] = useState(items);
 
   const initialState = {
     keys: [[],
@@ -104,14 +108,26 @@ function App ()
     }
   };
 
-
   useEffect(() => {
+    
+    EventBus.on('keyEvent',  (data) => {
+      //we get two keyEvent on the bus even though it was only sent once.  So, this triggers a read from the SendKeyEventsArray instead
+      // of trusting the keyEvent message      
+      while(phaserRef.current.scene.sendKeyEvents.length > 0){
+        let keyEvent = phaserRef.current.scene.sendKeyEvents.pop();
+        if ((keyEvent.keyCode === Phaser.Input.Keyboard.KeyCodes.ONE) && (keyEvent.isDown))  {
+          workBench.execute1();
+        }
+      }
+    })
+
     EventBus.on("touch-flag", (data) => {
       openWorkbench();
     });
 
     return () => {
       EventBus.removeListener("touch-flag");
+      EventBus.removeListener("keyEvent");
     };
   }, []);
 
@@ -128,6 +144,7 @@ function App ()
     const closeWorkbench = (event) => {
       setWorkbenchOpen(false);
       setShowGame(true);
+      phaserRef.current.scene.clearWorkbenchProperties();
     }
 
 
@@ -163,6 +180,9 @@ function App ()
             {gameOpen && <button className="button" onClick={changeScene}>Change Scene</button>}
             {gameOpen && <button type="button" onClick={() => workBench.execute1()}>Run 1</button>} 
             
+          </div>
+          <div>
+          <ItemContainer items={items} />
           </div>
         </div>
     )

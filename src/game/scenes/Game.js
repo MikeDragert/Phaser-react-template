@@ -59,24 +59,6 @@ export class Game extends Player {
     this.cameras.main.setBounds(0, 0, ground.width, ground.height);
     this.cameras.main.startFollow(this.player);
 
-    
-
-    //thise next 2 blocks were added for sending keys back to the app.jsx
-    //  if there is a better way to watch the phaser input we can adjust these
-    //watch for key down and trigger message to app.jsx
-    this.input.keyboard.on('keydown', (event) => {
-      if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ONE){
-       this.sendKeyPressMessage(event.keyCode, true)
-      }
-    })
-
-    //watch for key up and trigger message to app.jsx
-    this.input.keyboard.on('keyup', (event) => {
-      if (event.keyCode === Phaser.Input.Keyboard.KeyCodes.ONE){
-       this.sendKeyPressMessage(event.keyCode, false)
-      }
-    })
-
     items.setTileIndexCallback(
       [145, 155, 154, 138],
       this.triggerWorkbench,
@@ -99,6 +81,7 @@ export class Game extends Player {
       this
     );
 
+    this.one = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
     this.e = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
     this.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     this.r = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
@@ -133,6 +116,14 @@ export class Game extends Player {
     if (Phaser.Input.Keyboard.JustDown(this.r)) {
       this.scene.restart();
     }
+
+    if (Phaser.Input.Keyboard.JustDown(this.one)) {
+      this.sendKeyPressMessage(Phaser.Input.Keyboard.KeyCodes.ONE, true)
+    }
+
+    // if (Phaser.Input.Keyboard.JustUp(this.one)) {
+    //   this.sendKeyPressMessage(Phaser.Input.Keyboard.KeyCodes.ONE, false);
+    // }
 
     super.update();
   }

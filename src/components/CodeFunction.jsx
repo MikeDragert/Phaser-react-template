@@ -19,6 +19,7 @@ class CodeFunction extends CodeObject {
   clone = function(appendToName) {
     let newObject = new CodeFunction(this.name + (appendToName ? appendToName : ''))
     newObject._displayName = this._displayName;
+    newObject._callback = this._callback;
     newObject._cost = this._cost;
     newObject._used = this._used;
     newObject._returnType = this._returnType;
