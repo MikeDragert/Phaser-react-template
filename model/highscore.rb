@@ -1,3 +1,3 @@
-class highscore < ActiveRecord::Base
+class Highscore < ApplicationRecord
     belongs_to :player
   end

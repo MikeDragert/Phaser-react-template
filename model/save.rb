@@ -1,3 +1,3 @@
-class save < ActiveRecord::Base
+class Save < ApplicationRecord
     belongs_to :player
   end
