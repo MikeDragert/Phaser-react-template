@@ -4,16 +4,22 @@
     background-color: #fff;
     border-radius: 5px;
     box-shadow: 0 0 5px 0 #000;
-    width: 600px;
+    height: 600px;
+    width: 300px;
     display: grid;
-    grid-template-columns: repeat(3, 1fr); 
-    gap: 20px; 
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 20px;
+    justify-items: end;
 }
 
-
-
 .inventory {
+    padding: 1em;
+    margin: 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: top center;
     color: black;
     font-size: larger;
     font-weight: bold;
+    position: relative;
 }
