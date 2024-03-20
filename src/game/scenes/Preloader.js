@@ -86,6 +86,17 @@ export class Preloader extends Scene {
       }),
     });
 
+    this.anims.create({
+      key: "spinning_coin",
+      framrate: 30,
+      frames: this.anims.generateFrameNames("spinning_coin", {
+        start: 1,
+        end: 6,
+        prefix: "NinjaCat_jump_0",
+        suffix: ".png",
+      }),
+    })
+
     this.scene.start("MainMenu");
   }
 }

@@ -25,6 +25,15 @@ export class Tutorial extends Player {
     return false;
   }
 
+  playMessage(sprite, flag) {
+    const message = flag.data.list.message[0].value
+    this.tutorialText.setText(`${message}`)
+    setTimeout(() => {
+      this.tutorialText.setText("");
+    }, 2000);
+    return false;
+  }
+  
   create() {
     super.create();
 
@@ -52,9 +61,15 @@ export class Tutorial extends Player {
     const coins = this.map.createLayer("coinLayer", itemsTileSet, 0, 0);
     const tiles = this.map.createLayer("tileLayer", tilesTileSet, 0, 0);
     const tutorialObjects = this.map.getObjectLayer("tutorial")["objects"]
-
+    tutorialObjects.pop();
+    
+    
     tutorialObjects.forEach(obj => {
       const sprite = this.physics.add.sprite(obj.x, obj.y, "tutorial_flag");
+      sprite.body.moves =false
+      sprite.setData("message", obj.properties)
+      sprite.setOrigin(0,1)
+      this.physics.add.overlap(this.player, sprite, this.playMessage, null, this)
     })
     ground.setCollisionByExclusion([-1]);
 
@@ -66,6 +81,7 @@ export class Tutorial extends Player {
     this.physics.add.overlap(this.player, items);
     this.physics.add.overlap(this.player, coins);
     this.physics.add.overlap(this.player, tiles);
+    
 
     this.cameras.main.setBounds(0, 0, ground.width, ground.height);
     this.cameras.main.startFollow(this.player);
@@ -73,11 +89,19 @@ export class Tutorial extends Player {
     
 
     tiles.setTileIndexCallback(257, this.triggerWorkbench, this);
+    let previousSave = false;
 
     items.setTileIndexCallback(
       [145, 155, 154, 138],
       (sprite, tile) => {
-        this.progressTracker.saveProgress(sprite);
+        if(!previousSave) {
+          this.progressTracker.saveProgress(sprite);
+          previousSave = true
+        }
+
+        setTimeout(() => {
+          previousSave = false;
+        }, 2000)
       },
       this
     );
@@ -96,17 +120,22 @@ export class Tutorial extends Player {
 
     this.text = this.add.text(320, 700, "", {
       fontSize: "20px",
-      fill: "ffffff",
+      fill: "#ffffff",
     });
 
     this.scoreText = this.add.text(50, 60, "0", {
       fontSize: "20px",
-      fill: "ffffff",
+      fill: "#ffffff",
     });
+
+    this.tutorialText = this.add.text(50, 100, "", {
+      fontSize: "20px",
+      fill: "#ffffff",
+    })
 
     this.text.setScrollFactor(0);
     this.scoreText.setScrollFactor(0);
-
+    this.tutorialText.setScrollFactor(0);
     this.progressTracker.removeItems(coins);
     
     EventBus.emit("current-scene-ready", this);

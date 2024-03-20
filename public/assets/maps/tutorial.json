@@ -253,21 +253,21 @@
          "objects":[
                 {
                  "gid":138,
-                 "height":128,
+                 "height":116,
                  "id":3,
                  "name":"",
                  "properties":[
                         {
                          "name":"message",
                          "type":"string",
-                         "value":""
+                         "value":"Use Right Left to walk"
                         }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":128,
-                 "x":140,
-                 "y":6020
+                 "x":136,
+                 "y":6012
                 }, 
                 {
                  "gid":138,
@@ -285,7 +285,7 @@
                  "visible":true,
                  "width":128,
                  "x":1416,
-                 "y":6008
+                 "y":6016
                 }, 
                 {
                  "gid":138,
@@ -302,7 +302,7 @@
                  "type":"",
                  "visible":true,
                  "width":128,
-                 "x":2696,
+                 "x":2692,
                  "y":5764
                 }, 
                 {
@@ -320,8 +320,8 @@
                  "type":"",
                  "visible":true,
                  "width":128,
-                 "x":2972,
-                 "y":3584
+                 "x":2948,
+                 "y":3569
                 }, 
                 {
                  "gid":138,
@@ -332,14 +332,26 @@
                         {
                          "name":"message",
                          "type":"string",
-                         "value":"Workbenches Let you Create Functions To better tackle the Level, Hit E tto Open the workbench!"
+                         "value":"Workbenches Let you Create Functions To better tackle the Level, \nHit E to Open the workbench!"
                         }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":128,
-                 "x":3336,
+                 "x":3228,
                  "y":5628
+                }, 
+                {
+                 "gid":158,
+                 "height":128,
+                 "id":9,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":128,
+                 "x":1660,
+                 "y":5736
                 }],
          "opacity":1,
          "properties":[
@@ -353,8 +365,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":8,
- "nextobjectid":8,
+ "nextlayerid":9,
+ "nextobjectid":14,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",
