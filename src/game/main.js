@@ -6,6 +6,7 @@ import Phaser from "phaser";
 import { Preloader } from "./scenes/Preloader";
 import { Tutorial } from "./scenes/Tutorial";
 import { ProgressTracker } from "./scenes/progressTracker";
+import { UserInterface } from "./scenes/UserInterface";
 
 // Find out more information about the Game Config at:
 // https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
@@ -15,7 +16,7 @@ const config = {
   height: 768,
   parent: "game-container",
   backgroundColor: "#028af8",
-  scene: [Boot, Preloader, MainMenu, Game, GameOver, Tutorial, ProgressTracker],
+  scene: [Boot, Preloader, MainMenu, Game, GameOver, Tutorial, ProgressTracker, UserInterface],
   physics: {
     default: "arcade",
     arcade: {

@@ -1,4 +1,4 @@
-import { Scene } from "phaser";
+import { EventBus } from "../EventBus";
 
 export class ProgressTracker {
   constructor(score, spritePosition, items, level) {
@@ -47,6 +47,8 @@ export class ProgressTracker {
     layer.removeTileAt(tile.x, tile.y);
     this.updateScore(this.progressData.score + 1);
     this.updateItems(tile);
+    EventBus.emit("scoreUpdate", this.progressData.score)
+    this.saveProgress(null)
     return false;
   }
 
@@ -90,12 +92,10 @@ export class ProgressTracker {
   // then get what you want from progressData
 
   loadProgress() {
-    let storedData = JSON.parse(localStorage.getItem(`progress_${this.level}`));
+    let storedData = JSON.parse(localStorage.getItem(`progress_${this.level}`)) || this.progressData;
     if (storedData) {
       this.progressData = storedData;
     }
-    console.log("Level", this.level);
-    console.log("DATTA", this.progressData);
     return this.progressData;
   }
 
