@@ -5,6 +5,7 @@ import { ProgressTracker } from "./progressTracker";
 export class Game extends Player {
   constructor() {
     super("Game");
+    this.sceneName = "Game";
   }
 
   triggerWorkbench(sprite, tile) {
@@ -25,7 +26,7 @@ export class Game extends Player {
 
     super.create();
 
-    this.progressTracker = new ProgressTracker(0, { x: 300, y: 5900 }, [], "Game");
+    this.progressTracker = new ProgressTracker(0, { x: 300, y: 5900 }, [], this.sceneName);
     this.progressData = this.progressTracker.loadProgress();
     const position = this.progressData.spritePosition;
 
@@ -77,6 +78,7 @@ export class Game extends Player {
       158,
       (sprite = null, tile, layer = coins) => {
         this.progressTracker.collectCoins(sprite, tile, layer);
+        this.sendNewItemMessage(tile);
       },
       this
     );
@@ -102,6 +104,7 @@ export class Game extends Player {
     this.progressTracker.removeItems(coins);
 
     EventBus.emit("current-scene-ready", this);
+    EventBus.emit('give-me-inventory', this.sceneName);
   }
 
   update() {
@@ -114,6 +117,7 @@ export class Game extends Player {
     }
 
     if (Phaser.Input.Keyboard.JustDown(this.r)) {
+      EventBus.emit('clear-inventory', this.sceneName);
       this.scene.restart();
     }
 
