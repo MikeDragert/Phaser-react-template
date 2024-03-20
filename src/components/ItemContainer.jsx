@@ -1,22 +1,12 @@
-import React, { useState } from 'react';
-import '../styles/ItemContainer.css'
-import player_items from '../mock_data/playerItems';
+import React from "react";
+import "../styles/ItemContainer.css";
+import DisplayItem from "./components/item";
 
-
-    console.log(items);
-
-const ItemContainer = () => { 
-    const [itemsState, setItemsState] = useState(items);
+const ItemContainer = ({ items }) => {
     return (
-        <div className='item-container'>
-            <h2 className='inventory' >Inventory</h2>
-            {Object.entries(itemsState).map(([id, item]) => (
-                <div key={id} className='grid-item'>
-                    <p>Item ID: {item.item_id}</p>
-                    <p>Player ID: {item.player_id}</p>
-                    {/* Display other item properties here */}
-                </div>
-            ))}
+        <div className="item-container">
+            <h2 className="inventory">Inventory</h2>
+            <DisplayItem />
         </div>
     );
 };

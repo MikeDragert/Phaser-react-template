@@ -8,6 +8,8 @@ import { EventBus } from './game/EventBus';
 
 import './styles/App.css';
 import ItemContainer from './components/ItemContainer.jsx';
+import player_items from './mock_data/player_items';
+import items from './mock_data/items';
 
 
 
@@ -16,6 +18,7 @@ function App ()
   const [showGame, setShowGame] = useState(true);
   const [loaded, setLoaded] = useState(false);
   const [workbenchOpen, setWorkbenchOpen] = useState(false);
+  const [itemsState, setItemsState] = useState(items);
 
   const initialState = {
     keys: [[],
@@ -163,7 +166,7 @@ function App ()
             
           </div>
           <div>
-            <ItemContainer />
+          <ItemContainer items={items} />
           </div>
         </div>
     )
