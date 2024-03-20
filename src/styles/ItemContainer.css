@@ -4,18 +4,13 @@
     background-color: #fff;
     border-radius: 5px;
     box-shadow: 0 0 5px 0 #000;
-    width: 600px; /* Adjust width as needed */
+    width: 600px;
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Three columns */
-    gap: 20px; /* Gap between grid items */
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 20px; 
 }
 
-.grid-item {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    color: black
-}
+
 
 .inventory {
     color: black;
