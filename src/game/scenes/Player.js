@@ -4,6 +4,7 @@ import { Scene } from "phaser";
 export class Player extends Scene {
   constructor(sceneName) {
     super(sceneName);
+    this.sceneName = sceneName; 
   }
 
   init() {
@@ -16,8 +17,15 @@ export class Player extends Scene {
   initialJumpAmount = 0;
   savedJumpAmount = 0;
 
-   //anything that has to be cleared upon returning from the workbench should go here
-   clearWorkbenchProperties() {
+  inventory = [];
+
+  sendNewItemMessage = function(item) {
+    ///.sceneName needs to be set ..is it?
+    EventBus.emit('add-inventory-item', {sceneName: this.sceneName, ...item });
+  }
+
+  //anything that has to be cleared upon returning from the workbench should go here
+  clearWorkbenchProperties() {
     this.jumpPowerIncrease = 0;
   }
 
@@ -125,6 +133,10 @@ export class Player extends Scene {
 
   setJumpPower(newJumpPower) {
     this.jumpPowerIncrease = newJumpPower;
+  }
+
+  setInventory(newInventory) {
+    this.inventory = newInventory;
   }
 
   //key events stored for app.jsx to consume

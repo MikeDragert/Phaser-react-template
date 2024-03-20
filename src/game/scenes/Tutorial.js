@@ -37,7 +37,7 @@ export class Tutorial extends Player {
   create() {
     super.create();
 
-    this.progressTracker = new ProgressTracker(0, { x: 300, y: 5900 }, [], "Tutorial");
+    this.progressTracker = new ProgressTracker(0, { x: 300, y: 5900 }, [], this.sceneName);
     this.progressData = this.progressTracker.loadProgress();
     const position = this.progressData.spritePosition;
 
@@ -110,6 +110,7 @@ export class Tutorial extends Player {
       158,
       (sprite = null, tile, layer = coins) => {
         this.progressTracker.collectCoins(sprite, tile, layer);
+        this.sendNewItemMessage(tile);
       },
       this
     );
@@ -140,6 +141,7 @@ export class Tutorial extends Player {
     this.progressTracker.removeItems(coins);
     
     EventBus.emit("current-scene-ready", this);
+    EventBus.emit('give-me-inventory', this.sceneName);
   }
 
   update() {
@@ -152,6 +154,7 @@ export class Tutorial extends Player {
     }
 
     if (Phaser.Input.Keyboard.JustDown(this.r)) {
+      EventBus.emit('clear-inventory', this.sceneName);
       this.scene.restart();
     }
 
