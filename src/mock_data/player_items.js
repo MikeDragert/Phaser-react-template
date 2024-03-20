@@ -6,7 +6,7 @@ const player_items = {
         container_item_id: '1',
         location_x: '1',
         location_y: '1',
-        map_id: 'tutorial'
+        map_id: 'Tutorial'
     },
     '2': {
         player_id: '1', 
@@ -15,7 +15,7 @@ const player_items = {
         container_item_id: '1',
         location_x: '1',
         location_y: '1',
-        map_id: 'tutorial'
+        map_id: 'Tutorial'
     },
     '3': {
         player_id: '1', 
@@ -24,7 +24,7 @@ const player_items = {
         container_item_id: '1',
         location_x: '1',
         location_y: '1',
-        map_id: 'tutorial'
+        map_id: 'Tutorial'
     },
     '4': {
         player_id: '1', 
@@ -33,7 +33,7 @@ const player_items = {
         container_item_id: '1',
         location_x: '1',
         location_y: '1',
-        map_id: 'tutorial'
+        map_id: 'Tutorial'
     },
     '5': {
         player_id: '1', 
@@ -42,7 +42,7 @@ const player_items = {
         container_item_id: '1',
         location_x: '1',
         location_y: '1',
-        map_id: 'tutorial'
+        map_id: 'Tutorial'
     } , 
     '6': {
         player_id: '1', 
@@ -51,7 +51,7 @@ const player_items = {
         container_item_id: '1',
         location_x: '1',
         location_y: '1',
-        map_id: 'tutorial'
+        map_id: 'Tutorial'
     },
     '7': {
         player_id: '1', 
@@ -60,7 +60,7 @@ const player_items = {
         container_item_id: '1',
         location_x: '1',
         location_y: '1',
-        map_id: 'tutorial'
+        map_id: 'Tutorial'
     },
     '8': {
         player_id: '1', 
@@ -69,7 +69,7 @@ const player_items = {
         container_item_id: '1',
         location_x: '1',
         location_y: '1',
-        map_id: 'tutorial'
+        map_id: 'Tutorial'
     },
     '9': {
         player_id: '1', 
@@ -78,7 +78,7 @@ const player_items = {
         container_item_id: '1',
         location_x: '1',
         location_y: '1',
-        map_id: 'tutorial'
+        map_id: 'Tutorial'
     },
     '10': {
         player_id: '1', 
@@ -87,7 +87,7 @@ const player_items = {
         container_item_id: '1',
         location_x: '1',
         location_y: '1',
-        map_id: 'tutorial'
+        map_id: 'Tutorial'
     }};
 
     export default player_items;

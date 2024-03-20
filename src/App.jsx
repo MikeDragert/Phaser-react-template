@@ -4,7 +4,7 @@ import Phaser, { Game } from "phaser";
 import { PhaserGame } from './game/PhaserGame';
 import WorkBench from './components/WorkBench.jsx';
 import { reducer, moveCodeObject, changeMaxCurrency } from './helpers/workbenchStateHelpers.js';
-import { inventoryReducer, loadPlayerInventory, getInventory } from './helpers/inventoryHelpers.js';
+import { inventoryReducer, loadPlayerInventory, getInventory, addItemFromSceneToInventory, clearInventoryForScene } from './helpers/inventoryHelpers.js';
 import { EventBus } from './game/EventBus';
 
 import './styles/App.css';
@@ -116,14 +116,15 @@ function App ()
   };
 
   const eventHandlerItemPickup = function(itemData) {
-    //todo: add the item to the inventory  - item will have
-      // index - unique to item
-      //   x
-      //   y
+    addItemFromSceneToInventory(inventoryDispatch, itemData)
   }
 
   const eventHandlerInventoryRequest = function() {
     phaserRef.current.scene.setInventory(inventoryList);
+  }
+
+  const eventHandlerInventoryClear = function(mapId) {
+    clearInventoryForScene(inventoryDispatch, mapId);
   }
 
   useEffect(() => {
@@ -139,8 +140,8 @@ function App ()
 
     //every change to inventory requires recreating the listeners so that they
     // act on the latest copy of inventoryList
-    EventBus.removeListener("pickup-item");
-    EventBus.on("pickup-item", (itemData) => {
+    EventBus.removeListener("add-inventory-item");
+    EventBus.on("add-inventory-item", (itemData) => {
       eventHandlerItemPickup(itemData);
     });  
 
@@ -148,6 +149,12 @@ function App ()
     EventBus.on("give-me-inventory", (mapId) => {
       eventHandlerInventoryRequest();
     });
+    
+    EventBus.removeListener("clear-inventory");
+    EventBus.on("clear-inventory", (mapId) => {
+      eventHandlerInventoryClear(mapId);
+    });
+
 
   }, [inventoryList])
 
@@ -184,7 +191,7 @@ function App ()
         }
       })
   
-      EventBus.on("pickup-item", (itemData) => {
+      EventBus.on("add-inventory-item", (itemData) => {
         eventHandlerItemPickup(itemData);
       });  
 
@@ -192,6 +199,10 @@ function App ()
         eventHandlerInventoryRequest();
       });
   
+      EventBus.on("clear-inventory", (mapId) => {
+        eventHandlerInventoryClear(mapId);
+      });
+
       EventBus.on("touch-flag", (data) => {
         openWorkbench();
       });
@@ -199,7 +210,7 @@ function App ()
       return () => {
         EventBus.removeListener("touch-flag");
         EventBus.removeListener("keyEvent");
-        EventBus.removeListener("pickup-item")
+        EventBus.removeListener("add-inventory-item")
         EventBus.removeListener("give-me-inventory")
       };
     }, [phaserRef])

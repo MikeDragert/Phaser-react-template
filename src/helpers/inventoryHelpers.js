@@ -13,25 +13,10 @@ const INVENTORYACTION = {
   LOADLIST: 'loadList'
 }
 
-
-//example item
-/*
-{
-  player_id: 1, 
-  item_id: ITEMTYPES.TYPE1,
-  save_id: 1,
-  container_item_id: 1,
-  location_x: 1,
-  location_y: 1,
-  map_id: 'tutorial',
-  item_name: "Mystic Amulet",
-  item_type: 10
-  
+const itemMap = {
+  //tileNumber : {name: itemName, type: itemType}
+  158: {name:'Coin', type: ITEMTYPES.COIN}
 }
-*/
-
-
-//need inventory stored in state.
 
 export const inventoryReducer = (state, action) => {
   let newState = [...state]
@@ -40,7 +25,11 @@ export const inventoryReducer = (state, action) => {
       newState.push(action.data)
       break;
     case INVENTORYACTION.CLEAR:
-      newState = [];
+      if (action.data.mapId) {
+        newState = newState.filter(item => item.map_id !== action.data.mapId);
+      } else {
+        newState = [];
+      }
       break;
     case INVENTORYACTION.LOADLIST: 
       newState = action.data;
@@ -48,7 +37,6 @@ export const inventoryReducer = (state, action) => {
     default:
       break;
   }
-
   return newState
 }
 
@@ -89,7 +77,7 @@ export const getItemCountByMap = function(inventoryList, mapId) {
 
 //add item to inventory, update state
 export const addFullItemToInventory = function(inventoryDispatch, fullItem) {
-  return inventoryDispatch({type: inventoryDispatch.ADDITEM, data: fullItem});
+  return inventoryDispatch({type: INVENTORYACTION.ADDITEM, data: fullItem});
 }
 
 export const addItemToInventory = function(inventoryDispatch, playerItem, item){
@@ -99,6 +87,30 @@ export const addItemToInventory = function(inventoryDispatch, playerItem, item){
     fullItem.item_type = item.type;
     fullItem.has_obtained = item.has_obtained;
     return inventoryDispatch({type: INVENTORYACTION.ADDITEM, data: fullItem})
+  }
+}
+
+export const addItemFromSceneToInventory = function(inventoryDispatch, sceneItem) {
+  let newItem = generateItem(sceneItem);
+  // todo, extra things we should set if they are available
+  // newItem.player_id = 1, 
+  // newItem.item_id = 0;
+  // newItem.save_id = 0;
+  addFullItemToInventory(inventoryDispatch, newItem);
+}
+
+const generateItem = function(sceneItem) {
+  return {
+    player_id: undefined, 
+    item_id: undefined,
+    save_id: undefined,
+    container_item_id: 0,
+    location_x: sceneItem.x,
+    location_y: sceneItem.y,
+    map_id: sceneItem.sceneName,
+    item_name: itemMap[sceneItem.index].name,
+    item_type: itemMap[sceneItem.index].type,
+    has_obtained: true
   }
 }
 
@@ -121,7 +133,11 @@ export const loadPlayerInventory = function(inventoryDispatch, playerItemsList, 
 
 //empty the inventory
 export const clearInventory = function(inventoryDispatch) {
-  return inventoryDispatch({type: inventoryDispatch.CLEAR, data: {}});
+  return inventoryDispatch({type: INVENTORYACTION.CLEAR, data: {}});
+}
+
+export const clearInventoryForScene = function(inventoryDispatch, mapId) {
+  return inventoryDispatch({type: INVENTORYACTION.CLEAR, data: {mapId} });
 }
 
 //todo: we will want to use this to push inventory to game on change
