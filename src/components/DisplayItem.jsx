@@ -1,5 +1,5 @@
 import react from 'react';
-import '../styles/Item.css';
+// import './styles/Item.css';
 
 const DisplayItem = ({ items }) => {
     return (
