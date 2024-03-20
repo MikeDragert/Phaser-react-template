@@ -4,6 +4,7 @@ import Phaser, { Game } from "phaser";
 import { PhaserGame } from './game/PhaserGame';
 import WorkBench from './components/WorkBench.jsx';
 import { reducer, moveCodeObject, changeMaxCurrency } from './helpers/workbenchStateHelpers.js';
+import { inventoryReducer, loadPlayerInventory, getInventory } from './helpers/inventoryHelpers.js';
 import { EventBus } from './game/EventBus';
 
 import './styles/App.css';
@@ -15,12 +16,9 @@ import items from './mock_data/items';
 
 function App ()
 {
-  const [showGame, setShowGame] = useState(true);
-  const [loaded, setLoaded] = useState(false);
-  const [workbenchOpen, setWorkbenchOpen] = useState(false);
-  const [itemsState, setItemsState] = useState(items);
-
-  const initialState = {
+  
+  
+  const initialCodeListState = {
     keys: [[],
             [],
             [],
@@ -34,8 +32,14 @@ function App ()
     currentCurrency: 0,
     copyCounter: 0
   }
+  const initialInventoryState = [];
 
-  const [codeList, dispatch] = useReducer(reducer, initialState)
+  const [showGame, setShowGame] = useState(true);
+  const [loaded, setLoaded] = useState(false);
+  const [workbenchOpen, setWorkbenchOpen] = useState(false);
+  const [itemsState, setItemsState] = useState(items);
+  const [codeList, dispatch] = useReducer(reducer, initialCodeListState)
+  const [inventoryList, inventoryDispatch] = useReducer(inventoryReducer, initialInventoryState);
 
   const moveCodeObjectJumper = function(codeObject, fromName, toName) {
     return moveCodeObject(codeList, dispatch, codeObject, fromName, toName);
@@ -56,7 +60,10 @@ function App ()
 
   let workBench = new WorkBench(codeList, moveCodeObjectJumper, changeMaxCurrencyJumper, loaded, setLoaded, getFunctionList());
   
-  
+
+
+
+
   // The sprite can only be moved in the MainMenu Scene
     const [canMoveSprite, setCanMoveSprite] = useState(true);
     
@@ -108,28 +115,42 @@ function App ()
     }
   };
 
-  useEffect(() => {
-    
-    EventBus.on('keyEvent',  (data) => {
-      //we get two keyEvent on the bus even though it was only sent once.  So, this triggers a read from the SendKeyEventsArray instead
-      // of trusting the keyEvent message      
-      while(phaserRef.current.scene.sendKeyEvents.length > 0){
-        let keyEvent = phaserRef.current.scene.sendKeyEvents.pop();
-        if ((keyEvent.keyCode === Phaser.Input.Keyboard.KeyCodes.ONE) && (keyEvent.isDown))  {
-          workBench.execute1();
-        }
-      }
-    })
+  const eventHandlerItemPickup = function(itemData) {
+    //todo: add the item to the inventory  - item will have
+      // index - unique to item
+      //   x
+      //   y
+  }
 
-    EventBus.on("touch-flag", (data) => {
-      openWorkbench();
+  const eventHandlerInventoryRequest = function() {
+    phaserRef.current.scene.setInventory(inventoryList);
+  }
+
+  useEffect(() => {
+    //load the inventory one time
+    loadPlayerInventory(inventoryDispatch, player_items, items);    
+  }, []);
+
+
+  useEffect(() => {
+    if ((phaserRef.current.scene)) {
+      phaserRef.current.scene.setInventory(inventoryList);
+    }
+
+    //every change to inventory requires recreating the listeners so that they
+    // act on the latest copy of inventoryList
+    EventBus.removeListener("pickup-item");
+    EventBus.on("pickup-item", (itemData) => {
+      eventHandlerItemPickup(itemData);
+    });  
+
+    EventBus.removeListener("give-me-inventory");
+    EventBus.on("give-me-inventory", (mapId) => {
+      eventHandlerInventoryRequest();
     });
 
-    return () => {
-      EventBus.removeListener("touch-flag");
-      EventBus.removeListener("keyEvent");
-    };
-  }, []);
+  }, [inventoryList])
+
 
   // Event emitted from the PhaserGame component
   const currentScene = (scene) => {
@@ -147,13 +168,14 @@ function App ()
       phaserRef.current.scene.clearWorkbenchProperties();
     }
 
-
     const changeShowGame = function(showGameValue) {
       setShowGame(showGameValue);
     }
 
     useEffect(() => {
-      EventBus.on('keyEvent',  () => {
+      EventBus.on('keyEvent',  (data) => {
+        //we get two keyEvent on the bus even though it was only sent once.  So, this triggers a read from the SendKeyEventsArray instead
+        // of trusting the keyEvent message      
         while(phaserRef.current.scene.sendKeyEvents.length > 0){
           let keyEvent = phaserRef.current.scene.sendKeyEvents.pop();
           if ((keyEvent.keyCode === Phaser.Input.Keyboard.KeyCodes.ONE) && (keyEvent.isDown))  {
@@ -162,9 +184,24 @@ function App ()
         }
       })
   
+      EventBus.on("pickup-item", (itemData) => {
+        eventHandlerItemPickup(itemData);
+      });  
+
+      EventBus.on("give-me-inventory", (mapId) => {
+        eventHandlerInventoryRequest();
+      });
+  
       EventBus.on("touch-flag", (data) => {
-        openWorkbench
-      })
+        openWorkbench();
+      });
+  
+      return () => {
+        EventBus.removeListener("touch-flag");
+        EventBus.removeListener("keyEvent");
+        EventBus.removeListener("pickup-item")
+        EventBus.removeListener("give-me-inventory")
+      };
     }, [phaserRef])
 
     let gameOpen = !workbenchOpen;
@@ -182,7 +219,7 @@ function App ()
             
           </div>
           <div>
-          <ItemContainer items={items} />
+          <ItemContainer items={getInventory(inventoryList)} />
           </div>
         </div>
     )

@@ -25,7 +25,9 @@ export class Game extends Player {
 
     super.create();
 
-    this.progressTracker = new ProgressTracker(0, { x: 300, y: 5900 }, [], "Game");
+    let sceneName = "Game";
+
+    this.progressTracker = new ProgressTracker(0, { x: 300, y: 5900 }, [], sceneName);
     this.progressData = this.progressTracker.loadProgress();
     const position = this.progressData.spritePosition;
 
@@ -102,6 +104,7 @@ export class Game extends Player {
     this.progressTracker.removeItems(coins);
 
     EventBus.emit("current-scene-ready", this);
+    EventBus.emit('give-me-inventory', sceneName);
   }
 
   update() {
