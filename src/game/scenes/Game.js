@@ -100,16 +100,12 @@ export class Game extends Player {
     }
 
     if (Phaser.Input.Keyboard.JustDown(this.r)) {
-      this.scene.restart();
+      this.progressTracker.respawn(this);
     }
 
     if (Phaser.Input.Keyboard.JustDown(this.one)) {
       this.sendKeyPressMessage(Phaser.Input.Keyboard.KeyCodes.ONE, true);
     }
-
-    // if (Phaser.Input.Keyboard.JustUp(this.one)) {
-    //   this.sendKeyPressMessage(Phaser.Input.Keyboard.KeyCodes.ONE, false);
-    // }
 
     super.update();
   }

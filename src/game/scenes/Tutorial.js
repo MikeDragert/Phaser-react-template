@@ -13,16 +13,6 @@ export class Tutorial extends Player {
     this.scene.stop("UserInterface");
   }
 
-  // respawn() {
-  //   if (this.timeoutID) {
-  //     clearTimeout(this.timeoutID);
-  //   }
-  //   // EventBus.emit("Respawn");
-  //   this.scene.restart();
-  //   this.player.visible = true;
-  //     this.player.body.moves = true;
-  //   EventBus.emit("miscText", "");
-  // }
 
   create() {
     this.died = false;
@@ -55,10 +45,6 @@ export class Tutorial extends Player {
     this.player.visible = true;
     this.player.body.moves = true;
 
-    // EventBus.on("Respawn", () => {
-    //   this.player.visible = true;
-    //   this.player.body.moves = true;
-    // });
 
     this.map = this.make.tilemap({ key: "tutorial" });
     const groundTileSet = this.map.addTilesetImage(
@@ -69,12 +55,13 @@ export class Tutorial extends Player {
     // tilesets
     const itemsTileSet = this.map.addTilesetImage("spritesheet_items", "items");
     const tilesTileSet = this.map.addTilesetImage("spritesheet_tiles", "tiles");
-
+    const checkpointsLayer = this.map.addTilesetImage("spritesheet_items_large", "checkpoints");
+    const largeTilesSet = this.map.addTilesetImage("spritesheet_tiles_large", "large_tiles")
     // map layers
     const ground = this.map.createLayer("ground", groundTileSet, 0, 0);
-    const items = this.map.createLayer("checkpoints", itemsTileSet, 0, 0);
+    const checkpoints = this.map.createLayer("checkpoints", checkpointsLayer, 0, 0);
     const coins = this.map.createLayer("coinLayer", itemsTileSet, 0, 0);
-    const tiles = this.map.createLayer("tileLayer", tilesTileSet, 0, 0);
+    const tiles = this.map.createLayer("tileLayer", largeTilesSet, 0, 0);
     const water = this.map.createLayer("water", tilesTileSet, 0, 0).setDepth(2);
     const tutorialObjects = this.map.getObjectLayer("tutorial")["objects"];
 
@@ -92,7 +79,7 @@ export class Tutorial extends Player {
     // colliders and overlaps
     this.physics.add.collider(this.player, ground);
     ground.setCollisionByExclusion([-1]);
-    this.physics.add.overlap(this.player, items);
+    this.physics.add.overlap(this.player, checkpoints);
     this.physics.add.overlap(this.player, coins);
     this.physics.add.overlap(this.player, tiles);
     this.physics.add.overlap(this.player, water);
@@ -101,13 +88,13 @@ export class Tutorial extends Player {
     this.cameras.main.setZoom(0.5, 0.5);
     this.cameras.main.startFollow(this.player);
 
-    water.setTileIndexCallback([226, 234], this.progressTracker.die, this);
+    water.setTileIndexCallback([258, 266], this.progressTracker.die, this);
 
-    tiles.setTileIndexCallback(257, triggerWorkbench, this);
+    tiles.setTileIndexCallback(417, triggerWorkbench, this);
     let previousSave = false;
-
-    items.setTileIndexCallback(
-      [154],
+    
+    checkpoints.setTileIndexCallback(
+      [378],
       (sprite, tile) => {
         if (!previousSave) {
           this.progressTracker.saveProgress(sprite);

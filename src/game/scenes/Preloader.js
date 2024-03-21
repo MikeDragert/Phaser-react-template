@@ -41,7 +41,8 @@ export class Preloader extends Scene {
     this.load.image("tutorial_flag", "items/tutorial_flag.png")
     this.load.image("hud", "tiles/spritesheet_tiles.png");
     this.load.image("tiles", "tiles/spritesheet_tiles.png");
-
+    this.load.image("checkpoints", "items/spritesheet_items_large.png");
+    this.load.image("large_tiles", "tiles/spritesheet_tiles_large.png");
     this.load.tilemapTiledJSON("tilemap", "maps/FirstAttempt.json");
     this.load.tilemapTiledJSON("tutorial", "maps/tutorial.json");
   }

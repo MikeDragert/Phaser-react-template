@@ -14,16 +14,22 @@ export class UserInterface extends Scene {
     });
 
     EventBus.on("tutorialMessage", (data) => {
-      this.tutorialText.setText(`${data}`);
+      if (data) {
+        this.tutorialText.setText(`${data}`);
+      }
     });
 
     EventBus.on("workbenchText", (data) => {
-      this.text.setText(`${data}`);
+      if (data) {
+        this.text.setText(`${data}`);
+      }
     });
 
     EventBus.on("miscText", (data) => {
-      this.miscText.setText(`${data}`);
-    })
+      if (data) {
+        this.miscText.setText(`${data}`);
+      }
+    });
 
     this.scoreText = this.add.text(30, 30, "0", {
       fontFamily: "Quicksand",
@@ -87,7 +93,10 @@ export function triggerWorkbench(sprite, tile) {
 
 export function playMessage(sprite, flag) {
   const message = flag.data.list.message[0].value;
-  EventBus.emit("tutorialMessage", message);
+  if (message) {
+    EventBus.emit("tutorialMessage", message);
+  }
+
   setTimeout(() => {
     EventBus.emit("tutorialMessage", "");
   }, 2000);
