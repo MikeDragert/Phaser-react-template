@@ -1,5 +1,6 @@
 import { EventBus } from "../EventBus";
 import { Player } from "./Player";
+import { triggerWorkbench } from "./UserInterface";
 import { ProgressTracker } from "./progressTracker";
 
 export class Game extends Player {
@@ -8,31 +9,25 @@ export class Game extends Player {
     this.sceneName = "Game";
   }
 
-  triggerWorkbench(sprite, tile) {
-    this.text.setText("Press E to open inventory");
-    console.log("HERE");
-    if (this.e.isDown) {
-      EventBus.emit("touch-flag", tile);
-      console.log("HERE");
-    }
-    setTimeout(() => {
-      this.text.setText("");
-    }, 2000);
-    return false;
+  die() {
+    this.scene.restart();
   }
 
-
   create() {
-
     super.create();
-
-    this.progressTracker = new ProgressTracker(0, { x: 300, y: 5900 }, [], this.sceneName);
+    this.scene.launch("UserInterface");
+    this.progressTracker = new ProgressTracker(
+      0,
+      { x: 300, y: 5900 },
+      [],
+      this.sceneName
+    );
     this.progressData = this.progressTracker.loadProgress();
     const position = this.progressData.spritePosition;
 
     this.add.image(400, 300, "sky").setScale(20);
 
-    this.player = this.physics.add.sprite(position.x, position.y, "NinjaCat");
+    this.player = this.physics.add.sprite(position.x, position.y, "NinjaCat").setScale(2).setDepth(1);
     this.player.setBounce(0.2);
     this.player.body.setSize(80, 190);
     this.player.setOffset(40, 20);
@@ -58,11 +53,12 @@ export class Game extends Player {
     this.physics.add.overlap(this.player, coins);
 
     this.cameras.main.setBounds(0, 0, ground.width, ground.height);
+    this.cameras.main.setZoom(0.5, 0.5)
     this.cameras.main.startFollow(this.player, false, 1, 1, this._PLAYERWIDTHADJUST/2,0);
 
     items.setTileIndexCallback(
       [145, 155, 154, 138],
-      this.triggerWorkbench,
+      triggerWorkbench,
       this
     );
 
@@ -88,52 +84,35 @@ export class Game extends Player {
     this.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     this.r = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 
-    this.text = this.add.text(320, 700, "", {
-      fontSize: "20px",
-      fill: "ffffff",
-    });
-
-    this.scoreText = this.add.text(320, 700, "0", {
-      fontSize: "20px",
-      fill: "ffffff",
-    });
-
-    this.text.setScrollFactor(0);
-    this.scoreText.setScrollFactor(0);
-
     this.progressTracker.removeItems(coins);
 
     EventBus.emit("current-scene-ready", this);
-    EventBus.emit('give-me-inventory', this.sceneName);
+    EventBus.emit("give-me-inventory", this.sceneName);
   }
 
   update() {
-
     let score = this.progressTracker.progressData.score;
-    this.scoreText.setText(score);
+    EventBus.emit("scoreUpdate", score)
 
     if (Phaser.Input.Keyboard.JustDown(this.s)) {
+      EventBus.emit('clear-inventory', this.sceneName);
       this.progressTracker.resetProgress();
     }
 
     if (Phaser.Input.Keyboard.JustDown(this.r)) {
-      EventBus.emit('clear-inventory', this.sceneName);
-      this.scene.restart();
+      this.progressTracker.respawn(this);
     }
 
     if (Phaser.Input.Keyboard.JustDown(this.one)) {
-      this.sendKeyPressMessage(Phaser.Input.Keyboard.KeyCodes.ONE, true)
+      this.sendKeyPressMessage(Phaser.Input.Keyboard.KeyCodes.ONE, true);
     }
-
-    // if (Phaser.Input.Keyboard.JustUp(this.one)) {
-    //   this.sendKeyPressMessage(Phaser.Input.Keyboard.KeyCodes.ONE, false);
-    // }
 
     super.update();
   }
 
   changeScene() {
     this.scene.start("GameOver");
+    this.scene.stop("UserInterface");
   }
 }
 

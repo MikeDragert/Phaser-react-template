@@ -1,4 +1,4 @@
-import { Scene } from "phaser";
+import { EventBus } from "../EventBus";
 
 export class ProgressTracker {
   constructor(score, spritePosition, items, level) {
@@ -13,7 +13,8 @@ export class ProgressTracker {
       items: items,
     };
   }
-
+  
+  died = false;
   // updates score
   updateScore(score) {
     this.progressData.score = score;
@@ -47,6 +48,8 @@ export class ProgressTracker {
     layer.removeTileAt(tile.x, tile.y);
     this.updateScore(this.progressData.score + 1);
     this.updateItems(tile);
+    EventBus.emit("scoreUpdate", this.progressData.score);
+    this.saveProgress(null);
     return false;
   }
 
@@ -90,12 +93,12 @@ export class ProgressTracker {
   // then get what you want from progressData
 
   loadProgress() {
-    let storedData = JSON.parse(localStorage.getItem(`progress_${this.level}`));
+    let storedData =
+      JSON.parse(localStorage.getItem(`progress_${this.level}`)) ||
+      this.progressData;
     if (storedData) {
       this.progressData = storedData;
     }
-    console.log("Level", this.level);
-    console.log("DATTA", this.progressData);
     return this.progressData;
   }
 
@@ -107,6 +110,31 @@ export class ProgressTracker {
         layer.removeTileAt(item.x, item.y);
       }
     }
+  }
+
+  
+
+  die() {
+    // this.scene.restart();
+    if (!this.died) {
+      this.died = true;
+
+      setTimeout(() => {
+        this.player.visible = false;
+        this.player.body.moves = false;
+        EventBus.emit(
+          "miscText",
+          "You Died Press R To Restart from Checkpoint"
+        );
+      }, 500);
+    }
+  }
+
+  respawn(level) {
+    level.scene.restart();
+    level.player.visible = true;
+    level.player.body.moves = true;
+    EventBus.emit("miscText", "");
   }
 }
 

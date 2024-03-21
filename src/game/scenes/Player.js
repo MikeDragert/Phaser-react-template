@@ -183,7 +183,7 @@ export class Player extends Scene {
         player.setFlipX(true);
         this.fixPlayerOffset(true);
       } else {
-        player.body.velocity.x -= 10;
+        player.body.velocity.x -= 20;
       }
     } else if (right) {
       if (onFloor) {
@@ -194,7 +194,7 @@ export class Player extends Scene {
         player.setFlipX(false);
         this.fixPlayerOffset(false);
       } else {
-        player.body.velocity.x += 10;
+        player.body.velocity.x += 20;
       }
     } else {
       if (onFloor) {
