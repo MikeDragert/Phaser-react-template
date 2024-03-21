@@ -1,6 +1,6 @@
 import { EventBus } from "../EventBus";
 import { Scene } from "phaser";
-import { TextBox } from "phaser3-rex-plugins/templates/ui/ui-components.js";
+// import { TextBox } from "phaser3-rex-plugins/templates/ui/ui-components.js";
 
 export class UserInterface extends Scene {
   constructor() {
@@ -32,8 +32,8 @@ export class UserInterface extends Scene {
       }
     });
 
-    this.textBox = new TextBox(this);
-    this.add.existing(textBox);
+    // this.textBox = new TextBox(this);
+    // this.add.existing(textBox);
 
     this.scoreText = this.add.text(30, 30, "0", {
       fontFamily: "Quicksand",
