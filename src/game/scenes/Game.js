@@ -58,7 +58,7 @@ export class Game extends Player {
     this.physics.add.overlap(this.player, coins);
 
     this.cameras.main.setBounds(0, 0, ground.width, ground.height);
-    this.cameras.main.startFollow(this.player);
+    this.cameras.main.startFollow(this.player, false, 1, 1, this._PLAYERWIDTHADJUST/2,0);
 
     items.setTileIndexCallback(
       [145, 155, 154, 138],

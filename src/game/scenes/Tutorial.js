@@ -51,6 +51,7 @@ export class Tutorial extends Player {
     this.player.setBounce(0.2);
     this.player.body.setSize(80, 190);
     this.player.setOffset(40, 20);
+    
     this.player.setCollideWorldBounds(true);
 
     this.map = this.make.tilemap({ key: "tutorial" });
@@ -89,7 +90,7 @@ export class Tutorial extends Player {
 
     this.cameras.main.setBounds(0, 0, ground.width, ground.height);
     this.cameras.main.setZoom(0.5, 0.5)
-    this.cameras.main.startFollow(this.player);
+    this.cameras.main.startFollow(this.player, false, 1, 1, this._PLAYERWIDTHADJUST/2,0);
 
     
     tiles.setTileIndexCallback([226,234], this.die, this)

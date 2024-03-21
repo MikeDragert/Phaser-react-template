@@ -11,11 +11,24 @@ export class Player extends Scene {
     this.cursors = this.input.keyboard.createCursorKeys();
   }
 
+  _PLAYERWIDTHADJUST = 120;
+
   jumpCount = 0;
   jumpPowerIncrease = 0;
   jumpingTimingCount = 0; //track how fare are through the jump process
   initialJumpAmount = 0;
   savedJumpAmount = 0;
+  lastDirectionLeft = false;
+
+  fixPlayerOffset = function(currentDirectionLeft) {
+    if (this.lastDirectionLeft !== currentDirectionLeft) {
+      let offset = currentDirectionLeft ?  -this._PLAYERWIDTHADJUST : this._PLAYERWIDTHADJUST;
+      this.cameras.main.startFollow(this.player, false, 1, 1, offset/2,0);
+      this.player.setPosition(this.player.x + offset, this.player.y)
+      this.lastDirectionLeft = currentDirectionLeft;
+    }
+  }
+
 
   inventory = [];
 
@@ -44,12 +57,14 @@ export class Player extends Scene {
     }
 
     if (left) {
+      
       if (onFloor) {
         player.setOffset(133, 20);
         player.body.setVelocityX(-1000);
         player.anims.play("player-walk", true);
         player.anims.msPerFrame = 100;
         player.setFlipX(true);
+        this.fixPlayerOffset(true);
       } else {
         player.body.velocity.x -= 10;
       }
@@ -60,6 +75,7 @@ export class Player extends Scene {
         player.anims.play("player-walk", true);
         player.anims.msPerFrame = 100;
         player.setFlipX(false);
+        this.fixPlayerOffset(false);
       } else {
         player.body.velocity.x += 10;
       }
