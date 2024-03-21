@@ -12,18 +12,27 @@ export class UserInterface extends Scene {
       if (data) {
         this.scoreText.setText(`${data}`);
       }
+      setTimeout(() => {
+        this.scoreText.setText("");
+      }, 2000)
     });
 
     EventBus.on("tutorialMessage", (data) => {
       if (data) {
         this.tutorialText.setText(`${data}`);
       }
+      setTimeout(() => {
+        this.tutorialText.setText("");
+      }, 2000)
     });
 
     EventBus.on("workbenchText", (data) => {
       if (data) {
         this.text.setText(`${data}`);
       }
+      setTimeout(() => {
+        this.text.setText("");
+      }, 2000)
     });
 
     EventBus.on("miscText", (data) => {
