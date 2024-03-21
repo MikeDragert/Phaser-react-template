@@ -13,12 +13,7 @@ export class Player extends Scene {
 
   _PLAYERWIDTHADJUST = 120;
 
-  jumpCount = 0;
-  jumpPowerIncrease = 0;
-  jumpingTimingCount = 0; //track how fare are through the jump process
-  initialJumpAmount = 0;
-  savedJumpAmount = 0;
-  lastDirectionLeft = false;
+
 
   fixPlayerOffset = function(currentDirectionLeft) {
     if (this.lastDirectionLeft !== currentDirectionLeft) {
@@ -39,12 +34,134 @@ export class Player extends Scene {
 
   //anything that has to be cleared upon returning from the workbench should go here
   clearWorkbenchProperties() {
-    this.jumpPowerIncrease = 0;
+    this.power = 0;
   }
 
   create() {
     this.cursors = this.input.keyboard.createCursorKeys();
   }
+
+  lastDirectionLeft = false
+  //*******************************************************/
+  //********** start of jumping code **********************/
+  //these values can be manipulated to adjust jump behaviour
+  jumpConfig = {
+    maxJumps: 2,
+    baseJumpAmount: 400,
+    baseJumpAountIncreasePerAccum: 32,
+    jumpPowerMultiplier: 5,
+    accumulatorDelay: 6,
+    maxAccumulatorCount: 20,
+    jumpDelay: 10,
+    maxJumpingTimingCount: 50
+  }
+
+  //values used in the jump logic
+  jumpValues = {
+    count: 0,
+    power: 0,
+    jumpingTimingCount: -1,
+    initialJumpAmount: 0,
+    savedJumpAmount: 0,
+  }
+  
+  addToJumpAmount = function(currentAmount) {
+    currentAmount += this.jumpConfig.baseJumpAountIncreasePerAccum + this.jumpConfig.jumpPowerMultiplier * this.jumpValues.power;
+    return currentAmount;
+  }
+
+  disableJump = function() {
+    this.jumpValues.initialJumpAmount = -1;
+  }
+
+  resetForNextJump = function() {
+    this.jumpValues.jumpingTimingCount = -1;
+    this.jumpValues.initialJumpAmount = 0;
+  }
+
+  startJump = function() {
+    return (
+      (this.cursors.up.isDown || this.cursors.space.isDown) &&
+      (this.jumpValues.initialJumpAmount >= 0) &&
+      (this.jumpValues.count < this.jumpConfig.maxJumps)
+    );
+  };
+
+  executePlayerJump = function() {
+    return (this.jumpValues.jumpingTimingCount >= this.jumpConfig.jumpDelay);
+  }
+
+  beginJump = function() {
+    return (this.jumpValues.initialJumpAmount >= 0);
+  }
+
+  continueJump = function() {
+    return (this.jumpValues.jumpingTimingCount < this.jumpConfig.maxJumpingTimingCount);
+  }
+     
+  continueAmountAccumulation = function() {
+    return (
+      (this.cursors.up.isDown || this.cursors.space.isDown) && 
+      (this.jumpValues.jumpingTimingCount < this.jumpConfig.maxAccumulatorCount));
+  }
+
+  playerEndedJump = function() {
+    return (!this.cursors.up.isDown && !this.cursors.space.isDown);
+  }  
+
+  initialJumpAmountNotSet = function() {
+    return (this.jumpValues.initialJumpAmount === 0);
+  }
+
+  newJump = function() {
+    return this.jumpValues.jumpingTimingCount < 0;
+  }
+
+  pastAccumulatorDelay = function() {
+    return (this.jumpValues.jumpingTimingCount > this.jumpConfig.accumulatorDelay);
+  }
+
+  //*** this is the main jump logic */
+  executeJumpLogic = function() {
+    let player = this.player;
+    if (this.startJump()) {
+      if (this.initialJumpAmountNotSet()) {
+        this.jumpValues.initialJumpAmount = this.jumpConfig.baseJumpAmount;
+      }
+      if (this.newJump()) {
+        this.jumpValues.jumpingTimingCount = 0;
+      }
+      if (this.pastAccumulatorDelay()) {
+        this.jumpValues.initialJumpAmount = this.addToJumpAmount(this.jumpValues.initialJumpAmount);
+      }
+    } 
+
+    if ((!this.newJump()) && (this.continueJump())) {
+      this.jumpValues.jumpingTimingCount++;
+    }
+
+    if (this.executePlayerJump()) {
+      if (this.beginJump()) {
+        this.jumpValues.count++
+        player.anims.play("player-jump", true);
+        player.anims.msPerFrame = 30;
+        this.jumpValues.savedJumpAmount = this.jumpValues.initialJumpAmount;
+        player.body.velocity.y = -this.jumpValues.savedJumpAmount;
+        this.disableJump();
+      }
+      if (this.continueJump()) {
+        if (this.continueAmountAccumulation()) {
+          this.jumpValues.savedJumpAmount = this.addToJumpAmount(this.jumpValues.savedJumpAmount);
+        }
+        player.body.velocity.y = -this.jumpValues.savedJumpAmount;
+      }
+      if (this.playerEndedJump()) {
+        this.resetForNextJump()
+      }
+    }
+  }
+  //************ end of jumping code **********************/
+  //*******************************************************/
 
   update() {
     let player = this.player;
@@ -53,7 +170,7 @@ export class Player extends Scene {
     const onFloor = player.body.onFloor();
 
     if (onFloor) {
-      this.jumpCount = 0;
+      this.jumpValues.count = 0;
     }
 
     if (left) {
@@ -87,53 +204,8 @@ export class Player extends Scene {
       }
     }
 
-    //jumping logic starts here
-    if (this.cursors.up.isDown || this.cursors.space.isDown) {
-      if ((this.initialJumpAmount >= 0))  {
-        if (this.jumpCount < 2) {
-          //this starts tracking for the next jump
-          this.initialJumpAmount += 400;
-          if (this.jumpingTimingCount < 0) {
-            this.jumpingTimingCount = 0;
-          }
-        }
-      }
-    } 
-
-    if (this.jumpingTimingCount >= 0) {
-      this.jumpingTimingCount++;
-    }
+    this.executeJumpLogic()
     
-    //we've waited long enough, start processing the jump
-    if (this.jumpingTimingCount >= 10) {
-      if (this.initialJumpAmount >= 0) {
-        //begin jump  
-        this.jumpCount++
-        player.anims.play("player-jump", true);
-        player.anims.msPerFrame = 30;
-        //todo: this is not working as intended, for some reason, adding more y velocity past a certain point seems to do nothing.
-        //     the initial jump value gets bigger, BUT the character doesn't seem to go higher?
-        this.savedJumpAmount = -this.initialJumpAmount - (40 * this.jumpPowerIncrease);
-        //console.log(this.savedJumpAmount, this.jumpPowerIncrease)
-        player.body.velocity.y = this.savedJumpAmount;
-        //this disables jumping again, until the jump button is release
-        this.initialJumpAmount = -1;
-      }
-      
-      //hold up velocity to continue jump until our sequence number hits max
-      if (this.jumpingTimingCount < (30)) {
-        player.body.velocity.y = this.savedJumpAmount;
-        //console.log(player.body.velocity.y)
-      }
-
-      // end jump on jump key release
-      if (!this.cursors.up.isDown && !this.cursors.space.isDown) {
-        this.jumpingTimingCount = -1;
-        this.initialJumpAmount = 0;
-      }
-    }
-    
-
     player.body.velocity.x = Phaser.Math.Clamp(
       player.body.velocity.x,
       -10000,
@@ -142,8 +214,8 @@ export class Player extends Scene {
 
     player.body.velocity.y = Phaser.Math.Clamp(
       player.body.velocity.y,
-      -1000,
-      2000
+      -1800,
+      1800
     );
   }
 
@@ -152,7 +224,7 @@ export class Player extends Scene {
   }
 
   setJumpPower(newJumpPower) {
-    this.jumpPowerIncrease = newJumpPower;
+    this.jumpValues.power = newJumpPower;
   }
 
   setInventory(newInventory) {

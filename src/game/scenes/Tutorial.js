@@ -51,6 +51,8 @@ export class Tutorial extends Player {
     this.player.setBounce(0.2);
     this.player.body.setSize(80, 190);
     this.player.setOffset(40, 20);
+
+    //this.player.body.setMaxVelocityY(20000);
     
     this.player.setCollideWorldBounds(true);
 
