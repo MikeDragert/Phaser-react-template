@@ -51,7 +51,7 @@ export class Player extends Scene {
         player.anims.msPerFrame = 100;
         player.setFlipX(true);
       } else {
-        player.body.velocity.x -= 10;
+        player.body.velocity.x -= 20;
       }
     } else if (right) {
       if (onFloor) {
@@ -61,7 +61,7 @@ export class Player extends Scene {
         player.anims.msPerFrame = 100;
         player.setFlipX(false);
       } else {
-        player.body.velocity.x += 10;
+        player.body.velocity.x += 20;
       }
     } else {
       if (onFloor) {

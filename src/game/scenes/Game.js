@@ -12,7 +12,7 @@ export class Game extends Player {
   die() {
     this.scene.restart();
   }
-  
+
   create() {
     super.create();
     this.scene.launch("UserInterface");
@@ -53,6 +53,7 @@ export class Game extends Player {
     this.physics.add.overlap(this.player, coins);
 
     this.cameras.main.setBounds(0, 0, ground.width, ground.height);
+    this.cameras.main.setZoom(0.5, 0.5)
     this.cameras.main.startFollow(this.player);
 
     items.setTileIndexCallback(
@@ -91,7 +92,7 @@ export class Game extends Player {
 
   update() {
     let score = this.progressTracker.progressData.score;
-    this.scoreText.setText(score);
+    EventBus.emit("scoreUpdate", score)
 
     if (Phaser.Input.Keyboard.JustDown(this.s)) {
       EventBus.emit('clear-inventory', this.sceneName);

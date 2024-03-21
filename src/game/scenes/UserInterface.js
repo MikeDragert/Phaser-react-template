@@ -21,6 +21,10 @@ export class UserInterface extends Scene {
       this.text.setText(`${data}`);
     });
 
+    EventBus.on("miscText", (data) => {
+      this.miscText.setText(`${data}`);
+    })
+
     this.scoreText = this.add.text(30, 30, "0", {
       fontFamily: "Quicksand",
       fontSize: "48px",
@@ -39,7 +43,7 @@ export class UserInterface extends Scene {
       padding: { left: null },
     });
 
-    this.tutorialText = this.add.text(30, 120, "aaa", {
+    this.tutorialText = this.add.text(30, 120, "", {
       fontFamily: "Quicksand",
       fontSize: "20px",
       color: "#000000",
@@ -55,6 +59,14 @@ export class UserInterface extends Scene {
       strokeThickness: 1,
     });
 
+    this.miscText = this.add.text(300, 400, "", {
+      fontFamily: "Quicksand",
+      fontSize: "20px",
+      color: "#000000",
+      stroke: "#534848",
+      strokeThickness: 1,
+    });
+
     this.text.setScrollFactor(0);
     this.scoreText.setScrollFactor(0);
     this.tutorialText.setScrollFactor(0);
@@ -62,19 +74,19 @@ export class UserInterface extends Scene {
 }
 
 export function triggerWorkbench(sprite, tile) {
-  EventBus.emit("workbenchText", "Press E to Open Workbench")
+  EventBus.emit("workbenchText", "Press E to Open Workbench");
   if (this.e.isDown) {
     // this.changeScene()
     EventBus.emit("touch-flag", tile);
   }
   setTimeout(() => {
-    EventBus.emit("workbenchText", "")
+    EventBus.emit("workbenchText", "");
   }, 2000);
   return false;
 }
 
 export function playMessage(sprite, flag) {
-  const message = flag.data.list.message[0].value
+  const message = flag.data.list.message[0].value;
   EventBus.emit("tutorialMessage", message);
   setTimeout(() => {
     EventBus.emit("tutorialMessage", "");

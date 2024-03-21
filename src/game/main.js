@@ -21,7 +21,7 @@ const config = {
     default: "arcade",
     arcade: {
       gravity: { y: 2000 },
-      debug: true,
+      debug: false,
       overlapBias: 8,
       tileBias: 32,
       fps: 60,
