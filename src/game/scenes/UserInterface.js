@@ -97,7 +97,7 @@ export function triggerWorkbench(sprite, tile) {
 
 export function playMessage(sprite, flag) {
   const message = flag.data.list.message[0].value;
-  if (message) {
+  if (message != null) {
     EventBus.emit("tutorialMessage", message);
   }
 

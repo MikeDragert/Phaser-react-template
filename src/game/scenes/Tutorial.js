@@ -97,7 +97,7 @@ export class Tutorial extends Player {
     let previousSave = false;
     
     checkpoints.setTileIndexCallback(
-      [378],
+      [250],
       (sprite, tile) => {
         if (!previousSave) {
           this.progressTracker.saveProgress(sprite);
