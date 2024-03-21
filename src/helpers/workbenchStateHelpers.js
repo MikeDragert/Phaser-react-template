@@ -2,7 +2,8 @@ import { CodeObject } from '../components/CodeObject.jsx';
 
 const ACTION = {
   SETMAX: 'setMax',
-  MOVECODEOBJECTS: 'moveCodeObjects'
+  MOVECODEOBJECTS: 'moveCodeObjects',
+  CLEARITEMS: 'clearItems'
 }
 
 //check that and array Index Map is an array with a value[0] from min up to and including max
@@ -106,10 +107,26 @@ export const reducer = (state, action) => {
 
   if (action.type === ACTION.SETMAX) {
     let newMax = action.value;
-    let newCurrent = newMax - newState.maxCurrency; 
+    let newCurrent = newState.currentCurrency + newMax - newState.maxCurrency; 
     newState.maxCurrency = newMax;
     newState.currentCurrency = newCurrent;
   };
+
+  if (action.type === ACTION.CLEARITEMS) {
+    newState.currentCurrency = newState.maxCurrency;
+    newState.copyCounter = 1;
+    newState.keys = [
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      []
+    ];
+  }
 
   return newState
 }
@@ -206,34 +223,50 @@ export const moveCodeObject = function(codeList, dispatch, codeObject, fromName,
 
   let indicators = {
     newElement: ((fromArrayMap === undefined) || (fromArrayMap.length === 0)),
+    removingElement: ((fromArrayMap.length === 1) && (fromArrayMap[0] === 0) && ((toArrayMap === undefined) || (toArrayMap.length === 0))),
     fromBench: ((fromArrayMap.length === 1) && (fromArrayMap[0] === 0)),
     toBench: ((toArrayMap.length === 1) && (toArrayMap[0] === 0))
   }
 
   if (canMoveCodeObject(codeList, codeObject, fromArrayMap, toArrayMap)) {
-    let currencyCost = findCurrencyCostOfMove(codeList, codeObject, fromArrayMap, toArrayMap, indicators);
-    
-    if (currencyCost <= codeList.currentCurrency) {
-      dispatch({
-        type: ACTION.MOVECODEOBJECTS, 
-        value: {
-          fromIndexArrayMap: 
-          fromArrayMap, 
-          toIndexArrayMap: 
-          toArrayMap, 
-          codeObject, 
-          currencyCost, 
-          indicators, 
-          copyCounter: codeList.copyCounter
-        }
-      });
+    if (indicators.removingElement) {
+      for(let index = codeList.keys.length-1; index >=0; index--){
+        executeMoveOfCodeObject(dispatch, codeList, codeObject, [index], toArrayMap, indicators);
+      }
+    } else {
+      executeMoveOfCodeObject(dispatch, codeList, codeObject, fromArrayMap, toArrayMap, indicators);
     }
   }
 }
 
+const executeMoveOfCodeObject = function(dispatch, codeList, codeObject, fromArrayMap, toArrayMap, indicators) {
+  let currencyCost = findCurrencyCostOfMove(codeList, codeObject, fromArrayMap, toArrayMap, indicators);
+    
+  if (currencyCost <= codeList.currentCurrency) {
+    dispatch({
+      type: ACTION.MOVECODEOBJECTS, 
+      value: {
+        fromIndexArrayMap: 
+        fromArrayMap, 
+        toIndexArrayMap: 
+        toArrayMap, 
+        codeObject, 
+        currencyCost, 
+        indicators, 
+        copyCounter: codeList.copyCounter
+      }
+    });
+  }
+}
+
+
 //dispatch to change the max currency
 export const changeMaxCurrency = function(codeList, dispatch, maxCurrency) {
   dispatch({type: ACTION.SETMAX, value: maxCurrency});
+}
+
+export const addToMaxCurrency = function(codeList, dispatch, addToMaxCurrency) {
+  changeMaxCurrency(codeList, dispatch, codeList.maxCurrency + addToMaxCurrency)
 }
 
 //the 'bench' is actually key0
@@ -246,7 +279,7 @@ const checkKeyName = function(codeItemName) {
 
 // search the whole data tree for a codeItemName, return the arrayIndexMap if found
 const searchTreeForCodeObject = function(codeList, codeItemName) {
-  for (let index = 0; index < codeList.keys.length; index++) {
+  for (let index = 0; index < codeList.keys.length-1; index++) {
     for (let keyIndex = 0; keyIndex < codeList.keys[index].length; keyIndex++) {
       let indexMap = [index, keyIndex];
       let foundIndexMap = getItemArrayMapCheckParam(codeItemName, codeList.keys[index][keyIndex], indexMap);
@@ -292,4 +325,13 @@ const getItemArrayMapCheckParam = function(codeItemName, codeObject, indexMap) {
     }
   }
   return undefined;
+}
+
+export const isOnWorkbench = function(codeList, codeObject) {
+  let onlist = codeList.keys[0].find(item => item.name === codeObject.name) !== undefined;
+  return onlist;
+}
+
+export const clearWorkbenchItems = function(dispatch) {
+  dispatch({type: ACTION.CLEARITEMS});
 }

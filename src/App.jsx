@@ -3,14 +3,15 @@ import { useRef, useState, useEffect, useReducer } from 'react';
 import Phaser, { Game } from "phaser";
 import { PhaserGame } from './game/PhaserGame';
 import WorkBench from './components/WorkBench.jsx';
-import { reducer, moveCodeObject, changeMaxCurrency } from './helpers/workbenchStateHelpers.js';
-import { inventoryReducer, loadPlayerInventory, getInventory, addItemFromSceneToInventory, clearInventoryForScene } from './helpers/inventoryHelpers.js';
+import { reducer, moveCodeObject, changeMaxCurrency, addToMaxCurrency, isOnWorkbench, clearWorkbenchItems } from './helpers/workbenchStateHelpers.js';
+import { inventoryReducer, loadPlayerInventory, getInventory, addItemFromSceneToInventory, clearInventoryForScene, getInventoryForScene, getItemCountByType, ITEMTYPES } from './helpers/inventoryHelpers.js';
 import { EventBus } from './game/EventBus';
 
 import './styles/App.css';
 import ItemContainer from './components/ItemContainer.jsx';
 import player_items from './mock_data/player_items';
 import items from './mock_data/items';
+import { Player } from './game/scenes/Player.js'
 
 
 
@@ -47,17 +48,40 @@ function App ()
     return changeMaxCurrency(codeList, dispatch, maxCurrency);
   }
 
-  const getFunctionList = function() {
-    return [
-      {name: "jumpPower", callback: (jumpPower) => {
+  const addToMaxCurrencyJumper = function(addCurrency) {
+    return addToMaxCurrency(codeList, dispatch, addCurrency);
+  }
+
+  const clearWorkbenchItemsJumper = function() {
+    return clearWorkbenchItems(dispatch);
+  }
+
+  const isOnWorkbenchJumper = function(codeObject) {
+    return isOnWorkbench(codeList, codeObject);
+  }
+
+  const getFunctionCallbackList = function() {
+    return {
+      jumpPower: {name: "jumpPower", callback: (jumpPower) => {
         phaserRef.current.scene.setJumpPower(jumpPower);
         return
       }}
-    ];
+    };
   }
 
-  let workBench = new WorkBench(codeList, moveCodeObjectJumper, changeMaxCurrencyJumper, loaded, setLoaded, getFunctionList());
-  
+  //todo: get out of inventory
+  let workBench = new WorkBench(
+    codeList, 
+    { moveCodeObject: moveCodeObjectJumper, 
+      changeMaxCurrency: changeMaxCurrencyJumper, 
+      addToMaxCurrency: addToMaxCurrencyJumper,
+      clearWorkbenchItems: clearWorkbenchItemsJumper,
+      isOnWorkbench: isOnWorkbenchJumper}, 
+    loaded, 
+    setLoaded, 
+    getItemCountByType(inventoryList, ITEMTYPES.COIN)
+  );
+
   // The sprite can only be moved in the MainMenu Scene
     const [canMoveSprite, setCanMoveSprite] = useState(true);
     
@@ -118,7 +142,9 @@ function App ()
   }
 
   const eventHandlerInventoryClear = function(mapId) {
+    let itemsRemoved = getInventoryForScene(inventoryList, mapId);
     clearInventoryForScene(inventoryDispatch, mapId);
+    workBench.removeInventoryItemFromBench(itemsRemoved);
   }
 
   useEffect(() => {
@@ -148,6 +174,12 @@ function App ()
     EventBus.on("clear-inventory", (mapId) => {
       eventHandlerInventoryClear(mapId);
     });
+
+    //todo: on change to inventory, update what is in the workbench
+    inventoryList.forEach(inventoryItem => {
+      workBench.addInventoryItemToBench(inventoryItem, getFunctionCallbackList());
+    })
+
   }, [inventoryList])
 
   // Event emitted from the PhaserGame component
@@ -163,7 +195,9 @@ function App ()
   const closeWorkbench = (event) => {
     setWorkbenchOpen(false);
     setShowGame(true);
-    phaserRef.current.scene.clearWorkbenchProperties();
+    if (phaserRef.current.scene instanceof Player) {
+      phaserRef.current.scene.clearWorkbenchProperties();
+    }
   }
 
   const changeShowGame = function(showGameValue) {

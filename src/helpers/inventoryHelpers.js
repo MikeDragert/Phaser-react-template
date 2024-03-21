@@ -3,6 +3,7 @@ export const ITEMTYPES = {
   CODENUMBER: 1,
   CODEOPERATOR: 2,
   CODEFUNCTION: 3,
+  CODEITEMMAX: 9,
   DUCK: 10,
   COIN: 11
 }
@@ -40,6 +41,9 @@ export const inventoryReducer = (state, action) => {
   return newState
 }
 
+export const getAllCodeItems = function(inventoryList) {
+  return inventoryList.filter( item => item.item_type < ITEMTYPES.CODEITEMMAX);
+}
 
 //get a list of items in the inventory, as per passed in options
 export const getInventory = function (inventoryList, type = ITEMTYPES.ALL) {
@@ -138,6 +142,10 @@ export const clearInventory = function(inventoryDispatch) {
 
 export const clearInventoryForScene = function(inventoryDispatch, mapId) {
   return inventoryDispatch({type: INVENTORYACTION.CLEAR, data: {mapId} });
+}
+
+export const getInventoryForScene = function(inventoryList, mapId){
+  return inventoryList.filter(item => item.map_id === mapId);
 }
 
 //todo: we will want to use this to push inventory to game on change

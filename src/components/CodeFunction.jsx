@@ -7,7 +7,11 @@ import Droppable from './Droppable.jsx';
 class CodeFunction extends CodeObject {
   constructor(name, callback) {
     super(name);
-    this._displayName = name.split('-')[0];
+    let cleanName = name.split('-')[0];
+    if (cleanName.search('_') >= 0){
+      cleanName = name.split('_')[1];
+    }
+    this._displayName = cleanName;
     this._callback = callback;
     this._params = [
       new ObjectParameter("value", PARAMTYPES.NUMBER, 0)
