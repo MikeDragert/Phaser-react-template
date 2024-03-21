@@ -63,6 +63,7 @@ function App ()
   const getFunctionCallbackList = function() {
     return {
       jumpPower: {name: "jumpPower", callback: (jumpPower) => {
+        console.log('set jump power', jumpPower)
         phaserRef.current.scene.setJumpPower(jumpPower);
         return
       }}
@@ -197,6 +198,7 @@ function App ()
     setShowGame(true);
     if (phaserRef.current.scene instanceof Player) {
       phaserRef.current.scene.clearWorkbenchProperties();
+      workBench.execute1();
     }
   }
 
@@ -232,12 +234,17 @@ function App ()
       openWorkbench();
     });
 
+    EventBus.on("current-scene-ready", (data) => {
+      workBench.execute1()
+    });
+
     return () => {
       EventBus.removeListener("touch-flag");
       EventBus.removeListener("keyEvent");
       EventBus.removeListener("add-inventory-item")
       EventBus.removeListener("give-me-inventory")
       EventBus.removeListener("clear-inventory");
+      EventBus.removeListener("current-scene-ready");
     };
   }, [phaserRef])
 

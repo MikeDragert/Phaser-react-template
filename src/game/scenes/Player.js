@@ -111,7 +111,10 @@ export class Player extends Scene {
         this.jumpCount++
         player.anims.play("player-jump", true);
         player.anims.msPerFrame = 30;
-        this.savedJumpAmount = -this.initialJumpAmount - (20 * this.jumpPowerIncrease);
+        //todo: this is not working as intended, for some reason, adding more y velocity past a certain point seems to do nothing.
+        //     the initial jump value gets bigger, BUT the character doesn't seem to go higher?
+        this.savedJumpAmount = -this.initialJumpAmount - (40 * this.jumpPowerIncrease);
+        //console.log(this.savedJumpAmount, this.jumpPowerIncrease)
         player.body.velocity.y = this.savedJumpAmount;
         //this disables jumping again, until the jump button is release
         this.initialJumpAmount = -1;
@@ -120,6 +123,7 @@ export class Player extends Scene {
       //hold up velocity to continue jump until our sequence number hits max
       if (this.jumpingTimingCount < (30)) {
         player.body.velocity.y = this.savedJumpAmount;
+        //console.log(player.body.velocity.y)
       }
 
       // end jump on jump key release
