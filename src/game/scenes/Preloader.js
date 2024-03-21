@@ -24,8 +24,9 @@ export class Preloader extends Scene {
 
   preload() {
     //  Load the assets for the game - Replace with your own assets
-    this.load.setPath("assets");
+    // this.load.scenePlugin('rexuiplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js', 'rexUI', 'rexUI');
 
+    this.load.setPath("assets");
     this.load.image("logo", "logo.png");
     this.load.image("star", "star.png");
     this.load.image("sky", "skies/sky.png");
@@ -86,17 +87,6 @@ export class Preloader extends Scene {
         suffix: ".png",
       }),
     });
-
-    this.anims.create({
-      key: "spinning_coin",
-      framrate: 30,
-      frames: this.anims.generateFrameNames("spinning_coin", {
-        start: 1,
-        end: 6,
-        prefix: "NinjaCat_jump_0",
-        suffix: ".png",
-      }),
-    })
 
     this.scene.start("MainMenu");
   }
