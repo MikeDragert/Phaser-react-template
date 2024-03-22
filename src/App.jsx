@@ -10,6 +10,7 @@ import './styles/App.css';
 import ItemContainer from './components/ItemContainer.jsx';
 import player_items from './mock_data/player_items';
 import items from './mock_data/items';
+import TopNavigationBar from './components/TopNaviagtionBar.jsx';
 
 
 
@@ -171,6 +172,9 @@ function App ()
 
     return (
         <div id="app">
+            <header>
+            <TopNavigationBar />
+            </header>
           {workbenchOpen && <div>{workBench.getReactBench()}</div>}
           {workbenchOpen && <button className="button" onClick={closeWorkbench}>Close Workbench</button>}
 
