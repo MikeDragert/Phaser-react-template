@@ -24,14 +24,6 @@ export class Player extends Scene {
     }
   }
 
-
-  inventory = [];
-
-  sendNewItemMessage = function(item) {
-    ///.sceneName needs to be set ..is it?
-    EventBus.emit('add-inventory-item', {sceneName: this.sceneName, ...item });
-  }
-
   //anything that has to be cleared upon returning from the workbench should go here
   clearWorkbenchProperties() {
     this.power = 0;
@@ -241,4 +233,21 @@ export class Player extends Scene {
     this.sendKeyEvents.push({keyCode: keyCode, isDown: isDown})
     EventBus.emit('keyEvent', {scene: this, keyCode: keyCode, isDown: isDown});
   }
+  
+  inventory = [];
+  sendItemPickup = [];
+  
+  sendItemColllectionMessage = function(keyCode, isDown) {
+    this.sendKeyEvents.push({keyCode: keyCode, isDown: isDown})
+    EventBus.emit('keyEvent', {scene: this, keyCode: keyCode, isDown: isDown});
+  }
+
+  sendNewItemMessage = function(item) {
+    const itemWithSceneName = {sceneName: this.sceneName, ...item };
+    this.sendItemPickup.push(itemWithSceneName)
+    EventBus.emit('add-inventory-item', itemWithSceneName);
+  }
+
+
+
 }

@@ -235,7 +235,10 @@ export const HooksGame = () => {
         });
 
         EventBus.on("add-inventory-item", (itemData) => {
-            eventHandlerItemPickup(itemData);
+          while (phaserRef.current.scene.sendItemPickup.length > 0) {
+            let newItem = phaserRef.current.scene.sendItemPickup.pop();
+            eventHandlerItemPickup(newItem);
+          }
         });
 
         EventBus.on("give-me-inventory", (mapId) => {
