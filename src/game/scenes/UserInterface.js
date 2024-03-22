@@ -5,21 +5,16 @@ const COLOR_PRIMARY = 0x4e342e;
 const COLOR_LIGHT = 0x7b5e57;
 const COLOR_DARK = 0x260e04;
 
-
-
 export class UserInterface extends Scene {
   constructor() {
     super("UserInterface");
   }
 
-  content = "AAAAAAAA";
-
   create() {
-    
-    
 
     EventBus.on("scoreUpdate", (data) => {
-      if (data) {
+      console.log("DATA: ", data);
+      if (data != null) {
         this.scoreText.setText(`${data}`);
       }
       setTimeout(() => {
@@ -27,32 +22,31 @@ export class UserInterface extends Scene {
       }, 2000);
     });
 
-    EventBus.on("tutorialMessage", (data) => {
-      if (data) {
-        createTextBox(this, 450, 600, {
-          wrapWidth: 500,
-        }).start(this.content, 50);
-        this.tutorialText.setText(`${data}`);
-      }
-      setTimeout(() => {
-        this.tutorialText.setText("");
-      }, 2000);
-    });
-
-    EventBus.on("workbenchText", (data) => {
-      if (data) {
-        this.text.setText(`${data}`);
-      }
-      setTimeout(() => {
-        this.text.setText("");
-      }, 2000);
-    });
+    let message_count = 0;
 
     EventBus.on("miscText", (data) => {
-      if (data) {
-        this.miscText.setText(`${data}`);
+     
+
+      if (data && message_count == 0) {
+        message_count = 1
+        const textBox = createTextBox(
+          this,
+          280,
+          30,
+          {
+            wrapWidth: 500,
+          }
+          // data
+        ).start(data, 20);
+        console.log("MESSAGE COUNT:", message_count);
+        setTimeout(() => {
+          textBox.destroy();
+          message_count = 0;
+        }, 4000);
       }
     });
+
+    
 
     this.scoreText = this.add.text(30, 30, "0", {
       fontFamily: "Quicksand",
@@ -72,50 +66,20 @@ export class UserInterface extends Scene {
       padding: { left: null },
     });
 
-    this.tutorialText = this.add.text(30, 120, "", {
-      fontFamily: "Quicksand",
-      fontSize: "20px",
-      color: "#000000",
-      stroke: "#534848",
-      strokeThickness: 1,
-    });
-
-    this.text = this.add.text(320, 700, "", {
-      fontFamily: "Quicksand",
-      fontSize: "20px",
-      color: "#000000",
-      stroke: "#534848",
-      strokeThickness: 1,
-    });
-
-    this.miscText = this.add.text(300, 400, "", {
-      fontFamily: "Quicksand",
-      fontSize: "20px",
-      color: "#000000",
-      stroke: "#534848",
-      strokeThickness: 1,
-    });
-
-   
-
-    this.text.setScrollFactor(0);
     this.scoreText.setScrollFactor(0);
-    this.tutorialText.setScrollFactor(0);
+    
   }
 
-  update() {
-
-  }
+  update() {}
 }
 
 export function triggerWorkbench(sprite, tile) {
-  EventBus.emit("workbenchText", "Press E to Open Workbench");
+  EventBus.emit("miscText", "Press E to Open Workbench");
   if (this.e.isDown) {
-    // this.changeScene()
     EventBus.emit("touch-flag", tile);
   }
   setTimeout(() => {
-    EventBus.emit("workbenchText", "");
+    EventBus.emit("miscText", "");
   }, 2000);
   return false;
 }
@@ -123,22 +87,25 @@ export function triggerWorkbench(sprite, tile) {
 export function playMessage(sprite, flag) {
   const message = flag.data.list.message[0].value;
   if (message != null) {
-    EventBus.emit("tutorialMessage", message);
+    EventBus.emit("miscText", message);
   }
 
   setTimeout(() => {
-    EventBus.emit("tutorialMessage", "");
+    EventBus.emit("miscText", "");
   }, 2000);
   return false;
 }
 
-const GetValue = Phaser.Utils.Objects.GetValue;
 
-let createTextBox = function (scene, x, y, config, text) {
-  let wrapWidth = GetValue(config, "wrapWidth", 0);
-  let fixedWidth = GetValue(config, "fixedWidth", 0);
-  let fixedHeight = GetValue(config, "fixedHeight", 0);
-  let titleText = GetValue(config, "title", undefined);
+
+export function createTextBox (scene, x, y, config, miscText) {
+
+  const GetValue = Phaser.Utils.Objects.GetValue;
+
+  const wrapWidth = GetValue(config, "wrapWidth", 0);
+  const fixedWidth = GetValue(config, "fixedWidth", 0);
+  const fixedHeight = GetValue(config, "fixedHeight", 0);
+  const titleText = GetValue(config, "title", undefined);
 
   let textBox = scene.rexUI.add
     .textBox({
@@ -154,8 +121,14 @@ let createTextBox = function (scene, x, y, config, text) {
 
       icon: scene.rexUI.add.roundRectangle({ radius: 20, color: COLOR_DARK }),
 
-      text: getBuiltInText(scene, wrapWidth, fixedWidth, fixedHeight),
-      // text: getBBcodeText(scene, wrapWidth, fixedWidth, fixedHeight),
+      // text: getBuiltInText(scene, wrapWidth, fixedWidth, fixedHeight),
+      text: getBBcodeText(scene, wrapWidth, fixedWidth, fixedHeight),
+      // text: scene.add.text(0, 0, `${miscText}`, {
+      //   fontSize: "20px",
+      //   wordWrap: {
+      //     width: wrapWidth,
+      //   },
+      // }),
 
       action: scene.add
         .image(0, 0, "nextPage")
@@ -236,28 +209,29 @@ let createTextBox = function (scene, x, y, config, text) {
   return textBox;
 };
 
-let getBuiltInText = function (scene, wrapWidth, fixedWidth, fixedHeight) {
-  return scene.add.text(0, 0, '', {
-          fontSize: '20px',
-          wordWrap: {
-              width: wrapWidth
-          },
-          maxLines: 3
-      })
-      .setFixedSize(fixedWidth, fixedHeight);
-}
-
-let getBBcodeText = function (scene, wrapWidth, fixedWidth, fixedHeight) {
-  return scene.rexUI.add.BBCodeText(0, 0, '', {
-      fixedWidth: fixedWidth,
-      fixedHeight: fixedHeight,
-
-      fontSize: '20px',
-      wrap: {
-          mode: 'word',
-          width: wrapWidth
+const getBuiltInText = function (scene, wrapWidth, fixedWidth, fixedHeight) {
+  return scene.add
+    .text(0, 0, "", {
+      fontSize: "20px",
+      wordWrap: {
+        width: wrapWidth,
       },
-      maxLines: 3
-  })
-}
+      maxLines: 3,
+    })
+    .setFixedSize(fixedWidth, fixedHeight);
+};
+
+const getBBcodeText = function (scene, wrapWidth, fixedWidth, fixedHeight) {
+  return scene.rexUI.add.BBCodeText(0, 0, "", {
+    fixedWidth: fixedWidth,
+    fixedHeight: fixedHeight,
+
+    fontSize: "20px",
+    wrap: {
+      mode: "word",
+      width: wrapWidth,
+    },
+    maxLines: 3,
+  });
+};
 

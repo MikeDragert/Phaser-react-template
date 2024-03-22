@@ -24,12 +24,20 @@ export class Preloader extends Scene {
 
   preload() {
     //  Load the assets for the game - Replace with your own assets
-    
 
     this.load.setPath("assets");
+    
     this.load.image("logo", "logo.png");
     this.load.image("star", "star.png");
     this.load.image("sky", "skies/sky.png");
+    this.load.image("ground", "ground/spritesheet_ground.png");
+    this.load.image("items", "items/spritesheet_items.png");
+    this.load.image("tutorial_flag", "items/tutorial_flag.png");
+    this.load.image("hud", "tiles/spritesheet_tiles.png");
+    this.load.image("tiles", "tiles/spritesheet_tiles.png");
+    this.load.image("checkpoints", "items/spritesheet_items_large.png");
+    this.load.image("large_tiles", "tiles/spritesheet_tiles_large.png");
+
     this.load.atlas(
       "NinjaCat",
       "sprites/JsonArrayCat.png",
@@ -37,13 +45,11 @@ export class Preloader extends Scene {
       { frameWidth: 20, frameHeight: 48 }
     );
 
-    this.load.image("ground", "ground/spritesheet_ground.png");
-    this.load.image("items", "items/spritesheet_items.png")
-    this.load.image("tutorial_flag", "items/tutorial_flag.png")
-    this.load.image("hud", "tiles/spritesheet_tiles.png");
-    this.load.image("tiles", "tiles/spritesheet_tiles.png");
-    this.load.image("checkpoints", "items/spritesheet_items_large.png");
-    this.load.image("large_tiles", "tiles/spritesheet_tiles_large.png");
+    this.load.image(
+      "nextPage",
+      "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/assets/images/arrow-down-left.png"
+    );
+
     this.load.tilemapTiledJSON("tilemap", "maps/FirstAttempt.json");
     this.load.tilemapTiledJSON("tutorial", "maps/tutorial.json");
   }
