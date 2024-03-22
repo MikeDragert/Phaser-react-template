@@ -4,49 +4,40 @@ import { Scene } from "phaser";
 const COLOR_PRIMARY = 0x4e342e;
 const COLOR_LIGHT = 0x7b5e57;
 const COLOR_DARK = 0x260e04;
+let message_count = 0;
 
 export class UserInterface extends Scene {
   constructor() {
     super("UserInterface");
   }
+  
 
   create() {
+    message_count = 0;
 
-    EventBus.on("scoreUpdate", (data) => {
-      console.log("DATA: ", data);
-      if (data != null) {
+    console.log("!!UserInterface Started!!");
+
+    this.textBox = createTextBox(this, 224, 30, {
+      wrapWidth: 500,
+      fixedWidth: 460,
+    }).setVisible(false);
+
+
+    this.miscTextListener = EventBus.on("miscText", (data = "AAAAAAA") => {
+      if (data) {
+        console.log("DATA: ", data);
+        this.textBox.setVisible(true);
+        this.textBox.start(data, 20);
+
+        console.log("MESSAGE COUNT:", message_count);
+      }
+    });
+
+    EventBus.on("scoreUpdate", (data = "0") => {
+      if (data > 0) {
         this.scoreText.setText(`${data}`);
       }
-      setTimeout(() => {
-        this.scoreText.setText("");
-      }, 2000);
     });
-
-    let message_count = 0;
-
-    EventBus.on("miscText", (data) => {
-     
-
-      if (data && message_count == 0) {
-        message_count = 1
-        const textBox = createTextBox(
-          this,
-          280,
-          30,
-          {
-            wrapWidth: 500,
-          }
-          // data
-        ).start(data, 20);
-        console.log("MESSAGE COUNT:", message_count);
-        setTimeout(() => {
-          textBox.destroy();
-          message_count = 0;
-        }, 4000);
-      }
-    });
-
-    
 
     this.scoreText = this.add.text(30, 30, "0", {
       fontFamily: "Quicksand",
@@ -67,39 +58,36 @@ export class UserInterface extends Scene {
     });
 
     this.scoreText.setScrollFactor(0);
-    
   }
 
-  update() {}
+  destroy() {
+    this.events.off("miscText", this.miscTextListener);
+  }
 }
 
 export function triggerWorkbench(sprite, tile) {
-  EventBus.emit("miscText", "Press E to Open Workbench");
+  if (tile && message_count == 0) {
+    message_count = 1;
+    EventBus.emit("miscText", "Press E to Open Workbench");
+  }
+
   if (this.e.isDown) {
     EventBus.emit("touch-flag", tile);
   }
-  setTimeout(() => {
-    EventBus.emit("miscText", "");
-  }, 2000);
   return false;
 }
 
-export function playMessage(sprite, flag) {
+export function playMessage(sprite, flag, scene = this) {
   const message = flag.data.list.message[0].value;
-  if (message != null) {
+  if (message != null && message_count == 0) {
+    message_count = 1;
+    console.log("MESAGE YAH DOLT: ", message);
     EventBus.emit("miscText", message);
   }
-
-  setTimeout(() => {
-    EventBus.emit("miscText", "");
-  }, 2000);
   return false;
 }
 
-
-
-export function createTextBox (scene, x, y, config, miscText) {
-
+export function createTextBox(scene, x, y, config) {
   const GetValue = Phaser.Utils.Objects.GetValue;
 
   const wrapWidth = GetValue(config, "wrapWidth", 0);
@@ -123,12 +111,7 @@ export function createTextBox (scene, x, y, config, miscText) {
 
       // text: getBuiltInText(scene, wrapWidth, fixedWidth, fixedHeight),
       text: getBBcodeText(scene, wrapWidth, fixedWidth, fixedHeight),
-      // text: scene.add.text(0, 0, `${miscText}`, {
-      //   fontSize: "20px",
-      //   wordWrap: {
-      //     width: wrapWidth,
-      //   },
-      // }),
+      
 
       action: scene.add
         .image(0, 0, "nextPage")
@@ -175,6 +158,9 @@ export function createTextBox (scene, x, y, config, miscText) {
           this.typeNextPage();
         } else {
           // Next actions
+          message_count = 0;
+          console.log("CLICKED");
+          textBox.setVisible(false);
         }
       },
       textBox
@@ -183,6 +169,9 @@ export function createTextBox (scene, x, y, config, miscText) {
       "pageend",
       function () {
         if (this.isLastPage) {
+          // setTimeout(() => {
+          //   textBox.setVisible(false)
+          // }, 2000)
           return;
         }
 
@@ -205,9 +194,9 @@ export function createTextBox (scene, x, y, config, miscText) {
     });
   //.on('type', function () {
   //})
-
+  console.log("TEXT BOX CREATED");
   return textBox;
-};
+}
 
 const getBuiltInText = function (scene, wrapWidth, fixedWidth, fixedHeight) {
   return scene.add
@@ -231,7 +220,7 @@ const getBBcodeText = function (scene, wrapWidth, fixedWidth, fixedHeight) {
       mode: "word",
       width: wrapWidth,
     },
-    maxLines: 3,
+    maxLines: 5,
   });
 };
 

@@ -84,7 +84,6 @@ export class ProgressTracker {
       `progress_${this.level}`,
       JSON.stringify(this.progressData)
     );
-    console.log("--------PROGRESS SAVED----------------");
   }
   // loads progress from local store/db call :
   // this.progressData = this.progressTracker.loadProgress();
@@ -134,7 +133,6 @@ export class ProgressTracker {
     level.scene.restart();
     level.player.visible = true;
     level.player.body.moves = true;
-    EventBus.emit("miscText", "");
   }
 }
 

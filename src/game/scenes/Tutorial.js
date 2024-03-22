@@ -3,6 +3,7 @@ import { Player } from "./Player";
 import { playMessage, triggerWorkbench } from "./UserInterface";
 import { ProgressTracker } from "./progressTracker";
 
+
 export class Tutorial extends Player {
   constructor() {
     super("Tutorial");
@@ -13,6 +14,9 @@ export class Tutorial extends Player {
     this.scene.stop("UserInterface");
   }
 
+  restart(data) {
+    console.log("IN RESTART", data);
+  }
 
   create() {
     this.died = false;
@@ -43,11 +47,10 @@ export class Tutorial extends Player {
     this.player.setOffset(40, 20);
 
     //this.player.body.setMaxVelocityY(20000);
-    
+
     this.player.setCollideWorldBounds(true);
     this.player.visible = true;
     this.player.body.moves = true;
-
 
     this.map = this.make.tilemap({ key: "tutorial" });
     const groundTileSet = this.map.addTilesetImage(
@@ -58,11 +61,22 @@ export class Tutorial extends Player {
     // tilesets
     const itemsTileSet = this.map.addTilesetImage("spritesheet_items", "items");
     const tilesTileSet = this.map.addTilesetImage("spritesheet_tiles", "tiles");
-    const checkpointsLayer = this.map.addTilesetImage("spritesheet_items_large", "checkpoints");
-    const largeTilesSet = this.map.addTilesetImage("spritesheet_tiles_large", "large_tiles")
+    const checkpointsLayer = this.map.addTilesetImage(
+      "spritesheet_items_large",
+      "checkpoints"
+    );
+    const largeTilesSet = this.map.addTilesetImage(
+      "spritesheet_tiles_large",
+      "large_tiles"
+    );
     // map layers
     const ground = this.map.createLayer("ground", groundTileSet, 0, 0);
-    const checkpoints = this.map.createLayer("checkpoints", checkpointsLayer, 0, 0);
+    const checkpoints = this.map.createLayer(
+      "checkpoints",
+      checkpointsLayer,
+      0,
+      0
+    );
     const coins = this.map.createLayer("coinLayer", itemsTileSet, 0, 0);
     const tiles = this.map.createLayer("tileLayer", largeTilesSet, 0, 0);
     const water = this.map.createLayer("water", tilesTileSet, 0, 0).setDepth(2);
@@ -89,13 +103,21 @@ export class Tutorial extends Player {
 
     this.cameras.main.setBounds(0, 0, ground.width, ground.height);
     this.cameras.main.setZoom(0.5, 0.5);
-    this.cameras.main.startFollow(this.player, false, 1, 1, this._PLAYERWIDTHADJUST/2,0);
+    this.cameras.main.startFollow(
+      this.player,
+      false,
+      1,
+      1,
+      this._PLAYERWIDTHADJUST / 2,
+      0
+    );
 
     water.setTileIndexCallback([258, 266], this.progressTracker.die, this);
 
     tiles.setTileIndexCallback(417, triggerWorkbench, this);
+
     let previousSave = false;
-    
+
     checkpoints.setTileIndexCallback(
       [250],
       (sprite, tile) => {
@@ -106,7 +128,7 @@ export class Tutorial extends Player {
 
         setTimeout(() => {
           previousSave = false;
-        }, 2000);
+        }, 4000);
       },
       this
     );
@@ -132,7 +154,7 @@ export class Tutorial extends Player {
   }
 
   update() {
-    let score = this.progressTracker.progressData.score;
+    let score = this.progressTracker.progressData.score || 0;
     EventBus.emit("scoreUpdate", score);
 
     if (Phaser.Input.Keyboard.JustDown(this.s)) {
