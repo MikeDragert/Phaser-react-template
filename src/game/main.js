@@ -7,7 +7,7 @@ import { Preloader } from "./scenes/Preloader";
 import { Tutorial } from "./scenes/Tutorial";
 import { ProgressTracker } from "./scenes/progressTracker";
 import { UserInterface } from "./scenes/UserInterface";
-import UIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
+import UIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin.js";
 
 // Find out more information about the Game Config at:
 // https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
@@ -17,7 +17,16 @@ const config = {
   height: 768,
   parent: "game-container",
   backgroundColor: "#028af8",
-  scene: [Boot, Preloader, MainMenu, Game, GameOver, Tutorial, ProgressTracker, UserInterface],
+  scene: [
+    Boot,
+    Preloader,
+    MainMenu,
+    Game,
+    GameOver,
+    Tutorial,
+    ProgressTracker,
+    UserInterface,
+  ],
   physics: {
     default: "arcade",
     arcade: {
@@ -30,14 +39,16 @@ const config = {
     },
   },
   plugins: {
-    scene: [{
-        key: 'rexUI',
+    scene: [
+      {
+        key: "rexUI",
         plugin: UIPlugin,
-        mapping: 'rexUI'
-    }]
-  }
+        mapping: "rexUI",
+      },
+      // ...
+    ],
+  },
 };
-
 
 const StartGame = (parent) => {
   return new Phaser.Game({ ...config, parent: parent });
