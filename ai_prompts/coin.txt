@@ -1,0 +1,5 @@
+one coin that is green with an + sign on it.  another coin that is green with a minus sign on it.  another coin that is green with a x sign on it.  Another coin that is green with a / sign on it.  another coin that is green with a % sign on it.  All coins in the same style, shown directly from the front, on a white background. Show no other items.  
+
+another attempt
+
+one coin that is green with  "+" on it.  another coin that is green with "-" on it.  another coin that is green with "x" on it.  Another coin that is green with  "/" on it.  another coin that is green with "%" on it.  All coins in the same style, shown directly from the front, on a white background. Show no other items.  
