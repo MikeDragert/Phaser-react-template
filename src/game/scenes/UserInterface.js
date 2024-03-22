@@ -12,17 +12,15 @@ export class UserInterface extends Scene {
     super("UserInterface");
   }
 
-  content = "";
+  content = "AAAAAAAA";
 
   create() {
-
-    createTextBox(this, 100, 100, {
-      wrapWidth: 500,
-    }).start(this.content, 50);
+    
+    
 
     EventBus.on("scoreUpdate", (data) => {
       if (data) {
-        this.content = data
+        this.scoreText.setText(`${data}`);
       }
       setTimeout(() => {
         this.scoreText.setText("");
@@ -31,6 +29,9 @@ export class UserInterface extends Scene {
 
     EventBus.on("tutorialMessage", (data) => {
       if (data) {
+        createTextBox(this, 450, 600, {
+          wrapWidth: 500,
+        }).start(this.content, 50);
         this.tutorialText.setText(`${data}`);
       }
       setTimeout(() => {
@@ -95,10 +96,15 @@ export class UserInterface extends Scene {
       strokeThickness: 1,
     });
 
+   
 
     this.text.setScrollFactor(0);
     this.scoreText.setScrollFactor(0);
     this.tutorialText.setScrollFactor(0);
+  }
+
+  update() {
+
   }
 }
 
@@ -128,13 +134,13 @@ export function playMessage(sprite, flag) {
 
 const GetValue = Phaser.Utils.Objects.GetValue;
 
-var createTextBox = function (scene, x, y, config) {
-  var wrapWidth = GetValue(config, "wrapWidth", 0);
-  var fixedWidth = GetValue(config, "fixedWidth", 0);
-  var fixedHeight = GetValue(config, "fixedHeight", 0);
-  var titleText = GetValue(config, "title", undefined);
+let createTextBox = function (scene, x, y, config, text) {
+  let wrapWidth = GetValue(config, "wrapWidth", 0);
+  let fixedWidth = GetValue(config, "fixedWidth", 0);
+  let fixedHeight = GetValue(config, "fixedHeight", 0);
+  let titleText = GetValue(config, "title", undefined);
 
-  var textBox = scene.rexUI.add
+  let textBox = scene.rexUI.add
     .textBox({
       x: x,
       y: y,
@@ -148,8 +154,8 @@ var createTextBox = function (scene, x, y, config) {
 
       icon: scene.rexUI.add.roundRectangle({ radius: 20, color: COLOR_DARK }),
 
-      // text: getBuiltInText(scene, wrapWidth, fixedWidth, fixedHeight),
-      text: getBBcodeText(scene, wrapWidth, fixedWidth, fixedHeight),
+      text: getBuiltInText(scene, wrapWidth, fixedWidth, fixedHeight),
+      // text: getBBcodeText(scene, wrapWidth, fixedWidth, fixedHeight),
 
       action: scene.add
         .image(0, 0, "nextPage")
@@ -188,7 +194,7 @@ var createTextBox = function (scene, x, y, config) {
     .on(
       "pointerdown",
       function () {
-        var icon = this.getElement("action").setVisible(false);
+        let icon = this.getElement("action").setVisible(false);
         this.resetChildVisibleState(icon);
         if (this.isTyping) {
           this.stop(true);
@@ -207,10 +213,10 @@ var createTextBox = function (scene, x, y, config) {
           return;
         }
 
-        var icon = this.getElement("action").setVisible(true);
+        let icon = this.getElement("action").setVisible(true);
         this.resetChildVisibleState(icon);
         icon.y -= 30;
-        var tween = scene.tweens.add({
+        let tween = scene.tweens.add({
           targets: icon,
           y: "+=30", // '+=100'
           ease: "Bounce", // 'Cubic', 'Elastic', 'Bounce', 'Back'
@@ -230,7 +236,7 @@ var createTextBox = function (scene, x, y, config) {
   return textBox;
 };
 
-var getBuiltInText = function (scene, wrapWidth, fixedWidth, fixedHeight) {
+let getBuiltInText = function (scene, wrapWidth, fixedWidth, fixedHeight) {
   return scene.add.text(0, 0, '', {
           fontSize: '20px',
           wordWrap: {
@@ -241,7 +247,7 @@ var getBuiltInText = function (scene, wrapWidth, fixedWidth, fixedHeight) {
       .setFixedSize(fixedWidth, fixedHeight);
 }
 
-var getBBcodeText = function (scene, wrapWidth, fixedWidth, fixedHeight) {
+let getBBcodeText = function (scene, wrapWidth, fixedWidth, fixedHeight) {
   return scene.rexUI.add.BBCodeText(0, 0, '', {
       fixedWidth: fixedWidth,
       fixedHeight: fixedHeight,
