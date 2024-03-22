@@ -1,3 +1,18 @@
+@font-face {
+  font-family: 'BrightAzure';
+  src: local('BrightAzure'), url(../../assets/fonts/BrightAzure-x392V.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'MarchFrost';
+  src: local('MarchFrost'), url(../../assets/fonts/MarchFrost-z8nx1.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Dearkatienbp';
+  src: local('Dearkatienbp'), url(../../assets/fonts/Dearkatienbp-nZeg.ttf) format('truetype');
+}
+
 .codeBlock {
   border: 1px;
   border-color: rgb(10, 10, 10, 0.1);
@@ -45,15 +60,40 @@
   left:50%;
 }
 
+.currency {
+  background-color: black;
+  width : 220px;
+  position:absolute;
+  top: 30%;
+  left: 6%;
+}
+
+.codeBoxContainer {
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.noteContainer {
+  color: black;
+  background-color: rgb(241, 231, 91);
+  width : 220px;
+  height: 100px;
+  position:absolute;
+  top: 30%;
+  left: 30%;
+  padding: 10px;
+  font-family: Dearkatienbp;
+  font-size:x-large;
+}
+
+
 .benchContainer {
   background-image: url('../assets/Workbench.png');
   background-position: 'center';
   background-size: 'cover';
   background-repeat: none;
   background-size:100% 100%;
-  display:flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 1500px;
-  height: 800px;
+  width: 1100px;
+  height: 700px;
 }

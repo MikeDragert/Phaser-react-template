@@ -205,21 +205,28 @@ class WorkBench extends React.Component {
   getReactBench = function() {   
     return (
       <>
-        <div><label>Currency:</label><span>{this.codeList.currentCurrency} : {this.codeList.maxCurrency}</span></div>
-        <DndContext onDragEnd={(event) => this.handleDragEnd(event)}>
-          <div className='benchContainer'>
-            <Droppable id="key1" className="workbench workbench-left">
-              {this.codeList.keys[1].map(codeObject => {
-                return codeObject.reactDisplay("key1")
-              })}
-            </Droppable>
-            <Droppable id="bench" className="workbench workbench-right">
-              {this.codeList.keys[0].map(codeObject => {
-                return codeObject.reactDisplay("bench")
-              })}
-            </Droppable>
+        <section className='benchContainer'>
+          <div className='currency'>
+            <h2>Currency: {this.codeList.currentCurrency} : {this.codeList.maxCurrency}</h2>
           </div>
-        </DndContext>
+          <article className='noteContainer'>
+            <p> We can show a small hint here </p>
+          </article>
+          <DndContext onDragEnd={(event) => this.handleDragEnd(event)}>
+            <div className='codeBoxContainer'>
+              <Droppable id="key1" className="workbench workbench-left">
+                {this.codeList.keys[1].map(codeObject => {
+                  return codeObject.reactDisplay("key1")
+                })}
+              </Droppable>
+              <Droppable id="bench" className="workbench workbench-right">
+                {this.codeList.keys[0].map(codeObject => {
+                  return codeObject.reactDisplay("bench")
+                })}
+              </Droppable>
+            </div>
+          </DndContext>
+        </section>
       </>
     )
   }
