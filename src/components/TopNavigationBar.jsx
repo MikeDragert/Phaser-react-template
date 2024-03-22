@@ -1,7 +1,5 @@
 import React from "react";
-//import "./TopNavigationBar.css";
-import Highscores from "./Highscores";
-import Achievements from "./Achievements";
+import "./TopNavigationBar.css";
 
 const TopNavigationBar = () => {
     return (
@@ -9,6 +7,9 @@ const TopNavigationBar = () => {
             <span className="site-title">Welcome to Labber!</span>
             <div className="nav-section">
                 <ul>
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
                     <li>
                         <a href="/highscores">Highscores</a>
                     </li>
