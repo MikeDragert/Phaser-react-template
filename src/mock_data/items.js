@@ -1,4 +1,4 @@
-const items = {
+const mock_items = {
     1: { id: 1, name: "Number_1", type: 1, has_obtained: true },
     2: { id: 2, name: "Number_2", type: 1, has_obtained: true },
     3: { id: 3, name: "Number_3", type: 1, has_obtained: true },
@@ -19,4 +19,4 @@ const items = {
     18: { id: 12, name: "Function_passKey", type: 3, has_obtained: true },
 };
 
- export default items;
+ export default mock_items;

@@ -16,10 +16,12 @@ import {
 } from "../helpers/inventoryHelpers.js";
 import { EventBus } from "../game/EventBus";
 import { Player } from "../game/scenes/Player.js";
+import { getPlayerDbItems } from '../routes/dbRoutes.js'
+
 
 //mocks
-import player_items from "../mock_data/player_items";
-import items from "../mock_data/items";
+import mock_player_items from "../mock_data/player_items";
+import mock_items from "../mock_data/items";
 
 export const HooksGame = () => {
     
@@ -41,7 +43,7 @@ export const HooksGame = () => {
     const [showGame, setShowGame] = useState(true);
     const [loaded, setLoaded] = useState(false);
     const [workbenchOpen, setWorkbenchOpen] = useState(false);
-    const [itemsState, setItemsState] = useState(items);
+    const [itemsState, setItemsState] = useState(mock_items);
     
     const [inventoryList, inventoryDispatch] = useReducer(
         inventoryReducer,
@@ -176,7 +178,15 @@ export const HooksGame = () => {
 
     useEffect(() => {
         //load the inventory one time
-        loadPlayerInventory(inventoryDispatch, player_items, items);
+        getPlayerDbItems(1, (items) => {
+          console.log('received items: ',items)
+          setItemsState(items);
+          clearInventory(inventoryDispatch);
+          items.forEach(item => {
+            addFullItemToInventory(inventoryDispatch, item);    
+          });
+        });
+        //loadPlayerInventory(inventoryDispatch, mock_player_items, mock_items);
     }, []);
 
     useEffect(() => {

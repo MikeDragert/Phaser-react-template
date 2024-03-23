@@ -1,4 +1,4 @@
-const player_items = {
+const mock_player_items = {
     '1': {
         player_id: '1', 
         item_id: '1',
@@ -163,4 +163,4 @@ const player_items = {
     }
   };
 
-    export default player_items;
+    export default mock_player_items;
