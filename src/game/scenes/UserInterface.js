@@ -96,7 +96,7 @@ export function triggerWorkbench(sprite, tile) {
   EventBus.emit("workbenchText", "Press E to Open Workbench");
   if (this.e.isDown) {
     // this.changeScene()
-    EventBus.emit("touch-flag", tile);
+    EventBus.emit("touch-flag", {tile: tile, hint: `Workbench hint: ${ this.sceneName }`});  //this is an example of how to set the hint when you open the workbench!
   }
   setTimeout(() => {
     EventBus.emit("workbenchText", "");

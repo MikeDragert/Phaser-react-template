@@ -22,6 +22,7 @@ class WorkBench extends React.Component {
     this.addToMaxCurrency = workBenchFunction.addToMaxCurrency;
     this.clearWorkbenchItems = workBenchFunction.clearWorkbenchItems; 
     this.isOnWorkbench = workBenchFunction.isOnWorkbench;  
+    this.setWorkbenchHint = workBenchFunction.setWorkbenchHint;
     this.loaded = loaded;
     this.setLoaded = setLoaded;
     this.functionCallbackList = {};
@@ -201,16 +202,21 @@ class WorkBench extends React.Component {
     }
   }
 
+  logHint = function() {
+    console.log(this.codeList.hint)
+  }
+
+//{this.codeList.hint}
   //todo: need unique key
   getReactBench = function() {   
     return (
       <>
         <section className='benchContainer'>
           <div className='currency'>
-            <h2>Currency: {this.codeList.currentCurrency} : {this.codeList.maxCurrency}</h2>
+            <h2>{this.codeList.currentCurrency} : {this.codeList.maxCurrency}</h2>
           </div>
           <article className='noteContainer'>
-            <p> We can show a small hint here </p>
+            <span> {this.codeList.hint}  </span>
           </article>
           <DndContext onDragEnd={(event) => this.handleDragEnd(event)}>
             <div className='codeBoxContainer'>

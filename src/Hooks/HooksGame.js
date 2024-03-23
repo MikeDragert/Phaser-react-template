@@ -3,14 +3,7 @@ import { useRef, useState, useEffect, useReducer } from "react";
 import Phaser, { Game } from "phaser";
 import { PhaserGame } from "../game/PhaserGame";
 import WorkBench from "../components/WorkBench.jsx";
-import {
-    reducer,
-    moveCodeObject,
-    changeMaxCurrency,
-    addToMaxCurrency,
-    isOnWorkbench,
-    clearWorkbenchItems,
-} from "../helpers/workbenchStateHelpers.js";
+import { workbenchHelpers } from "../helpers/workbenchStateHelpers.js";
 import {
     inventoryReducer,
     loadPlayerInventory,
@@ -29,12 +22,19 @@ import player_items from "../mock_data/player_items";
 import items from "../mock_data/items";
 
 export const HooksGame = () => {
-    const initialCodeListState = {
-        keys: [[], [], [], [], [], [], [], [], []],
-        maxCurrency: 0,
-        currentCurrency: 0,
-        copyCounter: 0,
-    };
+    
+  const { 
+    moveCodeObject, 
+    changeMaxCurrency, 
+    addToMaxCurrency, 
+    isOnWorkbench, 
+    clearWorkbenchItems, 
+    setWorkbenchHint, 
+    codeList 
+  } = workbenchHelpers();
+  
+  
+
 
     const initialInventoryState = [];
 
@@ -42,22 +42,22 @@ export const HooksGame = () => {
     const [loaded, setLoaded] = useState(false);
     const [workbenchOpen, setWorkbenchOpen] = useState(false);
     const [itemsState, setItemsState] = useState(items);
-    const [codeList, dispatch] = useReducer(reducer, initialCodeListState);
+    
     const [inventoryList, inventoryDispatch] = useReducer(
         inventoryReducer,
         initialInventoryState
     );
 
     const moveCodeObjectJumper = function (codeObject, fromName, toName) {
-        return moveCodeObject(codeList, dispatch, codeObject, fromName, toName);
+        return moveCodeObject(codeObject, fromName, toName);
     };
 
     const changeMaxCurrencyJumper = function (maxCurrency) {
-        return changeMaxCurrency(codeList, dispatch, maxCurrency);
+        return changeMaxCurrency(maxCurrency);
     };
 
     const addToMaxCurrencyJumper = function (addCurrency) {
-        return addToMaxCurrency(codeList, dispatch, addCurrency);
+        return addToMaxCurrency(addCurrency);
     };
 
     const clearWorkbenchItemsJumper = function () {
@@ -65,7 +65,7 @@ export const HooksGame = () => {
     };
 
     const isOnWorkbenchJumper = function (codeObject) {
-        return isOnWorkbench(codeList, codeObject);
+        return isOnWorkbench(codeObject);
     };
 
     const getFunctionCallbackList = function () {
@@ -85,11 +85,12 @@ export const HooksGame = () => {
     let workBench = new WorkBench(
         codeList,
         {
-            moveCodeObject: moveCodeObjectJumper,
-            changeMaxCurrency: changeMaxCurrencyJumper,
-            addToMaxCurrency: addToMaxCurrencyJumper,
-            clearWorkbenchItems: clearWorkbenchItemsJumper,
-            isOnWorkbench: isOnWorkbenchJumper,
+            moveCodeObject: moveCodeObject,
+            changeMaxCurrency: changeMaxCurrency,
+            addToMaxCurrency: addToMaxCurrency,
+            clearWorkbenchItems: clearWorkbenchItems,
+            isOnWorkbench: isOnWorkbench,
+            setWorkbenchHint: setWorkbenchHint
         },
         loaded,
         setLoaded,
@@ -201,9 +202,16 @@ export const HooksGame = () => {
     //setCanMoveSprite(scene.scene.key !== "MainMenu");
     };
 
+    const openWorkbenchWithHint = function(hint) {
+      workBench.setWorkbenchHint(hint);
+      setWorkbenchOpen(true);
+      setShowGame(false);
+    }
+
     const openWorkbench = (event) => {
-        setWorkbenchOpen(true);
-        setShowGame(false);
+      workBench.setWorkbenchHint('openWorkbench was called by hitting the button that is just for testing');
+      setWorkbenchOpen(true);
+      setShowGame(false);
     };
 
     const closeWorkbench = (event) => {
@@ -247,7 +255,7 @@ export const HooksGame = () => {
         });
 
         EventBus.on("touch-flag", (data) => {
-            openWorkbench();
+          openWorkbenchWithHint(data.hint);
         });
 
         EventBus.on("current-scene-ready", (data) => {
