@@ -22,6 +22,7 @@ class WorkBench extends React.Component {
     this.addToMaxCurrency = workBenchFunction.addToMaxCurrency;
     this.clearWorkbenchItems = workBenchFunction.clearWorkbenchItems; 
     this.isOnWorkbench = workBenchFunction.isOnWorkbench;  
+    this.setWorkbenchHint = workBenchFunction.setWorkbenchHint;
     this.loaded = loaded;
     this.setLoaded = setLoaded;
     this.functionCallbackList = {};
@@ -201,25 +202,37 @@ class WorkBench extends React.Component {
     }
   }
 
+  logHint = function() {
+    console.log(this.codeList.hint)
+  }
+
+//{this.codeList.hint}
   //todo: need unique key
   getReactBench = function() {   
     return (
       <>
-        <div><label>Currency:</label><span>{this.codeList.currentCurrency} : {this.codeList.maxCurrency}</span></div>
-        <DndContext onDragEnd={(event) => this.handleDragEnd(event)}>
-          <div className='benchContainer'>
-            <Droppable id="key1" className="workbench workbench-left">
-              {this.codeList.keys[1].map(codeObject => {
-                return codeObject.reactDisplay("key1")
-              })}
-            </Droppable>
-            <Droppable id="bench" className="workbench workbench-right">
-              {this.codeList.keys[0].map(codeObject => {
-                return codeObject.reactDisplay("bench")
-              })}
-            </Droppable>
+        <section className='benchContainer'>
+          <div className='currency'>
+            <h2>{this.codeList.currentCurrency} : {this.codeList.maxCurrency}</h2>
           </div>
-        </DndContext>
+          <article className='noteContainer'>
+            <span> {this.codeList.hint}  </span>
+          </article>
+          <DndContext onDragEnd={(event) => this.handleDragEnd(event)}>
+            <div className='codeBoxContainer'>
+              <Droppable id="key1" className="workbench workbench-left">
+                {this.codeList.keys[1].map(codeObject => {
+                  return codeObject.reactDisplay("key1")
+                })}
+              </Droppable>
+              <Droppable id="bench" className="workbench workbench-right">
+                {this.codeList.keys[0].map(codeObject => {
+                  return codeObject.reactDisplay("bench")
+                })}
+              </Droppable>
+            </div>
+          </DndContext>
+        </section>
       </>
     )
   }

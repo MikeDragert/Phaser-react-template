@@ -5,14 +5,7 @@ import { useRef, useState, useEffect, useReducer } from "react";
 import Phaser, { Game } from "phaser";
 import { PhaserGame } from "./game/PhaserGame";
 import WorkBench from "./components/WorkBench.jsx";
-import {
-    reducer,
-    moveCodeObject,
-    changeMaxCurrency,
-    addToMaxCurrency,
-    isOnWorkbench,
-    clearWorkbenchItems,
-} from "./helpers/workbenchStateHelpers.js";
+
 import {
     inventoryReducer,
     loadPlayerInventory,
