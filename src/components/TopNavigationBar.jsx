@@ -1,34 +1,47 @@
 import React from "react";
-//import "./styles/TopNavigationBar.css";
+import "../styles/TopNavigationBar.css";
+// import labberLogo from "../assets/icons/duck2.png";
 
 const TopNavigationBar = ({ isLoggedIn, setActivePage, handleLogout }) => {
-
     return (
         <nav className="top-navigation-bar">
-            <span className="site-title">Welcome to Labber!</span>
+             {/* <img src={labberLogo} alt="Labber Logo" className="site-logo" /> */}
             <div className="nav-section">
-                <ul>
-                    <li>
-                    <div onClick={()=>setActivePage("home")}>Home</div>
-                    </li>
-                    <li>
-                    <div onClick={()=>setActivePage('highscores')}>Highscores</div>
-                    </li>
-                    <li>
-                        <div onClick={()=>setActivePage("achievements")}>Achievements</div>
-                    </li>
-                </ul>
+                <div className="nav-boxes">
+                    <div
+                        className="nav-box"
+                        onClick={() => setActivePage("home")}
+                    >
+                        Home
+                    </div>
+                    <div
+                        className="nav-box"
+                        onClick={() => setActivePage("highscores")}
+                    >
+                        Highscores
+                    </div>
+                    <div
+                        className="nav-box"
+                        onClick={() => setActivePage("achievements")}
+                    >
+                        Achievements
+                    </div>
+                </div>
             </div>
             {!isLoggedIn ? (
                 <div className="login-regsiter-links">
-                    <ul>
-                        <li>
-                        <div onClick={()=>setActivePage("login")}>Login</div>
-                        </li>
-                        <li>
-                        <div onClick={()=>setActivePage("register")}>Register</div>
-                        </li>
-                    </ul>
+                    <div
+                        className="small-nav-box"
+                        onClick={() => setActivePage("login")}
+                    >
+                        Login
+                    </div>
+                    <div
+                        className="small-nav-box"
+                        onClick={() => setActivePage("register")}
+                    >
+                        Register
+                    </div>
                 </div>
             ) : (
                 <div className="logout-link">
