@@ -69,16 +69,29 @@ export const HooksGame = () => {
     };
 
     const getFunctionCallbackList = function () {
-        return {
-            jumpPower: {
-                name: "jumpPower",
-                callback: (jumpPower) => {
-                    console.log("set jump power", jumpPower);
-                    phaserRef.current.scene.setJumpPower(jumpPower);
-                    return;
-                },
-            },
-        };
+      return {
+        jumpPower: {
+          name: "jumpPower",
+          callback: (jumpPower) => {
+              phaserRef.current.scene.setJumpPower(jumpPower);
+              return;
+          }
+        },
+        playerSize: {
+          name: "playerSize",
+          callback: (newSize) => {
+              phaserRef.current.scene.setPlayerSize(newSize);
+              return;
+          }
+        },
+        passKey: {
+          name: "passKey",
+          callback: (newPassKey) => {
+              phaserRef.current.scene.setPassKey(newPassKey);
+              return;
+          }
+        }
+      };
     };
 
     //todo: get out of inventory

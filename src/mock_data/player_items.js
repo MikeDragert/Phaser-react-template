@@ -142,6 +142,25 @@ const player_items = {
         location_x: '1',
         location_y: '1',
         map_id: 'START'
-    }};
+    },
+    '17': {
+      player_id: '1', 
+      item_id: '17',
+      save_id: '1',
+      container_item_id: '1',
+      location_x: '1',
+      location_y: '1',
+      map_id: 'START'
+    },
+    '18': {
+      player_id: '1', 
+      item_id: '18',
+      save_id: '1',
+      container_item_id: '1',
+      location_x: '1',
+      location_y: '1',
+      map_id: 'START'
+    }
+  };
 
     export default player_items;

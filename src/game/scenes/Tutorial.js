@@ -35,8 +35,9 @@ export class Tutorial extends Player {
     // create player
     this.player = this.physics.add
       .sprite(position.x, position.y, "NinjaCat")
-      .setScale(2)
+      .setScale(this._PLAYERDEFAULTSCALE)
       .setDepth(1);
+
 
     this.player.setBounce(0.2);
     this.player.body.setSize(80, 190);
@@ -132,6 +133,8 @@ export class Tutorial extends Player {
   }
 
   update() {
+    this.checkPlayerSize();
+
     let score = this.progressTracker.progressData.score;
     EventBus.emit("scoreUpdate", score);
 

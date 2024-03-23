@@ -1,3 +1,4 @@
+import Sizer from "phaser3-rex-plugins/templates/ui/sizer/Sizer";
 import { EventBus } from "../EventBus";
 import { Scene } from "phaser";
 
@@ -12,6 +13,7 @@ export class Player extends Scene {
   }
 
   _PLAYERWIDTHADJUST = 120;
+  _PLAYERDEFAULTSCALE =  2;
 
 
 
@@ -26,12 +28,27 @@ export class Player extends Scene {
 
   //anything that has to be cleared upon returning from the workbench should go here
   clearWorkbenchProperties() {
-    this.power = 0;
+    this.jumpValues.power = 0;
+    this.setPlayerSize(1);
+    this.passKey = undefined;
+
   }
 
   create() {
     this.cursors = this.input.keyboard.createCursorKeys();
   }
+
+  playerSizeMultiplier = 1;
+  lastPlayerSizeMultiplier = this.playerSizeMultiplier;
+  passKey = undefined;
+
+  checkPlayerSize() {
+    if (this.lastPlayerSizeMultiplier !== this.playerSizeMultiplier) {
+      this.player.setScale(this._PLAYERDEFAULTSCALE * this.playerSizeMultiplier);
+      this.lastPlayerSizeMultiplier =  this.playerSizeMultiplier;
+    }
+  }
+
 
   lastDirectionLeft = false
   //*******************************************************/
@@ -217,6 +234,23 @@ export class Player extends Scene {
 
   setJumpPower(newJumpPower) {
     this.jumpValues.power = newJumpPower;
+  }
+
+  setPlayerSize(newSize) {
+    //we want to reduce the effectiveness of the multiplier by 10
+    if (newSize > 1) {
+      this.playerSizeMultiplier = Math.min(2,1 + newSize / 100);
+    } else if ((newSize < 1) && (newSize > 0)) {
+      let inverse = 1 / newSize;
+      this.playerSizeMultiplier = Math.max(0.25, 1 - inverse / 100); 
+    } else {
+      this.playerSizeMultiplier = 1;
+    }
+    this.player.setScale(this._PLAYERDEFAULTSCALE * Math.round(this.playerSizeMultiplier*100)/100);
+  }
+  
+  setPassKey(newPassKey) {
+    this.passKey = newPassKey;
   }
 
   setInventory(newInventory) {

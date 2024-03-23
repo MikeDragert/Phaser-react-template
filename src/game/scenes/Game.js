@@ -27,7 +27,7 @@ export class Game extends Player {
 
     this.add.image(400, 300, "sky").setScale(20);
 
-    this.player = this.physics.add.sprite(position.x, position.y, "NinjaCat").setScale(2).setDepth(1);
+    this.player = this.physics.add.sprite(position.x, position.y, "NinjaCat").setScale(this._PLAYERDEFAULTSCALE).setDepth(1);
     this.player.setBounce(0.2);
     this.player.body.setSize(80, 190);
     this.player.setOffset(40, 20);

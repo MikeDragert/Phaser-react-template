@@ -14,7 +14,9 @@ const items = {
     13: { id: 13, name: "Coin", type: 11, has_obtained: true },
     14: { id: 14, name: "Phoenix Feather", type: 10, has_obtained: true },
     15: { id: 15, name: "Elven Bow", type: 10, has_obtained: true },
-    16: { id: 16, name: "Mystic Amulet", type: 10, has_obtained: true }
+    16: { id: 16, name: "Mystic Amulet", type: 10, has_obtained: true },
+    17: { id: 12, name: "Function_playerSize", type: 3, has_obtained: true },
+    18: { id: 12, name: "Function_passKey", type: 3, has_obtained: true },
 };
 
  export default items;
