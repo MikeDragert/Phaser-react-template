@@ -22,8 +22,8 @@ export const dbGetLastestPlayerSave = function(playerId, callback) {
     })
 }
 
-export const dbGetHighscores = function(playerId, callback) {
-    axios.get(`/api/highscores?player_id=${playerId}`) //todo: pass playerId
+export const dbGetHighscores = function(callback) {
+    axios.get(`/api/highscores`)
       .then((response) => {
         console.log('got', response.data)
         callback(response.data);
