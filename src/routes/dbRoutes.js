@@ -33,8 +33,8 @@ export const dbGetHighscores = function(callback) {
       })
   }
 
-  export const dbGetAchievements = function(playerId, callback) {
-    axios.get(`/api/player_saves?player_id=${playerId}`) //todo: pass playerId
+  export const dbGetAchievements = function(callback) {
+    axios.get(`/api/achievements`) 
       .then((response) => {
         console.log('got', response.data)
         callback(response.data);
@@ -45,13 +45,13 @@ export const dbGetHighscores = function(callback) {
   }
 
   export const dbGetPlayerAchievements = function(playerId, callback) {
-    axios.get(`/api/player_saves?player_id=${playerId}`) //todo: pass playerId
+    axios.get(`/api/player_achievements?player_id=${playerId}`) 
       .then((response) => {
         console.log('got', response.data)
         callback(response.data);
       })
       .catch((error) => {
-        console.error('Error retrieving player db latest save:', error)
+        console.error('Error retrieving player achievements:', error)
       })
   }
 
