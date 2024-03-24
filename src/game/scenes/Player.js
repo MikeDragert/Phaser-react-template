@@ -47,8 +47,8 @@ export class Player extends Scene {
   //these values can be manipulated to adjust jump behaviour
   jumpConfig = {
     maxJumps: 2,
-    baseJumpAmount: 400,
-    baseJumpAountIncreasePerAccum: 32,
+    baseJumpAmount: 50,
+    baseJumpAountIncreasePerAccum: 50,
     jumpPowerMultiplier: 5,
     accumulatorDelay: 6,
     maxAccumulatorCount: 20,
@@ -143,7 +143,7 @@ export class Player extends Scene {
     if (this.executePlayerJump()) {
       if (this.beginJump()) {
         this.jumpValues.count++
-        player.anims.play("player-jump", true);
+        // player.anims.play("player-jump", true);
         player.anims.msPerFrame = 30;
         this.jumpValues.savedJumpAmount = this.jumpValues.initialJumpAmount;
         player.body.velocity.y = -this.jumpValues.savedJumpAmount;
@@ -176,29 +176,29 @@ export class Player extends Scene {
     if (left) {
       
       if (onFloor) {
-        player.setOffset(133, 20);
-        player.body.setVelocityX(-1000);
-        player.anims.play("player-walk", true);
+        // player.setOffset(133, 20);
+        player.body.setVelocityX(-200);
+        // player.anims.play("player-walk", true);
         player.anims.msPerFrame = 100;
-        player.setFlipX(true);
-        this.fixPlayerOffset(true);
+        player.setFlipX(false);
+        // this.fixPlayerOffset(true);
       } else {
-        player.body.velocity.x -= 20;
+        player.body.velocity.x -= 10;
       }
     } else if (right) {
       if (onFloor) {
-        player.body.setVelocityX(1000);
-        player.setOffset(40, 20);
-        player.anims.play("player-walk", true);
+        player.body.setVelocityX(200);
+        // player.setOffset(40, 20);
+        // player.anims.play("player-walk", true);
         player.anims.msPerFrame = 100;
-        player.setFlipX(false);
-        this.fixPlayerOffset(false);
+        player.setFlipX(true);
+        // this.fixPlayerOffset(false);
       } else {
-        player.body.velocity.x += 20;
+        player.body.velocity.x += 10;
       }
     } else {
       if (onFloor) {
-        player.anims.play("player-idle", true);
+        // player.anims.play("player-idle", true);
         player.anims.msPerFrame = 500;
         player.body.setVelocityX(0);
       }

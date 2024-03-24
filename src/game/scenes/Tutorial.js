@@ -3,7 +3,6 @@ import { Player } from "./Player";
 import { playMessage, triggerWorkbench } from "./UserInterface";
 import { ProgressTracker } from "./progressTracker";
 
-
 export class Tutorial extends Player {
   constructor() {
     super("Tutorial");
@@ -26,7 +25,7 @@ export class Tutorial extends Player {
     this.scene.launch("UserInterface");
     this.progressTracker = new ProgressTracker(
       0,
-      { x: 300, y: 5900 },
+      { x: 36, y: 828 },
       [],
       this.sceneName
     );
@@ -38,13 +37,13 @@ export class Tutorial extends Player {
 
     // create player
     this.player = this.physics.add
-      .sprite(position.x, position.y, "NinjaCat")
-      .setScale(2)
+      .sprite(position.x, position.y, "lilGreenGuy")
+      .setScale(1)
       .setDepth(1);
 
     this.player.setBounce(0.2);
-    this.player.body.setSize(80, 190);
-    this.player.setOffset(40, 20);
+    this.player.body.setSize(15, 18);
+    this.player.setOffset(5,5);
 
     //this.player.body.setMaxVelocityY(20000);
 
@@ -52,57 +51,75 @@ export class Tutorial extends Player {
     this.player.visible = true;
     this.player.body.moves = true;
 
-    this.map = this.make.tilemap({ key: "tutorial" });
-    const groundTileSet = this.map.addTilesetImage(
-      "spritesheet_ground",
-      "ground"
-    );
+    this.map = this.make.tilemap({ key: "newTutorial" });
+    // const groundTileSet = this.map.addTilesetImage(
+    //   "spritesheet_ground",
+    //   "ground"
+    // );
 
     // tilesets
-    const itemsTileSet = this.map.addTilesetImage("spritesheet_items", "items");
-    const tilesTileSet = this.map.addTilesetImage("spritesheet_tiles", "tiles");
-    const checkpointsLayer = this.map.addTilesetImage(
-      "spritesheet_items_large",
-      "checkpoints"
+    const tilemap_packed = this.map.addTilesetImage(
+      "tilemap_packed",
+      "tilemap_packed"
     );
-    const largeTilesSet = this.map.addTilesetImage(
-      "spritesheet_tiles_large",
-      "large_tiles"
+    const sand_packed = this.map.addTilesetImage("sand_packed", "sand_packed");
+    const stone_packed = this.map.addTilesetImage(
+      "stone_packed",
+      "stone_packed"
     );
+    // const tilemap_characters_packed = this.map.addTilesetImage(
+    //   "tilemap_characters_packed",
+    //   "tilemap_characters_packed"
+    // );
+    // const itemsTileSet = this.map.addTilesetImage("spritesheet_items", "items");
+    // const tilesTileSet = this.map.addTilesetImage("spritesheet_tiles", "tiles");
+    // const checkpointsLayer = this.map.addTilesetImage(
+    //   "spritesheet_items_large",
+    //   "checkpoints"
+    // );
+    // const largeTilesSet = this.map.addTilesetImage(
+    //   "spritesheet_tiles_large",
+    //   "large_tiles"
+    // );
+    const floorLayers = [tilemap_packed, sand_packed, stone_packed];
     // map layers
-    const ground = this.map.createLayer("ground", groundTileSet, 0, 0);
-    const checkpoints = this.map.createLayer(
-      "checkpoints",
-      checkpointsLayer,
-      0,
-      0
-    );
-    const coins = this.map.createLayer("coinLayer", itemsTileSet, 0, 0);
-    const tiles = this.map.createLayer("tileLayer", largeTilesSet, 0, 0);
-    const water = this.map.createLayer("water", tilesTileSet, 0, 0).setDepth(2);
-    const tutorialObjects = this.map.getObjectLayer("tutorial")["objects"];
+    const ground = this.map.createLayer("ground", tilemap_packed, 0, 0);
+    const floor = this.map.createLayer("floor", floorLayers, 0, 0);
+    const water = this.map.createLayer("water", tilemap_packed, 0, 0).setDepth(2);
+    const props = this.map.createLayer("props", tilemap_packed, 0,0);
 
-    tutorialObjects.forEach((obj) => {
-      const sprite = this.physics.add.sprite(obj.x, obj.y, "tutorial_flag");
-      sprite.body.moves = false;
-      sprite.setData("message", obj.properties);
-      sprite.setOrigin(0, 1);
-      this.physics.add.overlap(this.player, sprite, playMessage, null, this);
-    });
+    // const checkpoints = this.map.createLayer(
+    //   "checkpoints",
+    //   checkpointsLayer,
+    //   0,
+    //   0
+    // );
+    // const coins = this.map.createLayer("coinLayer", itemsTileSet, 0, 0);
+    // const tiles = this.map.createLayer("tileLayer", largeTilesSet, 0, 0);
+    // const water = this.map.createLayer("water", tilesTileSet, 0, 0).setDepth(2);
+    // const tutorialObjects = this.map.getObjectLayer("tutorial")["objects"];
+
+    // tutorialObjects.forEach((obj) => {
+    //   const sprite = this.physics.add.sprite(obj.x, obj.y, "tutorial_flag");
+    //   sprite.body.moves = false;
+    //   sprite.setData("message", obj.properties);
+    //   sprite.setOrigin(0, 1);
+    //   this.physics.add.overlap(this.player, sprite, playMessage, null, this);
+    // });
 
     this.physics.world.bounds.width = ground.width;
     this.physics.world.bounds.height = ground.height;
 
     // colliders and overlaps
-    this.physics.add.collider(this.player, ground);
-    ground.setCollisionByExclusion([-1]);
-    this.physics.add.overlap(this.player, checkpoints);
-    this.physics.add.overlap(this.player, coins);
-    this.physics.add.overlap(this.player, tiles);
+    this.physics.add.collider(this.player, floor);
+    floor.setCollisionByExclusion([-1]);
+    // this.physics.add.overlap(this.player, checkpoints);
+    // this.physics.add.overlap(this.player, coins);
+    // this.physics.add.overlap(this.player, tiles);
     this.physics.add.overlap(this.player, water);
 
     this.cameras.main.setBounds(0, 0, ground.width, ground.height);
-    this.cameras.main.setZoom(0.5, 0.5);
+    this.cameras.main.setZoom(2, 2);
     this.cameras.main.startFollow(
       this.player,
       false,
@@ -112,42 +129,42 @@ export class Tutorial extends Player {
       0
     );
 
-    water.setTileIndexCallback([258, 266], this.progressTracker.die, this);
+    // water.setTileIndexCallback([54, 74], this.progressTracker.die, this);
 
-    tiles.setTileIndexCallback(417, triggerWorkbench, this);
+    // tiles.setTileIndexCallback(417, triggerWorkbench, this);
 
-    let previousSave = false;
+    // let previousSave = false;
 
-    checkpoints.setTileIndexCallback(
-      [250],
-      (sprite, tile) => {
-        if (!previousSave) {
-          this.progressTracker.saveProgress(sprite);
-          previousSave = true;
-        }
+    // checkpoints.setTileIndexCallback(
+    //   [250],
+    //   (sprite, tile) => {
+    //     if (!previousSave) {
+    //       this.progressTracker.saveProgress(sprite);
+    //       previousSave = true;
+    //     }
 
-        setTimeout(() => {
-          previousSave = false;
-        }, 4000);
-      },
-      this
-    );
+    //     setTimeout(() => {
+    //       previousSave = false;
+    //     }, 4000);
+    //   },
+    //   this
+    // );
 
-    coins.setTileIndexCallback(
-      158,
-      (sprite = null, tile, layer = coins) => {
-        this.progressTracker.collectCoins(sprite, tile, layer);
-        this.sendNewItemMessage(tile);
-      },
-      this
-    );
+    // coins.setTileIndexCallback(
+    //   158,
+    //   (sprite = null, tile, layer = coins) => {
+    //     this.progressTracker.collectCoins(sprite, tile, layer);
+    //     this.sendNewItemMessage(tile);
+    //   },
+    //   this
+    // );
 
     this.one = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
     this.e = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
     this.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     this.r = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 
-    this.progressTracker.removeItems(coins);
+    // this.progressTracker.removeItems(coins);
 
     EventBus.emit("current-scene-ready", this);
     EventBus.emit("give-me-inventory", this.sceneName);

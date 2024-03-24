@@ -27,22 +27,32 @@ export class Preloader extends Scene {
 
     this.load.setPath("assets");
 
-    this.load.image("logo", "logo.png");
-    this.load.image("star", "star.png");
+    // this.load.image("logo", "logo.png");
+    // this.load.image("star", "star.png");
     this.load.image("sky", "skies/sky.png");
-    this.load.image("ground", "ground/spritesheet_ground.png");
-    this.load.image("items", "items/spritesheet_items.png");
-    this.load.image("tutorial_flag", "items/tutorial_flag.png");
-    this.load.image("hud", "tiles/spritesheet_tiles.png");
-    this.load.image("tiles", "tiles/spritesheet_tiles.png");
-    this.load.image("checkpoints", "items/spritesheet_items_large.png");
-    this.load.image("large_tiles", "tiles/spritesheet_tiles_large.png");
+    // this.load.image("ground", "ground/spritesheet_ground.png");
+    // this.load.image("items", "items/spritesheet_items.png");
+    // this.load.image("tutorial_flag", "items/tutorial_flag.png");
+    // this.load.image("hud", "tiles/spritesheet_tiles.png");
+    // this.load.image("tiles", "tiles/spritesheet_tiles.png");
+    // this.load.image("checkpoints", "items/spritesheet_items_large.png");
+    // this.load.image("large_tiles", "tiles/spritesheet_tiles_large.png");
+    this.load.image("tilemap_packed", "tiles/tilemap_packed.png");
+    this.load.image("sand_packed", "tiles/sand_packed.png");
+    this.load.image("stone_packed", "tiles/stone_packed.png");
+    this.load.image("tilemap_characters_packed", "sprites/tilemap-characters_packed.png"); 
 
+    // this.load.atlas(
+    //   "NinjaCat",
+    //   "sprites/JsonArrayCat.png",
+    //   "sprites/JsonArrayCat.json",
+    //   { frameWidth: 20, frameHeight: 48 }
+    // );
     this.load.atlas(
-      "NinjaCat",
-      "sprites/JsonArrayCat.png",
-      "sprites/JsonArrayCat.json",
-      { frameWidth: 20, frameHeight: 48 }
+      "lilGreenGuy",
+      "sprites/lilGreenGuy.png",
+      "sprites/lilGreenGuy.json",
+      { frameWidth: 24, frameHeight: 24 }
     );
 
     this.load.image(
@@ -51,7 +61,8 @@ export class Preloader extends Scene {
     );
 
     this.load.tilemapTiledJSON("tilemap", "maps/FirstAttempt.json");
-    this.load.tilemapTiledJSON("tutorial", "maps/tutorial.json");
+    this.load.tilemapTiledJSON("newTutorial", "maps/newTutorial.json")
+    // this.load.tilemapTiledJSON("tutorial", "maps/tutorial.json");
   }
 
   create() {
@@ -59,41 +70,41 @@ export class Preloader extends Scene {
     //  For example, you can define global animations here, so we can use them in other scenes.
 
     //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
-    this.anims.create({
-      key: "player-walk",
-      framreate: 30,
-      frames: this.anims.generateFrameNames("NinjaCat", {
-        start: 1,
-        end: 8,
-        prefix: "NinjaCat_walk_0",
-        suffix: ".png",
-      }),
-      repeat: -1,
-    });
+    // this.anims.create({
+    //   key: "player-walk",
+    //   framreate: 30,
+    //   frames: this.anims.generateFrameNames("NinjaCat", {
+    //     start: 1,
+    //     end: 8,
+    //     prefix: "NinjaCat_walk_0",
+    //     suffix: ".png",
+    //   }),
+    //   repeat: -1,
+    // });
 
-    this.anims.create({
-      key: "player-idle",
-      framreate: 10,
-      frames: this.anims.generateFrameNames("NinjaCat", {
-        start: 1,
-        end: 2,
-        prefix: "NinjaCat_idle_0",
-        suffix: ".png",
-      }),
-      repeat: -1,
+    // this.anims.create({
+    //   key: "player-idle",
+    //   framreate: 10,
+    //   frames: this.anims.generateFrameNames("NinjaCat", {
+    //     start: 1,
+    //     end: 2,
+    //     prefix: "NinjaCat_idle_0",
+    //     suffix: ".png",
+    //   }),
+    //   repeat: -1,
       
-    });
+    // });
 
-    this.anims.create({
-      key: "player-jump",
-      framrate: 30,
-      frames: this.anims.generateFrameNames("NinjaCat", {
-        start: 1,
-        end: 6,
-        prefix: "NinjaCat_jump_0",
-        suffix: ".png",
-      }),
-    });
+    // this.anims.create({
+    //   key: "player-jump",
+    //   framrate: 30,
+    //   frames: this.anims.generateFrameNames("NinjaCat", {
+    //     start: 1,
+    //     end: 6,
+    //     prefix: "NinjaCat_jump_0",
+    //     suffix: ".png",
+    //   }),
+    // });
 
     this.scene.start("MainMenu");
   }
