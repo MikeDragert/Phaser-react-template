@@ -106,7 +106,7 @@ const generateItem = function(sceneItem) {
   return {
     player_id: undefined, 
     item_id: undefined,
-    save_id: undefined,
+    player_save_id: undefined,
     container_item_id: 0,
     location_x: sceneItem.x,
     location_y: sceneItem.y,

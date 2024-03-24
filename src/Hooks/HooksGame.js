@@ -18,7 +18,7 @@ import {
 } from "../helpers/inventoryHelpers.js";
 import { EventBus } from "../game/EventBus";
 import { Player } from "../game/scenes/Player.js";
-import { dbGetLastestPlayerSave, dbGetPlayerItems } from '../routes/dbRoutes.js'
+import { dbGetLastestPlayerSave, dbGetPlayerItems, dbCreateNewPlayerSave, dbSavePlayerItems } from '../routes/dbRoutes.js'
 
 
 //mocks
@@ -181,17 +181,18 @@ export const HooksGame = () => {
   useEffect(() => {
     //load the inventory one time
     let playerId = 2;
-    dbGetLastestPlayerSave(playerId, (save) => {
-      let saveId = save.id
-      dbGetPlayerItems(playerId, saveId, (items) => {
-        setItemsState(items);
-        clearInventory(inventoryDispatch);
-        items.forEach(item => {
-          console.log('Saving item to inventory: ', item);
-          addFullItemToInventory(inventoryDispatch, item);    
+    dbGetLastestPlayerSave(playerId, (playerSave) => {
+      if (playerSave) {
+        let playerSaveId = playerSave.id
+        dbGetPlayerItems(playerId, playerSaveId, (items) => {
+          setItemsState(items);
+          clearInventory(inventoryDispatch);
+          items.forEach(item => {
+            addFullItemToInventory(inventoryDispatch, item);    
+          });
         });
-      });
-    })
+      };
+    });
 
     //loadPlayerInventory(inventoryDispatch, mock_player_items, mock_items);
   }, []);
@@ -235,13 +236,28 @@ export const HooksGame = () => {
   //setCanMoveSprite(scene.scene.key !== "MainMenu");
   };
 
+  const saveItemsToDb = function(save_point) {
+    let playerId = 2;
+    dbCreateNewPlayerSave(playerId, save_point, (newSave) => {
+      if (inventoryList.length > 0) {
+        dbSavePlayerItems(playerId, newSave.id, inventoryList, (itemsSaved) => {
+          //console.log('save items was done', itemsSaved)
+          //todo:  we could update the inventory list with the item_id.  It's not really necessary though
+        }) 
+      }
+    })
+  }
+
+
   const openWorkbenchWithHint = function(hint) {
+    saveItemsToDb(10);
     workBench.setWorkbenchHint(hint);
     setWorkbenchOpen(true);
     setShowGame(false);
   }
 
   const openWorkbench = (event) => {
+    saveItemsToDb(10);
     workBench.setWorkbenchHint('openWorkbench was called by hitting the button that is just for testing');
     setWorkbenchOpen(true);
     setShowGame(false);
