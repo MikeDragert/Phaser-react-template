@@ -5,6 +5,7 @@ export const workbenchHelpers = () => {
 
   const ACTION = {
     SETMAX: 'setMax',
+    ADDMAX: 'addMax',
     MOVECODEOBJECTS: 'moveCodeObjects',
     CLEARITEMS: 'clearItems',
     SETHINT: 'setHint'
@@ -124,6 +125,13 @@ const executeOnCodeListParamItem = function(codeObject, arrayIndexMap, callback)
       newState.currentCurrency = newCurrent;
     };
 
+    if (action.type === ACTION.ADDMAX) {
+      let newMax = newState.maxCurrency + action.value;
+      let newCurrent = newState.currentCurrency  + action.value;
+      newState.maxCurrency = newMax;
+      newState.currentCurrency = newCurrent;
+    };
+    
     if (action.type === ACTION.CLEARITEMS) {
       newState.currentCurrency = newState.maxCurrency;
       newState.copyCounter = 1;
@@ -284,7 +292,7 @@ const executeOnCodeListParamItem = function(codeObject, arrayIndexMap, callback)
   }
 
   const addToMaxCurrency = function(addToMaxCurrency) {
-    changeMaxCurrency(codeList.maxCurrency + addToMaxCurrency)
+    dispatch({type: ACTION.ADDMAX, value: addToMaxCurrency});
   }
 
   //the 'bench' is actually key0

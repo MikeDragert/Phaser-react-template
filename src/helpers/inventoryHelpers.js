@@ -89,7 +89,6 @@ export const addItemToInventory = function(inventoryDispatch, playerItem, item){
     fullItem = {...playerItem};
     fullItem.item_name = item.name;
     fullItem.item_type = item.type;
-    fullItem.has_obtained = item.has_obtained;
     return inventoryDispatch({type: INVENTORYACTION.ADDITEM, data: fullItem})
   }
 }
@@ -114,7 +113,6 @@ const generateItem = function(sceneItem) {
     map_id: sceneItem.sceneName,
     item_name: itemMap[sceneItem.index].name,
     item_type: itemMap[sceneItem.index].type,
-    has_obtained: true
   }
 }
 
@@ -124,11 +122,9 @@ export const loadPlayerInventory = function(inventoryDispatch, playerItemsList, 
     if (itemsList[playerItem.item_id]) {
       playerItem.item_name = itemsList[playerItem.item_id].name;
       playerItem.item_type = itemsList[playerItem.item_id].type;
-      playerItem.has_obtained = itemsList[playerItem.item_id].has_obtained;
     } else {
       playerItem.item_name = 'UNKNOWN';
       playerItem.item_type = 0;
-      playerItem.has_obtained = false;
     }
     return playerItem
   })
