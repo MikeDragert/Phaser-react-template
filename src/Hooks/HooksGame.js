@@ -18,7 +18,7 @@ import {
 } from "../helpers/inventoryHelpers.js";
 import { EventBus } from "../game/EventBus";
 import { Player } from "../game/scenes/Player.js";
-import { dbGetLastestPlayerSave, dbGetPlayerItems, dbGetHighscores } from '../routes/dbRoutes.js'
+import { dbGetLastestPlayerSave, dbGetPlayerItems, dbGetHighscores, dbGetPlayerAchievements, dbGetAchievements, dbGetPlayerAchievements } from '../routes/dbRoutes.js'
 
 
 //mocks
@@ -47,6 +47,8 @@ export const HooksGame = () => {
   const [workbenchOpen, setWorkbenchOpen] = useState(false);
   const [itemsState, setItemsState] = useState(mock_items);
   const [highscores, setHighscores] = useState([]);
+  const [playerAchievements, setPlayerAchievements] = useState([]);
+  const [allAchievements, setAllAchievements] = useState([]);
   const [inventoryList, inventoryDispatch] = useReducer(
       inventoryReducer,
       initialInventoryState
@@ -201,6 +203,25 @@ export const HooksGame = () => {
       setHighscores(data);
     });
   }, []); 
+
+  useEffect(() => {
+    dbGetPlayerAchievements(playerId)
+    .then((data) => {
+        setPlayerAchievements(data);
+    })
+    .catch((error) => {
+        console.error('Error retrieving player achievements:', error)
+    });
+    dbGetAchievements()
+    .then((data) => {
+      setAllAchievements(data);
+    })
+    .catch((error) => {
+      console.error('Error fetching all achievements:', error);
+    });
+}, [playerId]);
+
+
         
   useEffect(() => {
     if (phaserRef.current.scene) {
@@ -316,5 +337,5 @@ export const HooksGame = () => {
 
   let gameOpen = !workbenchOpen;
 
-  return { workBench, workbenchOpen, closeWorkbench, phaserRef, currentScene, showGame, openWorkbench, changeScene, getInventory, inventoryList, gameOpen, highscores};
+  return { workBench, workbenchOpen, closeWorkbench, phaserRef, currentScene, showGame, openWorkbench, changeScene, getInventory, inventoryList, gameOpen, highscores, allAchievements, playerAchievements};
 };
