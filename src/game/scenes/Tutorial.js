@@ -38,7 +38,7 @@ export class Tutorial extends Player {
     // create player
     this.player = this.physics.add
       .sprite(position.x, position.y, "lilGreenGuy")
-      .setScale(1)
+      .setScale(2)
       .setDepth(1);
 
     this.player.setBounce(0.2);
@@ -111,11 +111,9 @@ export class Tutorial extends Player {
       this.map.getObjectLayer("tutorialMessages")["objects"];
 
     tutorialObjects.forEach((obj) => {
-      const tutorial_plaque = this.physics.add.sprite(
-        obj.x,
-        obj.y,
-        "tutorial_plaque"
-      );
+      const tutorial_plaque = this.physics.add
+        .sprite(obj.x, obj.y, "tutorial_plaque")
+        .setScale(2);
       tutorial_plaque.body.moves = false;
       tutorial_plaque.setData("message", obj.properties);
       tutorial_plaque.setOrigin(0, 1);
@@ -129,12 +127,19 @@ export class Tutorial extends Player {
     });
 
     const coinObjects = this.map.getObjectLayer("coinLayer")["objects"];
+    let coinIdCounter = 0;
 
     coinObjects.forEach((obj) => {
-      const coin = this.physics.add.sprite(obj.x, obj.y, "spinning_coin");
+      const coinId = `coin-tutorial-${coinIdCounter++}`;
+      if (this.progressData.items.includes(coinId)) {
+        return;
+      }
+      const coin = this.physics.add
+        .sprite(obj.x, obj.y, "spinning_coin")
+        .setName(coinId);
       this.physics.add.collider(coin, floor);
       this.physics.add.overlap(this.player, coin, (player, coin) => {
-        this.progressTracker.collectCoins(player,coin);
+        this.progressTracker.collectCoins(player, coin);
       });
       coin.anims.play("spinning_coin", true);
       coin.anims.msPerFrame = 70;
@@ -143,16 +148,13 @@ export class Tutorial extends Player {
     this.physics.world.bounds.width = ground.width;
     this.physics.world.bounds.height = ground.height;
 
-    // colliders and overlaps
     this.physics.add.collider(this.player, floor);
     floor.setCollisionByExclusion([-1]);
     this.physics.add.overlap(this.player, checkPoints);
-    // this.physics.add.overlap(this.player, coins);
-    // this.physics.add.overlap(this.player, tiles);
     this.physics.add.overlap(this.player, water);
 
     this.cameras.main.setBounds(0, 0, ground.width, ground.height);
-    this.cameras.main.setZoom(2, 2);
+    this.cameras.main.setZoom(1, 1);
     this.cameras.main.startFollow(
       this.player,
       false,
@@ -196,8 +198,6 @@ export class Tutorial extends Player {
     this.e = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
     this.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     this.r = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
-
-    // this.progressTracker.removeItems(coins);
 
     EventBus.emit("current-scene-ready", this);
     EventBus.emit("give-me-inventory", this.sceneName);

@@ -31,7 +31,7 @@ export class ProgressTracker {
 
   // adds items to item array
   updateItems(item) {
-    this.progressData.items.push({ idex: item.index, x: item.x, y: item.y });
+    this.progressData.items.push(item.name);
     console.log("IN TRACKER Items", this.progressData.items);
     return false;
   }
@@ -45,11 +45,11 @@ export class ProgressTracker {
   //   this
   // );
   collectCoins(player, coin) {
+    coin.destroy()
     console.log("COIN", coin);
-    coin.destroy(coin.x, coin.y)
+    console.log("COIN DATA:", coin.getData("id"));
     this.updateScore(this.progressData.score + 1);
     this.updateItems(coin);
-    EventBus.emit("scoreUpdate", this.progressData.score);
     this.saveProgress(null);
     return false;
   }
@@ -61,7 +61,7 @@ export class ProgressTracker {
   resetProgress() {
     this.progressData = {
       score: 0,
-      spritePosition: { x: 36, y: 46 },
+      spritePosition: { x: 36, y: 828 },
       items: [],
     };
     this.saveProgress();
@@ -101,18 +101,6 @@ export class ProgressTracker {
     }
     return this.progressData;
   }
-
-  // removes all items in the item layer from a given layer call like:
-  // this.progressTracker.removeItems(coins);
-  removeItems(layer) {
-    if (this.progressData.items) {
-      for (let item of this.progressData.items) {
-        layer.removeTileAt(item.x, item.y);
-      }
-    }
-  }
-
-  
 
   die() {
     // this.scene.restart();

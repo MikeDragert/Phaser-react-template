@@ -27,9 +27,8 @@ export class Preloader extends Scene {
 
     this.load.setPath("assets");
 
-    // this.load.image("logo", "logo.png");
     // this.load.image("star", "star.png");
-    this.load.image("sky", "skies/sky.png");
+
     // this.load.image("ground", "ground/spritesheet_ground.png");
     // this.load.image("items", "items/spritesheet_items.png");
     // this.load.image("tutorial_flag", "items/tutorial_flag.png");
@@ -37,6 +36,8 @@ export class Preloader extends Scene {
     // this.load.image("tiles", "tiles/spritesheet_tiles.png");
     // this.load.image("checkpoints", "items/spritesheet_items_large.png");
     // this.load.image("large_tiles", "tiles/spritesheet_tiles_large.png");
+    this.load.image("logo", "logo.png");
+    this.load.image("sky", "skies/sky.png");
     this.load.image("tutorial_plaque", "items/tile_0086.png");
     this.load.image("tilemap_packed", "tiles/tilemap_packed.png");
     this.load.image("sand_packed", "tiles/sand_packed.png");
@@ -45,6 +46,7 @@ export class Preloader extends Scene {
       "tilemap_characters_packed",
       "sprites/tilemap-characters_packed.png"
     );
+
     this.load.atlas(
       "spinning_coin",
       "sprites/spinning_coin.png",
@@ -100,7 +102,7 @@ export class Preloader extends Scene {
         suffix: ".png",
       }),
       repeat: -1,
-    })
+    });
 
     // this.anims.create({
     //   key: "player-idle",

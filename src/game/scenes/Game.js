@@ -84,8 +84,6 @@ export class Game extends Player {
     this.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     this.r = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 
-    this.progressTracker.removeItems(coins);
-
     EventBus.emit("current-scene-ready", this);
     EventBus.emit("give-me-inventory", this.sceneName);
   }
