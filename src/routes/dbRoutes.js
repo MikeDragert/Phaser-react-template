@@ -22,6 +22,39 @@ export const dbGetLastestPlayerSave = function(playerId, callback) {
     })
 }
 
+export const dbGetHighscores = function(playerId, callback) {
+    axios.get(`/api/highscores?player_id=${playerId}`) //todo: pass playerId
+      .then((response) => {
+        console.log('got', response.data)
+        callback(response.data);
+      })
+      .catch((error) => {
+        console.error('Error retrieving highscores:', error)
+      })
+  }
+
+  export const dbGetAchievements = function(playerId, callback) {
+    axios.get(`/api/player_saves?player_id=${playerId}`) //todo: pass playerId
+      .then((response) => {
+        console.log('got', response.data)
+        callback(response.data);
+      })
+      .catch((error) => {
+        console.error('Error retrieving achievements:', error)
+      })
+  }
+
+  export const dbGetPlayerAchievements = function(playerId, callback) {
+    axios.get(`/api/player_saves?player_id=${playerId}`) //todo: pass playerId
+      .then((response) => {
+        console.log('got', response.data)
+        callback(response.data);
+      })
+      .catch((error) => {
+        console.error('Error retrieving player db latest save:', error)
+      })
+  }
+
 //need to create new save
 
 //need to save all player items against new save
