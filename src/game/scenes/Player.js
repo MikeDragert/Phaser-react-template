@@ -48,12 +48,12 @@ export class Player extends Scene {
   jumpConfig = {
     maxJumps: 2,
     baseJumpAmount: 50,
-    baseJumpAountIncreasePerAccum: 50,
-    jumpPowerMultiplier: 5,
-    accumulatorDelay: 6,
-    maxAccumulatorCount: 20,
-    jumpDelay: 10,
-    maxJumpingTimingCount: 50
+    baseJumpAountIncreasePerAccum: 20,
+    jumpPowerMultiplier: 2,
+    accumulatorDelay: 0,
+    maxAccumulatorCount: 10,
+    jumpDelay: 0,
+    maxJumpingTimingCount: 20
   }
 
   //values used in the jump logic
@@ -178,7 +178,7 @@ export class Player extends Scene {
       if (onFloor) {
         // player.setOffset(133, 20);
         player.body.setVelocityX(-200);
-        // player.anims.play("player-walk", true);
+        player.anims.play("player_move", true);
         player.anims.msPerFrame = 100;
         player.setFlipX(false);
         // this.fixPlayerOffset(true);
@@ -189,7 +189,7 @@ export class Player extends Scene {
       if (onFloor) {
         player.body.setVelocityX(200);
         // player.setOffset(40, 20);
-        // player.anims.play("player-walk", true);
+        player.anims.play("player_move", true);
         player.anims.msPerFrame = 100;
         player.setFlipX(true);
         // this.fixPlayerOffset(false);
@@ -198,7 +198,7 @@ export class Player extends Scene {
       }
     } else {
       if (onFloor) {
-        // player.anims.play("player-idle", true);
+        player.anims.stop("player_move", true);;
         player.anims.msPerFrame = 500;
         player.body.setVelocityX(0);
       }

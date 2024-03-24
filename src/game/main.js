@@ -30,8 +30,8 @@ const config = {
   physics: {
     default: "arcade",
     arcade: {
-      gravity: { y: 2000 },
-      debug: true,
+      gravity: { y: 1500 },
+      debug: false,
       overlapBias: 8,
       tileBias: 32,
       fps: 60,

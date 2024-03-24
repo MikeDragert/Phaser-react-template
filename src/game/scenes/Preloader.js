@@ -37,11 +37,19 @@ export class Preloader extends Scene {
     // this.load.image("tiles", "tiles/spritesheet_tiles.png");
     // this.load.image("checkpoints", "items/spritesheet_items_large.png");
     // this.load.image("large_tiles", "tiles/spritesheet_tiles_large.png");
+    this.load.image("tutorial_plaque", "items/tile_0086.png");
     this.load.image("tilemap_packed", "tiles/tilemap_packed.png");
     this.load.image("sand_packed", "tiles/sand_packed.png");
     this.load.image("stone_packed", "tiles/stone_packed.png");
-    this.load.image("tilemap_characters_packed", "sprites/tilemap-characters_packed.png"); 
-
+    this.load.image(
+      "tilemap_characters_packed",
+      "sprites/tilemap-characters_packed.png"
+    );
+    this.load.atlas(
+      "spinning_coin",
+      "sprites/spinning_coin.png",
+      "sprites/spinning_coin.json"
+    );
     // this.load.atlas(
     //   "NinjaCat",
     //   "sprites/JsonArrayCat.png",
@@ -61,7 +69,7 @@ export class Preloader extends Scene {
     );
 
     this.load.tilemapTiledJSON("tilemap", "maps/FirstAttempt.json");
-    this.load.tilemapTiledJSON("newTutorial", "maps/newTutorial.json")
+    this.load.tilemapTiledJSON("newTutorial", "maps/newTutorial.json");
     // this.load.tilemapTiledJSON("tutorial", "maps/tutorial.json");
   }
 
@@ -70,17 +78,29 @@ export class Preloader extends Scene {
     //  For example, you can define global animations here, so we can use them in other scenes.
 
     //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
-    // this.anims.create({
-    //   key: "player-walk",
-    //   framreate: 30,
-    //   frames: this.anims.generateFrameNames("NinjaCat", {
-    //     start: 1,
-    //     end: 8,
-    //     prefix: "NinjaCat_walk_0",
-    //     suffix: ".png",
-    //   }),
-    //   repeat: -1,
-    // });
+    this.anims.create({
+      key: "player_move",
+      framreate: 30,
+      frames: this.anims.generateFrameNames("lilGreenGuy", {
+        start: 0,
+        end: 1,
+        prefix: "tile_000",
+        suffix: ".png",
+      }),
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "spinning_coin",
+      framreate: 30,
+      frames: this.anims.generateFrameNames("spinning_coin", {
+        start: 1,
+        end: 2,
+        prefix: "tile_015",
+        suffix: ".png",
+      }),
+      repeat: -1,
+    })
 
     // this.anims.create({
     //   key: "player-idle",
@@ -92,7 +112,7 @@ export class Preloader extends Scene {
     //     suffix: ".png",
     //   }),
     //   repeat: -1,
-      
+
     // });
 
     // this.anims.create({

@@ -1,0 +1,28 @@
+{"frames": [
+
+{
+	"filename": "tile_0151.png",
+	"frame": {"x":0,"y":0,"w":18,"h":18},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":18,"h":18},
+	"sourceSize": {"w":18,"h":18}
+},
+{
+	"filename": "tile_0152.png",
+	"frame": {"x":18,"y":0,"w":18,"h":18},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":18,"h":18},
+	"sourceSize": {"w":18,"h":18}
+}],
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "spinning_coin.png",
+	"format": "RGBA8888",
+	"size": {"w":36,"h":18},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:8c4c628273c03448ce936538b5e5e8d6:6bc3253b4ba2fdd886b75a31822c23c6:654fb61c9ba89fdf5ca9c1da648a0397$"
+}
+}

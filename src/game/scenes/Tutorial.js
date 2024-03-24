@@ -43,7 +43,7 @@ export class Tutorial extends Player {
 
     this.player.setBounce(0.2);
     this.player.body.setSize(15, 18);
-    this.player.setOffset(5,5);
+    this.player.setOffset(5, 5);
 
     //this.player.body.setMaxVelocityY(20000);
 
@@ -85,8 +85,16 @@ export class Tutorial extends Player {
     // map layers
     const ground = this.map.createLayer("ground", tilemap_packed, 0, 0);
     const floor = this.map.createLayer("floor", floorLayers, 0, 0);
-    const water = this.map.createLayer("water", tilemap_packed, 0, 0).setDepth(2);
-    const props = this.map.createLayer("props", tilemap_packed, 0,0);
+    const water = this.map
+      .createLayer("water", tilemap_packed, 0, 0)
+      .setDepth(2);
+    const props = this.map.createLayer("props", tilemap_packed, 0, 0);
+    const checkPoints = this.map.createLayer(
+      "checkPoints",
+      tilemap_packed,
+      0,
+      0
+    );
 
     // const checkpoints = this.map.createLayer(
     //   "checkpoints",
@@ -97,15 +105,40 @@ export class Tutorial extends Player {
     // const coins = this.map.createLayer("coinLayer", itemsTileSet, 0, 0);
     // const tiles = this.map.createLayer("tileLayer", largeTilesSet, 0, 0);
     // const water = this.map.createLayer("water", tilesTileSet, 0, 0).setDepth(2);
-    // const tutorialObjects = this.map.getObjectLayer("tutorial")["objects"];
 
-    // tutorialObjects.forEach((obj) => {
-    //   const sprite = this.physics.add.sprite(obj.x, obj.y, "tutorial_flag");
-    //   sprite.body.moves = false;
-    //   sprite.setData("message", obj.properties);
-    //   sprite.setOrigin(0, 1);
-    //   this.physics.add.overlap(this.player, sprite, playMessage, null, this);
-    // });
+    // Render Object Layers:
+    const tutorialObjects =
+      this.map.getObjectLayer("tutorialMessages")["objects"];
+
+    tutorialObjects.forEach((obj) => {
+      const tutorial_plaque = this.physics.add.sprite(
+        obj.x,
+        obj.y,
+        "tutorial_plaque"
+      );
+      tutorial_plaque.body.moves = false;
+      tutorial_plaque.setData("message", obj.properties);
+      tutorial_plaque.setOrigin(0, 1);
+      this.physics.add.overlap(
+        this.player,
+        tutorial_plaque,
+        playMessage,
+        null,
+        this
+      );
+    });
+
+    const coinObjects = this.map.getObjectLayer("coinLayer")["objects"];
+
+    coinObjects.forEach((obj) => {
+      const coin = this.physics.add.sprite(obj.x, obj.y, "spinning_coin");
+      this.physics.add.collider(coin, floor);
+      this.physics.add.overlap(this.player, coin, (player, coin) => {
+        this.progressTracker.collectCoins(player,coin);
+      });
+      coin.anims.play("spinning_coin", true);
+      coin.anims.msPerFrame = 70;
+    });
 
     this.physics.world.bounds.width = ground.width;
     this.physics.world.bounds.height = ground.height;
@@ -113,7 +146,7 @@ export class Tutorial extends Player {
     // colliders and overlaps
     this.physics.add.collider(this.player, floor);
     floor.setCollisionByExclusion([-1]);
-    // this.physics.add.overlap(this.player, checkpoints);
+    this.physics.add.overlap(this.player, checkPoints);
     // this.physics.add.overlap(this.player, coins);
     // this.physics.add.overlap(this.player, tiles);
     this.physics.add.overlap(this.player, water);
@@ -129,26 +162,26 @@ export class Tutorial extends Player {
       0
     );
 
-    // water.setTileIndexCallback([54, 74], this.progressTracker.die, this);
+    water.setTileIndexCallback([54, 74], this.progressTracker.die, this);
 
     // tiles.setTileIndexCallback(417, triggerWorkbench, this);
 
-    // let previousSave = false;
+    let previousSave = false;
 
-    // checkpoints.setTileIndexCallback(
-    //   [250],
-    //   (sprite, tile) => {
-    //     if (!previousSave) {
-    //       this.progressTracker.saveProgress(sprite);
-    //       previousSave = true;
-    //     }
+    checkPoints.setTileIndexCallback(
+      [112, 132],
+      (sprite, tile) => {
+        if (!previousSave) {
+          this.progressTracker.saveProgress(sprite);
+          previousSave = true;
+        }
 
-    //     setTimeout(() => {
-    //       previousSave = false;
-    //     }, 4000);
-    //   },
-    //   this
-    // );
+        setTimeout(() => {
+          previousSave = false;
+        }, 4000);
+      },
+      this
+    );
 
     // coins.setTileIndexCallback(
     //   158,

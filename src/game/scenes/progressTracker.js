@@ -44,10 +44,11 @@ export class ProgressTracker {
   //   },
   //   this
   // );
-  collectCoins(sprite, tile, layer) {
-    layer.removeTileAt(tile.x, tile.y);
+  collectCoins(player, coin) {
+    console.log("COIN", coin);
+    coin.destroy(coin.x, coin.y)
     this.updateScore(this.progressData.score + 1);
-    this.updateItems(tile);
+    this.updateItems(coin);
     EventBus.emit("scoreUpdate", this.progressData.score);
     this.saveProgress(null);
     return false;
@@ -60,7 +61,7 @@ export class ProgressTracker {
   resetProgress() {
     this.progressData = {
       score: 0,
-      spritePosition: { x: 36, y: 828 },
+      spritePosition: { x: 36, y: 46 },
       items: [],
     };
     this.saveProgress();
