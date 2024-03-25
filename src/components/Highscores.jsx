@@ -1,7 +1,7 @@
 import React from "react";
 //import "./Highscores.css";
 
-const Highscores = (highscores) => {
+const Highscores = ({ highscores, isLoggedIn }) => {
 
     return (
         <div>

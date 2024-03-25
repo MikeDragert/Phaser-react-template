@@ -1,7 +1,7 @@
 import React from "react";
 //import "./Achievements.css";
 
-const Achievements = (allAchievements, playerAchievements) => {
+const Achievements = ({ allAchievements, playerAchievements }) => {
     const isAchievementObtained = (achievementId) => {
         return playerAchievements.some(
             (achievement) => achievement.achievement_id === achievementId

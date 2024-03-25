@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Register = (handleRegister, setUsername, setPassword, isRegistered, handleCheckEmail) => {
+const Register = ({handleRegister, setUsername, setPassword, isRegistered, handleCheckEmail}) => {
     return (
         <div>
           {!isRegistered ? (
