@@ -86,6 +86,8 @@ export const HooksGame = () => {
     getItemCountByType(ITEMTYPES.COIN)
   );
 
+  workBench.setFunctionCallbacks(getFunctionCallbackList());
+
   // The sprite can only be moved in the MainMenu Scene
   // const [canMoveSprite, setCanMoveSprite] = useState(true);
 
@@ -199,8 +201,7 @@ export const HooksGame = () => {
     //todo: on change to inventory, update what is in the workbench
     inventoryList.forEach((inventoryItem) => {
       workBench.addInventoryItemToBench(
-        inventoryItem,
-        getFunctionCallbackList()
+        inventoryItem
       );
     });
 

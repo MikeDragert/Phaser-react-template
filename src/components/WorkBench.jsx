@@ -51,7 +51,7 @@ class WorkBench extends React.Component {
     return undefined;
   }
 
-  getCodeObjectFromInventoryItem = function(inventoryItem, functionCallbackList) {
+  getCodeObjectFromInventoryItem = function(inventoryItem) {
     let codeIdentifier = this.extractCodeIdentifierFromName(inventoryItem.item_name);
 
     if (codeIdentifier === undefined) {
@@ -65,10 +65,10 @@ class WorkBench extends React.Component {
         case ITEMTYPES.CODEOPERATOR:
           return new Operator(inventoryItem.item_name, codeIdentifier);
         case ITEMTYPES.CODEFUNCTION:
-          if (functionCallbackList[codeIdentifier] === undefined){
+          if (this.functionCallbackList[codeIdentifier] === undefined){
             return new CodeFunction(inventoryItem.item_name, undefined);
           }
-          let temp = new CodeFunction(inventoryItem.item_name, functionCallbackList[codeIdentifier].callback);
+          let temp = new CodeFunction(inventoryItem.item_name, this.functionCallbackList[codeIdentifier].callback);
           return temp
       }
     }
@@ -121,9 +121,9 @@ class WorkBench extends React.Component {
     
   }
 
-  addInventoryItemToBench = function(inventoryItem, functionCallbackList) {
+  addInventoryItemToBench = function(inventoryItem) {
     if (inventoryItem.item_type !== ITEMTYPES.COIN) {    
-      let codeObject = this.getCodeObjectFromInventoryItem(inventoryItem, functionCallbackList);
+      let codeObject = this.getCodeObjectFromInventoryItem(inventoryItem);
       if ((codeObject instanceof CodeFunction) && (codeObject._callback === undefined)) {
         return undefined;
       }
@@ -137,7 +137,7 @@ class WorkBench extends React.Component {
       if (inventoryItem.item_type === ITEMTYPES.COIN) {
         currencyChange++;
       } else { 
-        let codeObject = this.getCodeObjectFromInventoryItem(inventoryItem, functionCallbackList);
+        let codeObject = this.getCodeObjectFromInventoryItem(inventoryItem);
         this.removeCodeObjectFromBench(codeObject);
       }
 

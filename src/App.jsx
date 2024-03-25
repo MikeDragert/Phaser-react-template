@@ -39,7 +39,8 @@ export function App() {
       changeScene, 
       inventoryList, 
       gameOpen,
-      getInventory
+      getInventory,
+      getItemCountByType
     } = HooksGame();
       
     // State to manage the active page
@@ -66,7 +67,7 @@ export function App() {
             pageContent = <Register />;
             break;
         default:
-            pageContent = <Home workBench={workBench} workbenchOpen={workbenchOpen} closeWorkbench={closeWorkbench} phaserRef={phaserRef} currentScene={currentScene} showGame={showGame} openWorkbench={openWorkbench} changeScene={changeScene} getInventory={getInventory} gameOpen={gameOpen} />;
+            pageContent = <Home workBench={workBench} workbenchOpen={workbenchOpen} closeWorkbench={closeWorkbench} phaserRef={phaserRef} currentScene={currentScene} showGame={showGame} openWorkbench={openWorkbench} changeScene={changeScene} getInventory={getInventory} gameOpen={gameOpen} getItemCountByType={getItemCountByType} />;
     }
 
     return (

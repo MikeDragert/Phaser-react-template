@@ -1,15 +1,28 @@
 import React from 'react';
 import '../styles/DisplayItem.css';
+import { ITEMTYPES } from '../helpers/inventoryHelpers';
 
-const DisplayItem = ({ items }) => {
+const DisplayItem = ({ items, getItemCountByType }) => {
   
+  let displayItems = [];
+  
+  let coinCount = getItemCountByType(ITEMTYPES.COIN);
+  let larryCount = getItemCountByType(ITEMTYPES.DUCK)
+  console.log('the coincount is: ', coinCount)
+
+
+  displayItems.push(<article><img src="../assets/icons/coin.png" alt="Coin"></img> <span>{coinCount}</span> </article>)
+  
+  // if (items.includes())
+
+
+
+  console.log(items);
+
+
   return (
-        <div>
-            {items.map(item => (
-                <div key={item.type} className="grid-item has-item">
-                    <p>{item.item_name}</p>
-                </div>
-            ))}
+        <div>683636
+            {displayItems}
         </div>
     );
 };
