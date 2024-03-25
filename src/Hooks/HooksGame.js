@@ -227,7 +227,6 @@ export const HooksGame = () => {
 
 
   const openWorkbenchWithHint = function(hint) {
-    console.log('saving items to db from game')
     saveItemsToDb(10);
     workBench.setWorkbenchHint(hint);
     setWorkbenchOpen(true);
@@ -235,7 +234,6 @@ export const HooksGame = () => {
   }
 
   const openWorkbench = (event) => {
-    console.log('saving items to db from button')
     saveItemsToDb(10);
     workBench.setWorkbenchHint('openWorkbench was called by hitting the button that is just for testing');
     setWorkbenchOpen(true);

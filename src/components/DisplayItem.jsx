@@ -2,7 +2,6 @@ import React from 'react';
 import '../styles/DisplayItem.css';
 
 const DisplayItem = ({ items }) => {
-  console.log('DisplayItems:', items)  
   
   return (
         <div>

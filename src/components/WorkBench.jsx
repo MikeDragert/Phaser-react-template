@@ -143,7 +143,6 @@ class WorkBench extends React.Component {
 
     });
     if (currencyChange > 0) {
-      console.log('Revoving max currency for coin', currencyChange);
       this.addToMaxCurrency(-currencyChange);
     }
     

@@ -37,13 +37,11 @@ export const dbSavePlayerItems = function(playerId, playerSaveId, items, callbac
     item.player_save_id = playerSaveId;
     return item;
   })
-  console.log('saving items', updatedItems)
   let sendParams = {data: JSON.stringify(updatedItems)};
-  console.log('sending: ', sendParams)
   axios.post(`/api/players/${playerId}/player_items`, sendParams)
   .then((response) => {
     //console.log('got', response.data)
-    //callback(response.data);
+    callback(response.data);
   })
   .catch((error) => {
     console.error('Error saving player items to save point:', error)

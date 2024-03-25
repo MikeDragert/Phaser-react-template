@@ -132,8 +132,7 @@ const generateItem = function(sceneItem) {
     map_id: sceneItem.sceneName,
     unique_item_name: sceneItem.item.name,
     item_name: name,
-    item_type: itemMap[name],
-    has_obtained: true
+    item_type: itemMap[name]
   }
 }
 
