@@ -20,7 +20,6 @@ const Highscores = ({ highscores, isLoggedIn }) => {
               <td>{index + 1}</td>
               <td>{score.player_name}</td> 
               <td>{score.score}</td>
-              <td>{score.time}</td>
             </tr>
           ))}
         </tbody>
