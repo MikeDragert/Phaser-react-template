@@ -29,7 +29,8 @@ export class Player extends Scene {
 
   sendNewItemMessage = function(item) {
     ///.sceneName needs to be set ..is it?
-    EventBus.emit('add-inventory-item', {sceneName: this.sceneName, ...item });
+    console.log("ITEM IN PLAYER: ", item);
+    EventBus.emit('add-inventory-item', {sceneName: this.sceneName, item: item });
   }
 
   //anything that has to be cleared upon returning from the workbench should go here
@@ -143,8 +144,8 @@ export class Player extends Scene {
     if (this.executePlayerJump()) {
       if (this.beginJump()) {
         this.jumpValues.count++
-        // player.anims.play("player-jump", true);
-        player.anims.msPerFrame = 30;
+        player.anims.play("player-move", true);
+        player.anims.msPerFrame = 100;
         this.jumpValues.savedJumpAmount = this.jumpValues.initialJumpAmount;
         player.body.velocity.y = -this.jumpValues.savedJumpAmount;
         this.disableJump();

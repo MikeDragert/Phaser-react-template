@@ -13,7 +13,7 @@ export class ProgressTracker {
       items: items,
     };
   }
-  
+
   died = false;
   // updates score
   updateScore(score) {
@@ -25,13 +25,13 @@ export class ProgressTracker {
   updatePosition(sprite) {
     let position = { x: sprite.x, y: sprite.y };
     this.progressData.spritePosition = position;
-    console.log("IN TRACKER Position", this.progressData.spritePosition);
     return false;
   }
 
   // adds items to item array
   updateItems(item) {
-    this.progressData.items.push(item.name);
+    this.progressData.items.push({ name: item.name, item: item });
+    // this.progressData.items.push(item.name);
     console.log("IN TRACKER Items", this.progressData.items);
     return false;
   }
@@ -45,7 +45,7 @@ export class ProgressTracker {
   //   this
   // );
   collectCoins(player, coin) {
-    coin.destroy()
+    coin.destroy();
     console.log("COIN", coin);
     console.log("COIN DATA:", coin.getData("id"));
     this.updateScore(this.progressData.score + 1);
@@ -102,14 +102,13 @@ export class ProgressTracker {
     return this.progressData;
   }
 
-  die() {
-    // this.scene.restart();
+  die(player) {
     if (!this.died) {
       this.died = true;
-
+      
       setTimeout(() => {
-        this.player.visible = false;
-        this.player.body.moves = false;
+        player.visible = false;
+        player.body.moves = false;
         EventBus.emit(
           "miscText",
           "You Died Press R To Restart from Checkpoint"

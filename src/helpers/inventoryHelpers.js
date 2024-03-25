@@ -16,7 +16,8 @@ const INVENTORYACTION = {
 
 const itemMap = {
   //tileNumber : {name: itemName, type: itemType}
-  158: {name:'Coin', type: ITEMTYPES.COIN}
+  // 158: {name:'Coin', type: ITEMTYPES.COIN}
+  "coin": ITEMTYPES.COIN
 }
 
 export const inventoryReducer = (state, action) => {
@@ -104,16 +105,17 @@ export const addItemFromSceneToInventory = function(inventoryDispatch, sceneItem
 }
 
 const generateItem = function(sceneItem) {
+  let name = sceneItem.item.name.split("-")[0]
   return {
     player_id: undefined, 
     item_id: undefined,
     save_id: undefined,
     container_item_id: 0,
-    location_x: sceneItem.x,
-    location_y: sceneItem.y,
+    location_x: sceneItem.item.x,
+    location_y: sceneItem.item.y,
     map_id: sceneItem.sceneName,
-    item_name: itemMap[sceneItem.index].name,
-    item_type: itemMap[sceneItem.index].type,
+    item_name: name,
+    item_type: itemMap[name],
     has_obtained: true
   }
 }

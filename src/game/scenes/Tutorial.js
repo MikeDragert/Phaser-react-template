@@ -52,10 +52,6 @@ export class Tutorial extends Player {
     this.player.body.moves = true;
 
     this.map = this.make.tilemap({ key: "newTutorial" });
-    // const groundTileSet = this.map.addTilesetImage(
-    //   "spritesheet_ground",
-    //   "ground"
-    // );
 
     // tilesets
     const tilemap_packed = this.map.addTilesetImage(
@@ -67,22 +63,9 @@ export class Tutorial extends Player {
       "stone_packed",
       "stone_packed"
     );
-    // const tilemap_characters_packed = this.map.addTilesetImage(
-    //   "tilemap_characters_packed",
-    //   "tilemap_characters_packed"
-    // );
-    // const itemsTileSet = this.map.addTilesetImage("spritesheet_items", "items");
-    // const tilesTileSet = this.map.addTilesetImage("spritesheet_tiles", "tiles");
-    // const checkpointsLayer = this.map.addTilesetImage(
-    //   "spritesheet_items_large",
-    //   "checkpoints"
-    // );
-    // const largeTilesSet = this.map.addTilesetImage(
-    //   "spritesheet_tiles_large",
-    //   "large_tiles"
-    // );
-    const floorLayers = [tilemap_packed, sand_packed, stone_packed];
+
     // map layers
+    const floorLayers = [tilemap_packed, sand_packed, stone_packed];
     const ground = this.map.createLayer("ground", tilemap_packed, 0, 0);
     const floor = this.map.createLayer("floor", floorLayers, 0, 0);
     const water = this.map
@@ -96,15 +79,7 @@ export class Tutorial extends Player {
       0
     );
 
-    // const checkpoints = this.map.createLayer(
-    //   "checkpoints",
-    //   checkpointsLayer,
-    //   0,
-    //   0
-    // );
-    // const coins = this.map.createLayer("coinLayer", itemsTileSet, 0, 0);
-    // const tiles = this.map.createLayer("tileLayer", largeTilesSet, 0, 0);
-    // const water = this.map.createLayer("water", tilesTileSet, 0, 0).setDepth(2);
+    const workBench = this.map.createLayer("workBench", tilemap_packed, 0, 0);
 
     // Render Object Layers:
     const tutorialObjects =
@@ -131,7 +106,9 @@ export class Tutorial extends Player {
 
     coinObjects.forEach((obj) => {
       const coinId = `coin-tutorial-${coinIdCounter++}`;
-      if (this.progressData.items.includes(coinId)) {
+
+      if (this.progressData.items.some((item) => item.name === coinId)) {
+        console.log("Item Removed");
         return;
       }
       const coin = this.physics.add
@@ -140,11 +117,13 @@ export class Tutorial extends Player {
       this.physics.add.collider(coin, floor);
       this.physics.add.overlap(this.player, coin, (player, coin) => {
         this.progressTracker.collectCoins(player, coin);
+        this.sendNewItemMessage(coin);
       });
       coin.anims.play("spinning_coin", true);
       coin.anims.msPerFrame = 70;
     });
 
+    //Physical bounds and coliders:
     this.physics.world.bounds.width = ground.width;
     this.physics.world.bounds.height = ground.height;
 
@@ -152,9 +131,10 @@ export class Tutorial extends Player {
     floor.setCollisionByExclusion([-1]);
     this.physics.add.overlap(this.player, checkPoints);
     this.physics.add.overlap(this.player, water);
+    this.physics.add.overlap(this.player, workBench);
 
     this.cameras.main.setBounds(0, 0, ground.width, ground.height);
-    this.cameras.main.setZoom(1, 1);
+    this.cameras.main.setZoom(1.5, 1.5);
     this.cameras.main.startFollow(
       this.player,
       false,
@@ -164,9 +144,15 @@ export class Tutorial extends Player {
       0
     );
 
-    water.setTileIndexCallback([54, 74], this.progressTracker.die, this);
+    water.setTileIndexCallback(
+      [54, 74],
+      (sprite, tile) => {
+        this.progressTracker.die(sprite);
+      },
+      this
+    );
 
-    // tiles.setTileIndexCallback(417, triggerWorkbench, this);
+    workBench.setTileIndexCallback(27, triggerWorkbench, this);
 
     let previousSave = false;
 
@@ -189,7 +175,7 @@ export class Tutorial extends Player {
     //   158,
     //   (sprite = null, tile, layer = coins) => {
     //     this.progressTracker.collectCoins(sprite, tile, layer);
-    //     this.sendNewItemMessage(tile);
+    //
     //   },
     //   this
     // );

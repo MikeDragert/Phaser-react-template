@@ -144,6 +144,7 @@ function App ()
 
   const eventHandlerInventoryClear = function(mapId) {
     let itemsRemoved = getInventoryForScene(inventoryList, mapId);
+    console.log("ITEMSREMOVED: ", itemsRemoved);
     clearInventoryForScene(inventoryDispatch, mapId);
     workBench.removeInventoryItemFromBench(itemsRemoved);
   }
