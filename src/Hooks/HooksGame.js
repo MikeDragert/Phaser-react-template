@@ -70,6 +70,56 @@ export const HooksGame = () => {
     };
   };
 
+   // Login && Register State and Logic
+   const [username, setUsername] = useState('');
+   const [password, setPassword] = useState('');
+   const [email, setEmail] = useState('');
+   const [error, setError] = useState(null);
+   const [isLoggedIn, setIsLoggedIn] = useState(false);
+   const [isRegistered, setIsRegistered] = useState(false);
+   const [isEmailChecked, setIsEmailChecked] = useState(false);
+   const [emailExists, setEmailExists] = useState(false);
+   const [usernameExists, setUsernameExists] = useState(false);
+ 
+   const handleLogin = () => {
+     dbLogin(username, password, (data) => {
+         if (data.error) {
+             setError(data.error);
+         } else {
+             console.log('Login successful', data);
+             setIsLoggedIn(true);
+         }
+     });
+ };
+ 
+ const handleCheckEmail = () => {
+     dbCheckEmailExists(email, (data) => {
+       setIsEmailChecked(true);
+       setEmailExists(data.exists);
+     });
+   };
+ 
+   const handleRegister = () => {
+     if (password !== confirmPassword) {
+       setError('Passwords do not match');
+       return;
+     }
+ 
+     if (emailExists) {
+       setError('Email already exists');
+       return;
+     }
+ 
+     dbRegister(username, email, password, (data) => {
+       if (data.error) {
+         setError(data.error);
+       } else {
+         console.log('Registration successful:', data);
+         setIsRegistered(true);
+       }
+     });
+   };
+
   //todo: get out of inventory
   let workBench = new WorkBench(
     codeList,
