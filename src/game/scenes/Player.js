@@ -286,7 +286,7 @@ export class Player extends Scene {
   }
 
   sendNewItemMessage = function(item) {
-    const itemWithSceneName = {sceneName: this.sceneName, ...item };
+    const itemWithSceneName = {sceneName: this.sceneName, item: item};
     this.sendItemPickup.push(itemWithSceneName)
     EventBus.emit('add-inventory-item', itemWithSceneName);
   }
