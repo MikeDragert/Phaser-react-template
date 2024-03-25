@@ -62,33 +62,21 @@ export function App() {
     let pageContent;
     switch (activePage) {
         case "highscores":
-            pageContent = <Highscores />;
+            pageContent = <Highscores highscores={highscores} />;
             break;
         case "achievements":
-            pageContent = <Achievements />;
+            pageContent = <Achievements allAchievements={allAchievements} playerAchievements={playerAchievements} />;
             break;
         case "login":
-            pageContent = <Login />;
+            pageContent = <Login handleLogin={handleLogin} setUsername={setUsername} setPassword={setPassword} isLoggedIn={isLoggedIn} />;
             break;
         case "register":
-            pageContent = <Register />;
+            pageContent = <Register handleRegister={handleRegister} setUsername={setUsername} setPassword={setPassword} isLoggedIn={isRegistered} handleCheckEmail={handleCheckEmail} />;
             break;
         default:
-            pageContent = (
-                <Home
-                    workBench={workBench}
-                    workbenchOpen={workbenchOpen}
-                    closeWorkbench={closeWorkbench}
-                    phaserRef={phaserRef}
-                    currentScene={currentScene}
-                    showGame={showGame}
-                    openWorkbench={openWorkbench}
-                    changeScene={changeScene}
-                    getInventory={getInventory}
-                    gameOpen={gameOpen}
-                />
-            );
+            pageContent = <Home workBench={workBench} workbenchOpen={workbenchOpen} closeWorkbench={closeWorkbench} phaserRef={phaserRef} currentScene={currentScene} showGame={showGame} openWorkbench={openWorkbench} changeScene={changeScene} getInventory={getInventory} inventoryList={inventoryList} gameOpen={gameOpen} />;
     }
+
 
     return (
         <div>
@@ -98,8 +86,7 @@ export function App() {
                     setActivePage={setActivePage}
                 />
             </header>
-
-            <body>{pageContent}</body>
+            {pageContent}
         </div>
     );
 }
