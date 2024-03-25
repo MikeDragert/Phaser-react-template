@@ -35,6 +35,16 @@ export const inventoryHelpers = () => {
     //tileNumber : {name: itemName, type: itemType}
     // 158: {name:'Coin', type: ITEMTYPES.COIN}
     "coin": ITEMTYPES.COIN,
+    "Number_1": ITEMTYPES.CODENUMBER,
+    "Number_2": ITEMTYPES.CODENUMBER,
+    "Number_3": ITEMTYPES.CODENUMBER,
+    "Number_4": ITEMTYPES.CODENUMBER,
+    "Number_5": ITEMTYPES.CODENUMBER,
+    "Number_6": ITEMTYPES.CODENUMBER,
+    "Number_7": ITEMTYPES.CODENUMBER,
+    "Number_8": ITEMTYPES.CODENUMBER,
+    "Number_9": ITEMTYPES.CODENUMBER,
+    "Number_10": ITEMTYPES.CODENUMBER,
   }
 
   const inventoryReducer = (state, action) => {
@@ -131,6 +141,7 @@ const generateItem = function(sceneItem) {
     location_y: sceneItem.item.y,
     map_id: sceneItem.sceneName,
     unique_item_name: sceneItem.item.name,
+    // name must be Number_1 ...
     item_name: name,
     item_type: itemMap[name]
   }
