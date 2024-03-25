@@ -61,13 +61,21 @@ export const dbSavePlayerItems = function (
 
 export const dbGetHighscores = function (callback) {
     axios
-        .get(`/api/highscores`)
-        .then((response) => {
-            console.log("got", response.data);
-            callback(response.data);
+        .get("/players/scores")
+        .then(function (response) {
+            console.log("Scores:", response.data);
+
+            response.data.forEach(function (playerScore) {
+                console.log(
+                    "Player ID:",
+                    playerScore.player_id,
+                    "Score:",
+                    playerScore.score
+                );
+            });
         })
-        .catch((error) => {
-            console.error("Error retrieving highscores:", error);
+        .catch(function (error) {
+            console.error("Error:", error);
         });
 };
 
