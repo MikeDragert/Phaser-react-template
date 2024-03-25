@@ -43,6 +43,14 @@ export const inventoryHelpers = () => {
     "Number_8": ITEMTYPES.CODENUMBER,
     "Number_9": ITEMTYPES.CODENUMBER,
     "Number_10": ITEMTYPES.CODENUMBER,
+    "Operator_+": ITEMTYPES.CODEOPERATOR,
+    "Operator_-": ITEMTYPES.CODEOPERATOR,
+    "Operator_*": ITEMTYPES.CODEOPERATOR,
+    "Operator_/": ITEMTYPES.CODEOPERATOR,
+    "Operator_%": ITEMTYPES.CODEOPERATOR,
+    "Function_jumpPower": ITEMTYPES.CODEFUNCTION,
+    "Function_playerSize": ITEMTYPES.CODEFUNCTION,
+    "Function_passKey": ITEMTYPES.CODEFUNCTION
   };
 
   const inventoryReducer = (state, action) => {

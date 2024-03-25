@@ -131,5 +131,12 @@ export class ProgressTracker {
     level.player.visible = true;
     level.player.body.moves = true;
   }
+
+  removeItems(layer) {
+    for (let item of this.progressData.items) {
+      console.log(item);
+      layer.removeTileAt(item.item.x, item.item.y)
+    }
+  }
 }
 

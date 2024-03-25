@@ -28,13 +28,13 @@ export class Tutorial extends Player {
       [],
       this.sceneName
     );
-    
+
     this.progressData = this.progressTracker.loadProgress();
 
     const position = this.progressData.spritePosition;
 
     this.add.image(400, 300, "sky").setScale(20);
-  
+
     // create player
     this.player = this.physics.add
       .sprite(position.x, position.y, "lilGreenGuy")
@@ -63,7 +63,10 @@ export class Tutorial extends Player {
       "stone_packed",
       "stone_packed"
     );
-    const iconSpriteSheet = this.map.addTilesetImage("iconSpriteSheet", "iconSpriteSheet")
+    const iconSpriteSheet = this.map.addTilesetImage(
+      "iconSpriteSheet",
+      "iconSpriteSheet"
+    );
 
     // map layers
     const floorLayers = [tilemap_packed, sand_packed, stone_packed];
@@ -81,7 +84,7 @@ export class Tutorial extends Player {
     );
     const workBench = this.map.createLayer("workBench", tilemap_packed, 0, 0);
     console.log("ICON SHEET", iconSpriteSheet);
-    const codeItems = this.map.createLayer("codeItems", iconSpriteSheet, 0,0)
+    const codeItems = this.map.createLayer("codeItems", iconSpriteSheet, 0, 0);
 
     // Render Object Layers:
     const tutorialObjects =
@@ -177,14 +180,17 @@ export class Tutorial extends Player {
     );
 
     codeItems.setTileIndexCallback(
-      [410,419,414,413,412,416,418,415],
+      [
+        424, 410, 420, 418, 417, 423, 411, 422, 412, 413, 416, 419, 414, 415,
+        421, 420, 426, 425, 427
+      ],
       (sprite, tile) => {
         console.log("CODEITEM: ", tile);
-        this.progressTracker.collectItems(sprite, tile, codeItems)
+        this.progressTracker.collectItems(sprite, tile, codeItems);
         this.sendNewItemMessage(tile);
       },
       this
-    )
+    );
 
     this.one = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
     this.e = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
@@ -195,6 +201,7 @@ export class Tutorial extends Player {
     EventBus.emit("give-me-inventory", this.sceneName);
 
     this.scene.launch("UserInterface");
+    this.progressTracker.removeItems(codeItems);
   }
 
   update() {
