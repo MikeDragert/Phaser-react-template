@@ -77,6 +77,16 @@ export const dbGetHighscores = function(callback) {
       });
   };
   
+  export const logout = function(callback) {
+    axios.post('/api/logout')
+      .then((response) => {
+        console.log('Logout successful');
+        callback(response.data);
+      })
+      .catch((error) => {
+        console.error('Error logging out:', error);
+      });
+  };
 
 //need to create new save
 
