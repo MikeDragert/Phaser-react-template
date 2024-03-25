@@ -21,18 +21,6 @@ export class UserInterface extends Scene {
       fixedWidth: 470,
     }).setVisible(false);
 
-    this.scoreText = this.add.text(30, 30, "0", {
-      backgroundColor: null,
-      fontFamily: "Quicksand",
-      fontSize: "48px",
-      color: "#FFEB09",
-      fontStyle: "italic",
-      stroke: "#0A0A0A",
-      strokeThickness: 7,
-      shadow: { color: "#FF0B0B", fill: true, offsetX: 2, offsetY: 2 },
-      padding: { left: 10, right: 10, top: 10, bottom: 10 },
-    });
-
     this.miscTextListener = EventBus.on("miscText", (data = "AAAAAAA") => {
       if (data) {
         console.log("DATA: ", data);
@@ -48,10 +36,20 @@ export class UserInterface extends Scene {
       }
     });
 
-    this.scoreText.setScrollFactor(0);
-   
-  }
+    this.scoreText = this.add.text(30, 30, "0", {
+      backgroundColor: null,
+      fontFamily: "Quicksand",
+      fontSize: "48px",
+      color: "#FFEB09",
+      fontStyle: "italic",
+      stroke: "#0A0A0A",
+      strokeThickness: 7,
+      shadow: { color: "#FF0B0B", fill: true, offsetX: 2, offsetY: 2 },
+      padding: { left: 10, right: 10, top: 10, bottom: 10 },
+    });
 
+    this.scoreText.setScrollFactor(0);
+  }
 }
 
 export function triggerWorkbench(sprite, tile) {

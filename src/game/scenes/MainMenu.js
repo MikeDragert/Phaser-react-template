@@ -24,18 +24,6 @@ export class MainMenu extends Scene {
       })
       .setDepth(100)
       .setOrigin(0.5);
-      
-    this.add
-      .text(512, 100, "Main Menu", {
-        fontFamily: "Arial Black",
-        fontSize: 38,
-        color: "#ffffff",
-        stroke: "#000000",
-        strokeThickness: 8,
-        align: "center",
-      })
-      .setDepth(2)
-      .setOrigin(0.5);
 
     EventBus.emit("current-scene-ready", this);
   }
