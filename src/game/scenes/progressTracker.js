@@ -31,7 +31,6 @@ export class ProgressTracker {
   // adds items to item array
   updateItems(item) {
     this.progressData.items.push({ name: item.name, item: item });
-    // this.progressData.items.push(item.name);
     console.log("IN TRACKER Items", this.progressData.items);
     return false;
   }
@@ -44,10 +43,9 @@ export class ProgressTracker {
   //   },
   //   this
   // );
+  
   collectCoins(player, coin) {
     coin.destroy();
-    console.log("COIN", coin);
-    console.log("COIN DATA:", coin.getData("id"));
     this.updateScore(this.progressData.score + 1);
     this.updateItems(coin);
     this.saveProgress(null);
