@@ -10,7 +10,6 @@ export class UserInterface extends Scene {
   constructor() {
     super("UserInterface");
   }
-  
 
   create() {
     message_count = 0;
@@ -19,9 +18,20 @@ export class UserInterface extends Scene {
 
     this.textBox = createTextBox(this, 224, 30, {
       wrapWidth: 500,
-      fixedWidth: 460,
+      fixedWidth: 470,
     }).setVisible(false);
 
+    this.scoreText = this.add.text(30, 30, "0", {
+      backgroundColor: "FFFFFF",
+      fontFamily: "Quicksand",
+      fontSize: "48px",
+      color: "#FFEB09",
+      fontStyle: "italic",
+      stroke: "#0A0A0A",
+      strokeThickness: 7,
+      shadow: { color: "#FF0B0B", fill: true, offsetX: 2, offsetY: 2 },
+      padding: { left: 10, right: 10, top: 10, bottom: 10 },
+    });
 
     this.miscTextListener = EventBus.on("miscText", (data = "AAAAAAA") => {
       if (data) {
@@ -35,24 +45,6 @@ export class UserInterface extends Scene {
       if (data > 0) {
         this.scoreText.setText(`${data}`);
       }
-    });
-
-    this.scoreText = this.add.text(30, 30, "0", {
-      fontFamily: "Quicksand",
-      fontSize: "48px",
-      color: "#F8E71C",
-      fontStyle: "normal",
-      stroke: "#000000",
-      strokeThickness: 12,
-      shadow: {
-        offsetX: 2,
-        offsetY: 2,
-        color: "#FF0000",
-        fill: true,
-        blur: 2,
-        stroke: true,
-      },
-      padding: { left: null },
     });
 
     this.scoreText.setScrollFactor(0);
@@ -71,8 +63,11 @@ export function triggerWorkbench(sprite, tile) {
 
   //**Important:  switch this to JustDown, so that we don't spam the eventbus with touch-flag - each of which triggers another save */
   if (Phaser.Input.Keyboard.JustDown(this.e)) {
-  //if (this.e.isDown) {
-    EventBus.emit("touch-flag", {tile: tile, hint: `Workbench hint: ${ this.sceneName }`});  //this is an example of how to set the hint when you open the workbench!
+    //if (this.e.isDown) {
+    EventBus.emit("touch-flag", {
+      tile: tile,
+      hint: `Workbench hint: ${this.sceneName}`,
+    }); //this is an example of how to set the hint when you open the workbench!
   }
   return false;
 }
@@ -110,7 +105,6 @@ export function createTextBox(scene, x, y, config) {
 
       // text: getBuiltInText(scene, wrapWidth, fixedWidth, fixedHeight),
       text: getBBcodeText(scene, wrapWidth, fixedWidth, fixedHeight),
-      
 
       action: scene.add
         .image(0, 0, "nextPage")
@@ -158,7 +152,6 @@ export function createTextBox(scene, x, y, config) {
         } else {
           // Next actions
           message_count = 0;
-          console.log("CLICKED");
           textBox.setVisible(false);
         }
       },
@@ -168,9 +161,6 @@ export function createTextBox(scene, x, y, config) {
       "pageend",
       function () {
         if (this.isLastPage) {
-          // setTimeout(() => {
-          //   textBox.setVisible(false)
-          // }, 2000)
           return;
         }
 

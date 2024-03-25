@@ -34,11 +34,11 @@ export class Tutorial extends Player {
     const position = this.progressData.spritePosition;
 
     this.add.image(400, 300, "sky").setScale(20);
-
+    // this._PLAYERDEFAULTSCALE
     // create player
     this.player = this.physics.add
       .sprite(position.x, position.y, "lilGreenGuy")
-      .setScale(this._PLAYERDEFAULTSCALE)
+      .setScale(2)
       .setDepth(1);
 
 
@@ -188,6 +188,7 @@ export class Tutorial extends Player {
 
     EventBus.emit("current-scene-ready", this);
     EventBus.emit("give-me-inventory", this.sceneName);
+
   }
 
   update() {
