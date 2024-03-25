@@ -55,6 +55,29 @@ export const dbGetHighscores = function(callback) {
       })
   }
 
+  export const dbLogin = function(username, password, callback) {
+    axios.post('/api/login', { username, password })
+      .then((response) => {
+        console.log('Login successful');
+        callback(response.data);
+      })
+      .catch((error) => {
+        console.error('Error logging in:', error);
+      });
+  };
+
+  export const dbRegister = function(username, password, callback) {
+    axios.post('/api/register', { username, password, email })
+      .then((response) => {
+        console.log('Register successful');
+        callback(response.data);
+      })
+      .catch((error) => {
+        console.error('Error registering:', error);
+      });
+  };
+  
+
 //need to create new save
 
 //need to save all player items against new save
