@@ -1,21 +1,10 @@
-import { useRef, useState, useEffect, useReducer } from "react";
+import { useRef, useState, useEffect } from "react";
 
 import Phaser, { Game } from "phaser";
 import { PhaserGame } from "../game/PhaserGame";
 import WorkBench from "../components/WorkBench.jsx";
 import { workbenchHelpers } from "../helpers/workbenchStateHelpers.js";
-import {
-    inventoryReducer,
-    loadPlayerInventory,
-    getInventory,
-    addItemFromSceneToInventory,
-    addFullItemToInventory,
-    clearInventoryForScene,
-    clearInventory,
-    getInventoryForScene,
-    getItemCountByType,
-    ITEMTYPES,
-} from "../helpers/inventoryHelpers.js";
+import { inventoryHelpers } from "../helpers/inventoryHelpers.js"
 import { EventBus } from "../game/EventBus";
 import { Player } from "../game/scenes/Player.js";
 import { dbGetLastestPlayerSave, dbGetPlayerItems, dbCreateNewPlayerSave, dbSavePlayerItems } from '../routes/dbRoutes.js'
@@ -36,41 +25,24 @@ export const HooksGame = () => {
     setWorkbenchHint, 
     codeList 
   } = workbenchHelpers();
+
+  const {
+    inventoryList,
+    loadPlayerInventory,
+    getInventory,
+    addItemFromSceneToInventory,
+    addFullItemToInventory,
+    clearInventoryForScene,
+    clearInventory,
+    getInventoryForScene,
+    getItemCountByType,
+    ITEMTYPES,
+} = inventoryHelpers();
   
-  
-
-
-  const initialInventoryState = [];
-
   const [showGame, setShowGame] = useState(true);
   const [loaded, setLoaded] = useState(false);
   const [workbenchOpen, setWorkbenchOpen] = useState(false);
   const [itemsState, setItemsState] = useState(mock_items);
-  
-  const [inventoryList, inventoryDispatch] = useReducer(
-      inventoryReducer,
-      initialInventoryState
-  );
-
-  const moveCodeObjectJumper = function (codeObject, fromName, toName) {
-      return moveCodeObject(codeObject, fromName, toName);
-  };
-
-  const changeMaxCurrencyJumper = function (maxCurrency) {
-      return changeMaxCurrency(maxCurrency);
-  };
-
-  const addToMaxCurrencyJumper = function (addCurrency) {
-      return addToMaxCurrency(addCurrency);
-  };
-
-  const clearWorkbenchItemsJumper = function () {
-      return clearWorkbenchItems(dispatch);
-  };
-
-  const isOnWorkbenchJumper = function (codeObject) {
-      return isOnWorkbench(codeObject);
-  };
 
   const getFunctionCallbackList = function () {
     return {
@@ -111,7 +83,7 @@ export const HooksGame = () => {
     },
     loaded,
     setLoaded,
-    getItemCountByType(inventoryList, ITEMTYPES.COIN)
+    getItemCountByType(ITEMTYPES.COIN)
   );
 
   // The sprite can only be moved in the MainMenu Scene
@@ -165,16 +137,16 @@ export const HooksGame = () => {
   //   };
 
   const eventHandlerItemPickup = function (itemData) {
-    addItemFromSceneToInventory(inventoryDispatch, itemData);
+    addItemFromSceneToInventory(itemData);
   };
 
   const eventHandlerInventoryRequest = function () {
-    phaserRef.current.scene.setInventory(inventoryList);
+    phaserRef.current.scene.setInventory();
   };
 
   const eventHandlerInventoryClear = function (mapId) {
-    let itemsRemoved = getInventoryForScene(inventoryList, mapId);
-    clearInventoryForScene(inventoryDispatch, mapId);
+    let itemsRemoved = getInventoryForScene(mapId);
+    clearInventoryForScene(mapId);
     workBench.removeInventoryItemFromBench(itemsRemoved);
   };
 
@@ -186,19 +158,19 @@ export const HooksGame = () => {
         let playerSaveId = playerSave.id
         dbGetPlayerItems(playerId, playerSaveId, (items) => {
           setItemsState(items);
-          clearInventory(inventoryDispatch);
+          clearInventory();
           items.forEach(item => {
-            addFullItemToInventory(inventoryDispatch, item);    
+            addFullItemToInventory(item);    
           });
         });
       };
     });
 
-    //loadPlayerInventory(inventoryDispatch, mock_player_items, mock_items);
+    //loadPlayerInventory(mock_player_items, mock_items);
   }, []);
 
   useEffect(() => {
-    if (phaserRef.current.scene) {
+    if (phaserRef.current.scene instanceof Player) {
         phaserRef.current.scene.setInventory(inventoryList);
     }
    
@@ -219,6 +191,11 @@ export const HooksGame = () => {
         eventHandlerInventoryClear(mapId);
     });
 
+    EventBus.removeListener("touch-flag");
+    EventBus.on("touch-flag", (data) => {
+      openWorkbenchWithHint(data.hint);
+    });
+
     //todo: on change to inventory, update what is in the workbench
     inventoryList.forEach((inventoryItem) => {
       workBench.addInventoryItemToBench(
@@ -227,7 +204,7 @@ export const HooksGame = () => {
       );
     });
 
-    workBench.changeMaxCurrency(getItemCountByType(inventoryList, ITEMTYPES.COIN));
+    workBench.changeMaxCurrency(getItemCountByType(ITEMTYPES.COIN));
 
   }, [inventoryList]);
 
@@ -250,6 +227,7 @@ export const HooksGame = () => {
 
 
   const openWorkbenchWithHint = function(hint) {
+    console.log('saving items to db from game')
     saveItemsToDb(10);
     workBench.setWorkbenchHint(hint);
     setWorkbenchOpen(true);
@@ -257,6 +235,7 @@ export const HooksGame = () => {
   }
 
   const openWorkbench = (event) => {
+    console.log('saving items to db from button')
     saveItemsToDb(10);
     workBench.setWorkbenchHint('openWorkbench was called by hitting the button that is just for testing');
     setWorkbenchOpen(true);
@@ -326,5 +305,11 @@ export const HooksGame = () => {
 
   let gameOpen = !workbenchOpen;
 
-  return { workBench, workbenchOpen, closeWorkbench, phaserRef, currentScene, showGame, openWorkbench, changeScene, getInventory, inventoryList, gameOpen};
+  return { workBench, workbenchOpen, closeWorkbench, phaserRef, currentScene, showGame, openWorkbench, changeScene, inventoryList, gameOpen,
+    loadPlayerInventory,
+    getInventory,
+    addItemFromSceneToInventory,
+    clearInventoryForScene,
+    getInventoryForScene,
+    getItemCountByType };
 };

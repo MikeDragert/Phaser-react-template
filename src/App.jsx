@@ -7,13 +7,6 @@ import { PhaserGame } from "./game/PhaserGame";
 import WorkBench from "./components/WorkBench.jsx";
 
 import {
-    inventoryReducer,
-    loadPlayerInventory,
-    getInventory,
-    addItemFromSceneToInventory,
-    clearInventoryForScene,
-    getInventoryForScene,
-    getItemCountByType,
     ITEMTYPES,
 } from "./helpers/inventoryHelpers.js";
 import { EventBus } from "./game/EventBus";
@@ -35,7 +28,20 @@ import Login from "./components/Login.jsx";
 import Register from "./components/Register.jsx";
 
 export function App() {
-    const { workBench, workbenchOpen, closeWorkbench, phaserRef, currentScene, showGame, openWorkbench, changeScene, getInventory, inventoryList, gameOpen } = HooksGame();
+    const { 
+      workBench, 
+      workbenchOpen, 
+      closeWorkbench, 
+      phaserRef, 
+      currentScene, 
+      showGame, 
+      openWorkbench, 
+      changeScene, 
+      inventoryList, 
+      gameOpen,
+      getInventory
+    } = HooksGame();
+      
     // State to manage the active page
     const [activePage, setActivePage] = useState("home");
 
@@ -60,7 +66,7 @@ export function App() {
             pageContent = <Register />;
             break;
         default:
-            pageContent = <Home workBench={workBench} workbenchOpen={workbenchOpen} closeWorkbench={closeWorkbench} phaserRef={phaserRef} currentScene={currentScene} showGame={showGame} openWorkbench={openWorkbench} changeScene={changeScene} getInventory={getInventory} inventoryList={inventoryList} gameOpen={gameOpen} />;
+            pageContent = <Home workBench={workBench} workbenchOpen={workbenchOpen} closeWorkbench={closeWorkbench} phaserRef={phaserRef} currentScene={currentScene} showGame={showGame} openWorkbench={openWorkbench} changeScene={changeScene} getInventory={getInventory} gameOpen={gameOpen} />;
     }
 
     return (

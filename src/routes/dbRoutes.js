@@ -42,7 +42,7 @@ export const dbSavePlayerItems = function(playerId, playerSaveId, items, callbac
   console.log('sending: ', sendParams)
   axios.post(`/api/players/${playerId}/player_items`, sendParams)
   .then((response) => {
-    console.log('got', response.data)
+    //console.log('got', response.data)
     //callback(response.data);
   })
   .catch((error) => {

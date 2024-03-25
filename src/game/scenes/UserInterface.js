@@ -94,7 +94,9 @@ export class UserInterface extends Scene {
 
 export function triggerWorkbench(sprite, tile) {
   EventBus.emit("workbenchText", "Press E to Open Workbench");
-  if (this.e.isDown) {
+  //**Important:  switch this to JustDown, so that we don't spam the eventbus with touch-flag - each of which triggers another save */
+  if (Phaser.Input.Keyboard.JustDown(this.e)) {
+  //if (this.e.isDown) {
     // this.changeScene()
     EventBus.emit("touch-flag", {tile: tile, hint: `Workbench hint: ${ this.sceneName }`});  //this is an example of how to set the hint when you open the workbench!
   }
