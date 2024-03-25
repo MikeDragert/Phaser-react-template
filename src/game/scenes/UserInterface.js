@@ -28,8 +28,6 @@ export class UserInterface extends Scene {
         console.log("DATA: ", data);
         this.textBox.setVisible(true);
         this.textBox.start(data, 20);
-
-        console.log("MESSAGE COUNT:", message_count);
       }
     });
 
@@ -83,7 +81,6 @@ export function playMessage(sprite, flag, scene = this) {
   const message = flag.data.list.message[0].value;
   if (message != null && message_count == 0) {
     message_count = 1;
-    console.log("MESAGE YAH DOLT: ", message);
     EventBus.emit("miscText", message);
   }
   return false;
