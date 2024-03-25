@@ -13,7 +13,7 @@ export class ProgressTracker {
       items: items,
     };
   }
-  
+
   died = false;
   // updates score
   updateScore(score) {
@@ -25,13 +25,12 @@ export class ProgressTracker {
   updatePosition(sprite) {
     let position = { x: sprite.x, y: sprite.y };
     this.progressData.spritePosition = position;
-    console.log("IN TRACKER Position", this.progressData.spritePosition);
     return false;
   }
 
   // adds items to item array
   updateItems(item) {
-    this.progressData.items.push({ idex: item.index, x: item.x, y: item.y });
+    this.progressData.items.push({ uniqueItemName: item.name, item: item });
     console.log("IN TRACKER Items", this.progressData.items);
     return false;
   }
@@ -44,11 +43,11 @@ export class ProgressTracker {
   //   },
   //   this
   // );
-  collectCoins(sprite, tile, layer) {
-    layer.removeTileAt(tile.x, tile.y);
+
+  collectCoins(player, coin) {
+    coin.destroy();
     this.updateScore(this.progressData.score + 1);
-    this.updateItems(tile);
-    EventBus.emit("scoreUpdate", this.progressData.score);
+    this.updateItems(coin);
     this.saveProgress(null);
     return false;
   }
@@ -60,7 +59,7 @@ export class ProgressTracker {
   resetProgress() {
     this.progressData = {
       score: 0,
-      spritePosition: { x: 300, y: 5700 },
+      spritePosition: { x: 36, y: 828 },
       items: [],
     };
     this.saveProgress();
@@ -84,7 +83,6 @@ export class ProgressTracker {
       `progress_${this.level}`,
       JSON.stringify(this.progressData)
     );
-    console.log("--------PROGRESS SAVED----------------");
   }
   // loads progress from local store/db call :
   // this.progressData = this.progressTracker.loadProgress();
@@ -102,26 +100,13 @@ export class ProgressTracker {
     return this.progressData;
   }
 
-  // removes all items in the item layer from a given layer call like:
-  // this.progressTracker.removeItems(coins);
-  removeItems(layer) {
-    if (this.progressData.items) {
-      for (let item of this.progressData.items) {
-        layer.removeTileAt(item.x, item.y);
-      }
-    }
-  }
-
-  
-
-  die() {
-    // this.scene.restart();
+  die(player) {
     if (!this.died) {
       this.died = true;
-
+      
       setTimeout(() => {
-        this.player.visible = false;
-        this.player.body.moves = false;
+        player.visible = false;
+        player.body.moves = false;
         EventBus.emit(
           "miscText",
           "You Died Press R To Restart from Checkpoint"
@@ -134,7 +119,6 @@ export class ProgressTracker {
     level.scene.restart();
     level.player.visible = true;
     level.player.body.moves = true;
-    EventBus.emit("miscText", "");
   }
 }
 

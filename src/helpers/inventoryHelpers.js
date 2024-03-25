@@ -33,7 +33,8 @@ export const inventoryHelpers = () => {
 
   const itemMap = {
     //tileNumber : {name: itemName, type: itemType}
-    158: {name:'Coin', type: ITEMTYPES.COIN}
+    // 158: {name:'Coin', type: ITEMTYPES.COIN}
+    "coin": ITEMTYPES.COIN,
   }
 
   const inventoryReducer = (state, action) => {
@@ -118,19 +119,23 @@ export const inventoryHelpers = () => {
     addFullItemToInventory(newItem);
   }
 
-  const generateItem = function(sceneItem) {
-    return {
-      player_id: undefined, 
-      item_id: undefined,
-      player_save_id: undefined,
-      container_item_id: 0,
-      location_x: sceneItem.x,
-      location_y: sceneItem.y,
-      map_id: sceneItem.sceneName,
-      item_name: itemMap[sceneItem.index].name,
-      item_type: itemMap[sceneItem.index].type,
-    }
+const generateItem = function(sceneItem) {
+  let name = sceneItem.item.name.split("-")[0];
+
+  return {
+    player_id: undefined, 
+    item_id: undefined,
+    save_id: undefined,
+    container_item_id: 0,
+    location_x: sceneItem.item.x,
+    location_y: sceneItem.item.y,
+    map_id: sceneItem.sceneName,
+    unique_item_name: sceneItem.item.name,
+    item_name: name,
+    item_type: itemMap[name],
+    has_obtained: true
   }
+}
 
   //save all given items 
   const loadPlayerInventory = function(playerItemsList, itemsList) {

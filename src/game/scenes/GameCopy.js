@@ -39,7 +39,7 @@ export class Game extends Scene {
     this.cursors = this.input.keyboard.createCursorKeys();
 
     this.anims.create({
-      key: "player-walk",
+      key: "player_move",
       framreate: 30,
       frames: this.anims.generateFrameNames("NinjaCat", {
         start: 1,
@@ -92,7 +92,7 @@ export class Game extends Scene {
       if (onFloor) {
         player.setOffset(133, 20);
         player.body.setVelocityX(-500);
-        player.anims.play("player-walk", true);
+        player.anims.play("player_move", true);
         player.anims.msPerFrame = 100;
         player.setFlipX(true);
       } else {
@@ -104,7 +104,7 @@ export class Game extends Scene {
       if (onFloor) {
         player.body.setVelocityX(500);
         player.setOffset(40, 20);
-        player.anims.play("player-walk", true);
+        player.anims.play("player_move", true);
         player.anims.msPerFrame = 100;
         player.setFlipX(false);
       } else {

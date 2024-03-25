@@ -24,28 +24,55 @@ export class Preloader extends Scene {
 
   preload() {
     //  Load the assets for the game - Replace with your own assets
-    // this.load.scenePlugin('rexuiplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js', 'rexUI', 'rexUI');
 
     this.load.setPath("assets");
+
+    // this.load.image("star", "star.png");
+
+    // this.load.image("ground", "ground/spritesheet_ground.png");
+    // this.load.image("items", "items/spritesheet_items.png");
+    // this.load.image("tutorial_flag", "items/tutorial_flag.png");
+    // this.load.image("hud", "tiles/spritesheet_tiles.png");
+    // this.load.image("tiles", "tiles/spritesheet_tiles.png");
+    // this.load.image("checkpoints", "items/spritesheet_items_large.png");
+    // this.load.image("large_tiles", "tiles/spritesheet_tiles_large.png");
     this.load.image("logo", "logo.png");
-    this.load.image("star", "star.png");
     this.load.image("sky", "skies/sky.png");
-    this.load.atlas(
-      "NinjaCat",
-      "sprites/JsonArrayCat.png",
-      "sprites/JsonArrayCat.json",
-      { frameWidth: 20, frameHeight: 48 }
+    this.load.image("tutorial_plaque", "items/tile_0086.png");
+    this.load.image("tilemap_packed", "tiles/tilemap_packed.png");
+    this.load.image("sand_packed", "tiles/sand_packed.png");
+    this.load.image("stone_packed", "tiles/stone_packed.png");
+    this.load.image(
+      "tilemap_characters_packed",
+      "sprites/tilemap-characters_packed.png"
     );
 
-    this.load.image("ground", "ground/spritesheet_ground.png");
-    this.load.image("items", "items/spritesheet_items.png")
-    this.load.image("tutorial_flag", "items/tutorial_flag.png")
-    this.load.image("hud", "tiles/spritesheet_tiles.png");
-    this.load.image("tiles", "tiles/spritesheet_tiles.png");
-    this.load.image("checkpoints", "items/spritesheet_items_large.png");
-    this.load.image("large_tiles", "tiles/spritesheet_tiles_large.png");
+    this.load.atlas(
+      "spinning_coin",
+      "sprites/spinning_coin.png",
+      "sprites/spinning_coin.json"
+    );
+    // this.load.atlas(
+    //   "NinjaCat",
+    //   "sprites/JsonArrayCat.png",
+    //   "sprites/JsonArrayCat.json",
+    //   { frameWidth: 20, frameHeight: 48 }
+    // );
+    this.load.atlas(
+      "lilGreenGuy",
+      "sprites/lilGreenGuy.png",
+      "sprites/lilGreenGuy.json",
+      { frameWidth: 24, frameHeight: 24 }
+    );
+
+    this.load.image(
+      "nextPage",
+      "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/assets/images/arrow-down-left.png"
+    );
+
     this.load.tilemapTiledJSON("tilemap", "maps/FirstAttempt.json");
-    this.load.tilemapTiledJSON("tutorial", "maps/tutorial.json");
+    this.load.tilemapTiledJSON("newTutorial", "maps/newTutorial.json");
+    // this.load.tilemapTiledJSON("tutorial", "maps/tutorial.json");
   }
 
   create() {
@@ -54,39 +81,52 @@ export class Preloader extends Scene {
 
     //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
     this.anims.create({
-      key: "player-walk",
+      key: "player_move",
       framreate: 30,
-      frames: this.anims.generateFrameNames("NinjaCat", {
-        start: 1,
-        end: 8,
-        prefix: "NinjaCat_walk_0",
+      frames: this.anims.generateFrameNames("lilGreenGuy", {
+        start: 0,
+        end: 1,
+        prefix: "tile_000",
         suffix: ".png",
       }),
       repeat: -1,
     });
 
     this.anims.create({
-      key: "player-idle",
-      framreate: 10,
-      frames: this.anims.generateFrameNames("NinjaCat", {
+      key: "spinning_coin",
+      framreate: 30,
+      frames: this.anims.generateFrameNames("spinning_coin", {
         start: 1,
         end: 2,
-        prefix: "NinjaCat_idle_0",
+        prefix: "tile_015",
         suffix: ".png",
       }),
       repeat: -1,
     });
 
-    this.anims.create({
-      key: "player-jump",
-      framrate: 30,
-      frames: this.anims.generateFrameNames("NinjaCat", {
-        start: 1,
-        end: 6,
-        prefix: "NinjaCat_jump_0",
-        suffix: ".png",
-      }),
-    });
+    // this.anims.create({
+    //   key: "player-idle",
+    //   framreate: 10,
+    //   frames: this.anims.generateFrameNames("NinjaCat", {
+    //     start: 1,
+    //     end: 2,
+    //     prefix: "NinjaCat_idle_0",
+    //     suffix: ".png",
+    //   }),
+    //   repeat: -1,
+
+    // });
+
+    // this.anims.create({
+    //   key: "player-jump",
+    //   framrate: 30,
+    //   frames: this.anims.generateFrameNames("NinjaCat", {
+    //     start: 1,
+    //     end: 6,
+    //     prefix: "NinjaCat_jump_0",
+    //     suffix: ".png",
+    //   }),
+    // });
 
     this.scene.start("MainMenu");
   }

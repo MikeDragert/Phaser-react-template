@@ -26,6 +26,15 @@ export class Player extends Scene {
     }
   }
 
+
+  inventory = [];
+
+  sendNewItemMessage = function(item) {
+    ///.sceneName needs to be set ..is it?
+    console.log("ITEM IN PLAYER: ", item);
+    EventBus.emit('add-inventory-item', {sceneName: this.sceneName, item: item });
+  }
+
   //anything that has to be cleared upon returning from the workbench should go here
   clearWorkbenchProperties() {
     this.jumpValues.power = 0;
@@ -56,13 +65,13 @@ export class Player extends Scene {
   //these values can be manipulated to adjust jump behaviour
   jumpConfig = {
     maxJumps: 2,
-    baseJumpAmount: 400,
-    baseJumpAountIncreasePerAccum: 32,
-    jumpPowerMultiplier: 5,
-    accumulatorDelay: 6,
-    maxAccumulatorCount: 20,
-    jumpDelay: 10,
-    maxJumpingTimingCount: 50
+    baseJumpAmount: 50,
+    baseJumpAountIncreasePerAccum: 20,
+    jumpPowerMultiplier: 2,
+    accumulatorDelay: 0,
+    maxAccumulatorCount: 10,
+    jumpDelay: 0,
+    maxJumpingTimingCount: 20
   }
 
   //values used in the jump logic
@@ -152,8 +161,8 @@ export class Player extends Scene {
     if (this.executePlayerJump()) {
       if (this.beginJump()) {
         this.jumpValues.count++
-        player.anims.play("player-jump", true);
-        player.anims.msPerFrame = 30;
+        player.anims.play("player-move", true);
+        player.anims.msPerFrame = 100;
         this.jumpValues.savedJumpAmount = this.jumpValues.initialJumpAmount;
         player.body.velocity.y = -this.jumpValues.savedJumpAmount;
         this.disableJump();
@@ -185,29 +194,29 @@ export class Player extends Scene {
     if (left) {
       
       if (onFloor) {
-        player.setOffset(133, 20);
-        player.body.setVelocityX(-1000);
-        player.anims.play("player-walk", true);
+        // player.setOffset(133, 20);
+        player.body.setVelocityX(-200);
+        player.anims.play("player_move", true);
         player.anims.msPerFrame = 100;
-        player.setFlipX(true);
-        this.fixPlayerOffset(true);
+        player.setFlipX(false);
+        // this.fixPlayerOffset(true);
       } else {
-        player.body.velocity.x -= 20;
+        player.body.velocity.x -= 10;
       }
     } else if (right) {
       if (onFloor) {
-        player.body.setVelocityX(1000);
-        player.setOffset(40, 20);
-        player.anims.play("player-walk", true);
+        player.body.setVelocityX(200);
+        // player.setOffset(40, 20);
+        player.anims.play("player_move", true);
         player.anims.msPerFrame = 100;
-        player.setFlipX(false);
-        this.fixPlayerOffset(false);
+        player.setFlipX(true);
+        // this.fixPlayerOffset(false);
       } else {
-        player.body.velocity.x += 20;
+        player.body.velocity.x += 10;
       }
     } else {
       if (onFloor) {
-        player.anims.play("player-idle", true);
+        player.anims.stop("player_move", true);;
         player.anims.msPerFrame = 500;
         player.body.setVelocityX(0);
       }
