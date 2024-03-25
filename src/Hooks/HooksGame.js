@@ -18,7 +18,7 @@ import {
 } from "../helpers/inventoryHelpers.js";
 import { EventBus } from "../game/EventBus";
 import { Player } from "../game/scenes/Player.js";
-import { dbGetLastestPlayerSave, dbGetPlayerItems, dbGetHighscores, dbGetPlayerAchievements, dbGetAchievements, dbGetPlayerAchievements } from '../routes/dbRoutes.js'
+import { dbGetLastestPlayerSave, dbGetPlayerItems, dbGetHighscores, dbGetPlayerAchievements, dbGetAchievements, dbGetPlayerAchievements, dbLogin, dbRegister } from '../routes/dbRoutes.js'
 
 
 //mocks
@@ -53,6 +53,56 @@ export const HooksGame = () => {
       inventoryReducer,
       initialInventoryState
   );
+
+  // Login && Register State and Logic
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [error, setError] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isRegistered, setIsRegistered] = useState(false);
+  const [isEmailChecked, setIsEmailChecked] = useState(false);
+  const [emailExists, setEmailExists] = useState(false);
+  const [usernameExists, setUsernameExists] = useState(false);
+
+  const handleLogin = () => {
+    dbLogin(username, password, (data) => {
+        if (data.error) {
+            setError(data.error);
+        } else {
+            console.log('Login successful', data);
+            setIsLoggedIn(true);
+        }
+    });
+};
+
+const handleCheckEmail = () => {
+    dbCheckEmailExists(email, (data) => {
+      setIsEmailChecked(true);
+      setEmailExists(data.exists);
+    });
+  };
+
+  const handleRegister = () => {
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    if (emailExists) {
+      setError('Email already exists');
+      return;
+    }
+
+    dbRegister(username, email, password, (data) => {
+      if (data.error) {
+        setError(data.error);
+      } else {
+        console.log('Registration successful:', data);
+        setIsRegistered(true);
+      }
+    });
+  };
 
   const moveCodeObjectJumper = function (codeObject, fromName, toName) {
       return moveCodeObject(codeObject, fromName, toName);
@@ -337,5 +387,5 @@ export const HooksGame = () => {
 
   let gameOpen = !workbenchOpen;
 
-  return { workBench, workbenchOpen, closeWorkbench, phaserRef, currentScene, showGame, openWorkbench, changeScene, getInventory, inventoryList, gameOpen, highscores, allAchievements, playerAchievements};
+  return { workBench, workbenchOpen, closeWorkbench, phaserRef, currentScene, showGame, openWorkbench, changeScene, getInventory, inventoryList, gameOpen, highscores, allAchievements, playerAchievements, handleLogin, handleRegister, setUsername, setPassword, isLoggedIn, isRegistered, handleCheckEmail };
 };
