@@ -37,15 +37,21 @@ export class UserInterface extends Scene {
     });
 
     this.scoreText = this.add.text(30, 30, "0", {
-      backgroundColor: null,
       fontFamily: "Quicksand",
       fontSize: "48px",
-      color: "#FFEB09",
-      fontStyle: "italic",
-      stroke: "#0A0A0A",
-      strokeThickness: 7,
-      shadow: { color: "#FF0B0B", fill: true, offsetX: 2, offsetY: 2 },
-      padding: { left: 10, right: 10, top: 10, bottom: 10 },
+      color: "#F8E71C",
+      fontStyle: "normal",
+      stroke: "#000000",
+      strokeThickness: 12,
+      shadow: {
+        offsetX: 2,
+        offsetY: 2,
+        color: "#FF0000",
+        fill: true,
+        blur: 2,
+        stroke: true,
+      },
+      padding: { left: null },
     });
 
     this.scoreText.setScrollFactor(0);
