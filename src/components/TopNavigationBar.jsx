@@ -1,33 +1,40 @@
 import React from "react";
 //import "./styles/TopNavigationBar.css";
 
-const TopNavigationBar = () => {
+const TopNavigationBar = ({ isLoggedIn, setActivePage }) => {
+
     return (
         <nav className="top-navigation-bar">
             <span className="site-title">Welcome to Labber!</span>
             <div className="nav-section">
                 <ul>
                     <li>
-                        <a href="/">Home</a>
+                    <div onClick={()=>setActivePage("home")}>Home</div>
                     </li>
                     <li>
-                        <a href="/highscores">Highscores</a>
+                    <div onClick={()=>setActivePage('highscores')}>Highscores</div>
                     </li>
                     <li>
-                        <a href="/achievements">Achievements</a>
+                        <div onClick={()=>setActivePage("achievements")}>Achievements</div>
                     </li>
                 </ul>
             </div>
-            <div className="login-regsiter-links">
-                <ul>
-                    <li>
-                        <a href="/login">Login</a>
-                    </li>
-                    <li>
-                        <a href="/register">Register</a>
-                    </li>
-                </ul>
-            </div>
+            {!isLoggedIn ? (
+                <div className="login-regsiter-links">
+                    <ul>
+                        <li>
+                        <div onClick={()=>setActivePage("login")}>Login</div>
+                        </li>
+                        <li>
+                        <div onClick={()=>setActivePage("register")}>Register</div>
+                        </li>
+                    </ul>
+                </div>
+            ) : (
+                <div className="logout-link">
+                    <div onClick={()=>setActivePage("logout")}>Logout</div>
+                </div>
+            )}
         </nav>
     );
 };

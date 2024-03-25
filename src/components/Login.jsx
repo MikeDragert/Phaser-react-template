@@ -1,12 +1,31 @@
 import React from 'react';
 
-const Login = () => {
+const Login = ({handleLogin, setUsername, setPassword, isLoggedIn}) => {
     return (
         <div>
-            <h1>Login Page</h1>
-            {/* Add login form and logic here */}
+          {!isLoggedIn ? (
+            <div>
+              <h2>Login</h2>
+              <div>
+                <label>Username:</label>
+                <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+              </div>
+              <div>
+                <label>Password:</label>
+                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+              </div>
+              <div>
+                <button onClick={handleLogin}>Login</button>
+              </div>
+              {error && <div style={{ color: 'red' }}>{error}</div>}
+            </div>
+          ) : (
+            <div>
+              <h2>Welcome, {username}!</h2>
+            </div>
+          )}
         </div>
-    );
-};
+      );
+    }
 
 export default Login;
