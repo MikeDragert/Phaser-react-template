@@ -84,6 +84,7 @@ export class ProgressTracker {
       JSON.stringify(this.progressData)
     );
   }
+  
   // loads progress from local store/db call :
   // this.progressData = this.progressTracker.loadProgress();
   // const position = this.progressData.spritePosition;

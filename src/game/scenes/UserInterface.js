@@ -22,7 +22,7 @@ export class UserInterface extends Scene {
     }).setVisible(false);
 
     this.scoreText = this.add.text(30, 30, "0", {
-      backgroundColor: "FFFFFF",
+      backgroundColor: null,
       fontFamily: "Quicksand",
       fontSize: "48px",
       color: "#FFEB09",
@@ -41,18 +41,17 @@ export class UserInterface extends Scene {
       }
     });
 
-    EventBus.on("scoreUpdate", (data = "0") => {
-      if (data > 0) {
+    this.scoreListener = EventBus.on("scoreUpdate", (data) => {
+      if (data > 0 && data != null) {
+        console.log("SCORE DATA: ", data);
         this.scoreText.setText(`${data}`);
       }
     });
 
     this.scoreText.setScrollFactor(0);
+   
   }
 
-  destroy() {
-    this.events.off("miscText", this.miscTextListener);
-  }
 }
 
 export function triggerWorkbench(sprite, tile) {

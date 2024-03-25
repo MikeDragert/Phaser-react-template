@@ -26,16 +26,7 @@ export class Preloader extends Scene {
     //  Load the assets for the game - Replace with your own assets
 
     this.load.setPath("assets");
-
-    // this.load.image("star", "star.png");
-
-    // this.load.image("ground", "ground/spritesheet_ground.png");
-    // this.load.image("items", "items/spritesheet_items.png");
-    // this.load.image("tutorial_flag", "items/tutorial_flag.png");
-    // this.load.image("hud", "tiles/spritesheet_tiles.png");
-    // this.load.image("tiles", "tiles/spritesheet_tiles.png");
-    // this.load.image("checkpoints", "items/spritesheet_items_large.png");
-    // this.load.image("large_tiles", "tiles/spritesheet_tiles_large.png");
+    // Images
     this.load.image("logo", "logo.png");
     this.load.image("sky", "skies/sky.png");
     this.load.image("tutorial_plaque", "items/tile_0086.png");
@@ -46,18 +37,17 @@ export class Preloader extends Scene {
       "tilemap_characters_packed",
       "sprites/tilemap-characters_packed.png"
     );
-
+    this.load.image(
+      "nextPage",
+      "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/assets/images/arrow-down-left.png"
+    );
+    
+    // Sprite Atlas'
     this.load.atlas(
       "spinning_coin",
       "sprites/spinning_coin.png",
       "sprites/spinning_coin.json"
     );
-    // this.load.atlas(
-    //   "NinjaCat",
-    //   "sprites/JsonArrayCat.png",
-    //   "sprites/JsonArrayCat.json",
-    //   { frameWidth: 20, frameHeight: 48 }
-    // );
     this.load.atlas(
       "lilGreenGuy",
       "sprites/lilGreenGuy.png",
@@ -65,10 +55,6 @@ export class Preloader extends Scene {
       { frameWidth: 24, frameHeight: 24 }
     );
 
-    this.load.image(
-      "nextPage",
-      "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/assets/images/arrow-down-left.png"
-    );
 
     this.load.tilemapTiledJSON("tilemap", "maps/FirstAttempt.json");
     this.load.tilemapTiledJSON("newTutorial", "maps/newTutorial.json");
@@ -103,30 +89,6 @@ export class Preloader extends Scene {
       }),
       repeat: -1,
     });
-
-    // this.anims.create({
-    //   key: "player-idle",
-    //   framreate: 10,
-    //   frames: this.anims.generateFrameNames("NinjaCat", {
-    //     start: 1,
-    //     end: 2,
-    //     prefix: "NinjaCat_idle_0",
-    //     suffix: ".png",
-    //   }),
-    //   repeat: -1,
-
-    // });
-
-    // this.anims.create({
-    //   key: "player-jump",
-    //   framrate: 30,
-    //   frames: this.anims.generateFrameNames("NinjaCat", {
-    //     start: 1,
-    //     end: 6,
-    //     prefix: "NinjaCat_jump_0",
-    //     suffix: ".png",
-    //   }),
-    // });
 
     this.scene.start("MainMenu");
   }

@@ -9,7 +9,7 @@ export class Tutorial extends Player {
   }
 
   changeScene() {
-    this.scene.start("Game");
+    this.scene.start("GameOver");
     this.scene.stop("UserInterface");
   }
 
@@ -22,7 +22,6 @@ export class Tutorial extends Player {
 
     super.create();
 
-    this.scene.launch("UserInterface");
     this.progressTracker = new ProgressTracker(
       0,
       { x: 36, y: 828 },
@@ -38,9 +37,8 @@ export class Tutorial extends Player {
     // create player
     this.player = this.physics.add
       .sprite(position.x, position.y, "lilGreenGuy")
-      .setScale(2)
+      .setScale(this._PLAYERDEFAULTSCALE)
       .setDepth(1);
-
 
     this.player.setBounce(0.2);
     this.player.body.setSize(15, 18);
@@ -108,7 +106,9 @@ export class Tutorial extends Player {
     coinObjects.forEach((obj) => {
       const coinId = `coin-tutorial-${coinIdCounter++}`;
 
-      if (this.progressData.items.some((item) => item.uniqueItemName === coinId)) {
+      if (
+        this.progressData.items.some((item) => item.uniqueItemName === coinId)
+      ) {
         return;
       }
 
@@ -172,15 +172,6 @@ export class Tutorial extends Player {
       this
     );
 
-    // coins.setTileIndexCallback(
-    //   158,
-    //   (sprite = null, tile, layer = coins) => {
-    //     this.progressTracker.collectCoins(sprite, tile, layer);
-    //
-    //   },
-    //   this
-    // );
-
     this.one = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
     this.e = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
     this.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
@@ -189,12 +180,13 @@ export class Tutorial extends Player {
     EventBus.emit("current-scene-ready", this);
     EventBus.emit("give-me-inventory", this.sceneName);
 
+    this.scene.launch("UserInterface");
   }
 
   update() {
     this.checkPlayerSize();
 
-    let score = this.progressTracker.progressData.score;
+    let score = this.progressTracker.progressData.score || 0;
     EventBus.emit("scoreUpdate", score);
 
     if (Phaser.Input.Keyboard.JustDown(this.s)) {

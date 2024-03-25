@@ -15,7 +15,8 @@ export class Game extends Player {
 
   create() {
     super.create();
-    this.scene.launch("UserInterface");
+
+    // this.scene.launch("UserInterface");
     this.progressTracker = new ProgressTracker(
       0,
       { x: 300, y: 5900 },
@@ -27,7 +28,10 @@ export class Game extends Player {
 
     this.add.image(400, 300, "sky").setScale(20);
 
-    this.player = this.physics.add.sprite(position.x, position.y, "NinjaCat").setScale(this._PLAYERDEFAULTSCALE).setDepth(1);
+    this.player = this.physics.add
+      .sprite(position.x, position.y, "NinjaCat")
+      .setScale(this._PLAYERDEFAULTSCALE)
+      .setDepth(1);
     this.player.setBounce(0.2);
     this.player.body.setSize(80, 190);
     this.player.setOffset(40, 20);
@@ -53,14 +57,17 @@ export class Game extends Player {
     this.physics.add.overlap(this.player, coins);
 
     this.cameras.main.setBounds(0, 0, ground.width, ground.height);
-    this.cameras.main.setZoom(0.5, 0.5)
-    this.cameras.main.startFollow(this.player, false, 1, 1, this._PLAYERWIDTHADJUST/2,0);
-
-    items.setTileIndexCallback(
-      [145, 155, 154, 138],
-      triggerWorkbench,
-      this
+    this.cameras.main.setZoom(0.5, 0.5);
+    this.cameras.main.startFollow(
+      this.player,
+      false,
+      1,
+      1,
+      this._PLAYERWIDTHADJUST / 2,
+      0
     );
+
+    items.setTileIndexCallback([145, 155, 154, 138], triggerWorkbench, this);
 
     items.setTileIndexCallback(
       [145, 155, 154, 138],
@@ -90,10 +97,10 @@ export class Game extends Player {
 
   update() {
     let score = this.progressTracker.progressData.score;
-    EventBus.emit("scoreUpdate", score)
+    EventBus.emit("scoreUpdate", score);
 
     if (Phaser.Input.Keyboard.JustDown(this.s)) {
-      EventBus.emit('clear-inventory', this.sceneName);
+      EventBus.emit("clear-inventory", this.sceneName);
       this.progressTracker.resetProgress();
     }
 

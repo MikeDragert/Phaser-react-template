@@ -5,7 +5,7 @@ import { Scene } from "phaser";
 export class Player extends Scene {
   constructor(sceneName) {
     super(sceneName);
-    this.sceneName = sceneName; 
+    this.sceneName = sceneName;
   }
 
   init() {
@@ -13,34 +13,35 @@ export class Player extends Scene {
   }
 
   _PLAYERWIDTHADJUST = 120;
-  _PLAYERDEFAULTSCALE =  2;
+  _PLAYERDEFAULTSCALE = 2;
 
-
-
-  fixPlayerOffset = function(currentDirectionLeft) {
+  fixPlayerOffset = function (currentDirectionLeft) {
     if (this.lastDirectionLeft !== currentDirectionLeft) {
-      let offset = currentDirectionLeft ?  -this._PLAYERWIDTHADJUST : this._PLAYERWIDTHADJUST;
-      this.cameras.main.startFollow(this.player, false, 1, 1, offset/2,0);
-      this.player.setPosition(this.player.x + offset, this.player.y)
+      let offset = currentDirectionLeft
+        ? -this._PLAYERWIDTHADJUST
+        : this._PLAYERWIDTHADJUST;
+      this.cameras.main.startFollow(this.player, false, 1, 1, offset / 2, 0);
+      this.player.setPosition(this.player.x + offset, this.player.y);
       this.lastDirectionLeft = currentDirectionLeft;
     }
-  }
-
+  };
 
   inventory = [];
 
-  sendNewItemMessage = function(item) {
+  sendNewItemMessage = function (item) {
     ///.sceneName needs to be set ..is it?
     console.log("ITEM IN PLAYER: ", item);
-    EventBus.emit('add-inventory-item', {sceneName: this.sceneName, item: item });
-  }
+    EventBus.emit("add-inventory-item", {
+      sceneName: this.sceneName,
+      item: item,
+    });
+  };
 
   //anything that has to be cleared upon returning from the workbench should go here
   clearWorkbenchProperties() {
     this.jumpValues.power = 0;
     this.setPlayerSize(1);
     this.passKey = undefined;
-
   }
 
   create() {
@@ -53,13 +54,14 @@ export class Player extends Scene {
 
   checkPlayerSize() {
     if (this.lastPlayerSizeMultiplier !== this.playerSizeMultiplier) {
-      this.player.setScale(this._PLAYERDEFAULTSCALE * this.playerSizeMultiplier);
-      this.lastPlayerSizeMultiplier =  this.playerSizeMultiplier;
+      this.player.setScale(
+        this._PLAYERDEFAULTSCALE * this.playerSizeMultiplier
+      );
+      this.lastPlayerSizeMultiplier = this.playerSizeMultiplier;
     }
   }
 
-
-  lastDirectionLeft = false
+  lastDirectionLeft = false;
   //*******************************************************/
   //********** start of jumping code **********************/
   //these values can be manipulated to adjust jump behaviour
@@ -67,12 +69,12 @@ export class Player extends Scene {
     maxJumps: 2,
     baseJumpAmount: 50,
     baseJumpAountIncreasePerAccum: 20,
-    jumpPowerMultiplier: 2,
+    jumpPowerMultiplier: 1,
     accumulatorDelay: 0,
     maxAccumulatorCount: 10,
     jumpDelay: 0,
-    maxJumpingTimingCount: 20
-  }
+    maxJumpingTimingCount: 20,
+  };
 
   //values used in the jump logic
   jumpValues = {
@@ -81,66 +83,73 @@ export class Player extends Scene {
     jumpingTimingCount: -1,
     initialJumpAmount: 0,
     savedJumpAmount: 0,
-  }
-  
-  addToJumpAmount = function(currentAmount) {
-    currentAmount += this.jumpConfig.baseJumpAountIncreasePerAccum + this.jumpConfig.jumpPowerMultiplier * this.jumpValues.power;
+  };
+
+  addToJumpAmount = function (currentAmount) {
+    currentAmount +=
+      this.jumpConfig.baseJumpAountIncreasePerAccum +
+      this.jumpConfig.jumpPowerMultiplier * this.jumpValues.power;
     return currentAmount;
-  }
+  };
 
-  disableJump = function() {
+  disableJump = function () {
     this.jumpValues.initialJumpAmount = -1;
-  }
+  };
 
-  resetForNextJump = function() {
+  resetForNextJump = function () {
     this.jumpValues.jumpingTimingCount = -1;
     this.jumpValues.initialJumpAmount = 0;
-  }
+  };
 
-  startJump = function() {
+  startJump = function () {
     return (
       (this.cursors.up.isDown || this.cursors.space.isDown) &&
-      (this.jumpValues.initialJumpAmount >= 0) &&
-      (this.jumpValues.count < this.jumpConfig.maxJumps)
+      this.jumpValues.initialJumpAmount >= 0 &&
+      this.jumpValues.count < this.jumpConfig.maxJumps
     );
   };
 
-  executePlayerJump = function() {
-    return (this.jumpValues.jumpingTimingCount >= this.jumpConfig.jumpDelay);
-  }
+  executePlayerJump = function () {
+    return this.jumpValues.jumpingTimingCount >= this.jumpConfig.jumpDelay;
+  };
 
-  beginJump = function() {
-    return (this.jumpValues.initialJumpAmount >= 0);
-  }
+  beginJump = function () {
+    return this.jumpValues.initialJumpAmount >= 0;
+  };
 
-  continueJump = function() {
-    return (this.jumpValues.jumpingTimingCount < this.jumpConfig.maxJumpingTimingCount);
-  }
-     
-  continueAmountAccumulation = function() {
+  continueJump = function () {
     return (
-      (this.cursors.up.isDown || this.cursors.space.isDown) && 
-      (this.jumpValues.jumpingTimingCount < this.jumpConfig.maxAccumulatorCount));
-  }
+      this.jumpValues.jumpingTimingCount < this.jumpConfig.maxJumpingTimingCount
+    );
+  };
 
-  playerEndedJump = function() {
-    return (!this.cursors.up.isDown && !this.cursors.space.isDown);
-  }  
+  continueAmountAccumulation = function () {
+    return (
+      (this.cursors.up.isDown || this.cursors.space.isDown) &&
+      this.jumpValues.jumpingTimingCount < this.jumpConfig.maxAccumulatorCount
+    );
+  };
 
-  initialJumpAmountNotSet = function() {
-    return (this.jumpValues.initialJumpAmount === 0);
-  }
+  playerEndedJump = function () {
+    return !this.cursors.up.isDown && !this.cursors.space.isDown;
+  };
 
-  newJump = function() {
+  initialJumpAmountNotSet = function () {
+    return this.jumpValues.initialJumpAmount === 0;
+  };
+
+  newJump = function () {
     return this.jumpValues.jumpingTimingCount < 0;
-  }
+  };
 
-  pastAccumulatorDelay = function() {
-    return (this.jumpValues.jumpingTimingCount > this.jumpConfig.accumulatorDelay);
-  }
+  pastAccumulatorDelay = function () {
+    return (
+      this.jumpValues.jumpingTimingCount > this.jumpConfig.accumulatorDelay
+    );
+  };
 
   //*** this is the main jump logic */
-  executeJumpLogic = function() {
+  executeJumpLogic = function () {
     let player = this.player;
     if (this.startJump()) {
       if (this.initialJumpAmountNotSet()) {
@@ -150,17 +159,19 @@ export class Player extends Scene {
         this.jumpValues.jumpingTimingCount = 0;
       }
       if (this.pastAccumulatorDelay()) {
-        this.jumpValues.initialJumpAmount = this.addToJumpAmount(this.jumpValues.initialJumpAmount);
+        this.jumpValues.initialJumpAmount = this.addToJumpAmount(
+          this.jumpValues.initialJumpAmount
+        );
       }
-    } 
+    }
 
-    if ((!this.newJump()) && (this.continueJump())) {
+    if (!this.newJump() && this.continueJump()) {
       this.jumpValues.jumpingTimingCount++;
     }
 
     if (this.executePlayerJump()) {
       if (this.beginJump()) {
-        this.jumpValues.count++
+        this.jumpValues.count++;
         player.anims.play("player-move", true);
         player.anims.msPerFrame = 100;
         this.jumpValues.savedJumpAmount = this.jumpValues.initialJumpAmount;
@@ -169,15 +180,17 @@ export class Player extends Scene {
       }
       if (this.continueJump()) {
         if (this.continueAmountAccumulation()) {
-          this.jumpValues.savedJumpAmount = this.addToJumpAmount(this.jumpValues.savedJumpAmount);
+          this.jumpValues.savedJumpAmount = this.addToJumpAmount(
+            this.jumpValues.savedJumpAmount
+          );
         }
         player.body.velocity.y = -this.jumpValues.savedJumpAmount;
       }
       if (this.playerEndedJump()) {
-        this.resetForNextJump()
+        this.resetForNextJump();
       }
     }
-  }
+  };
   //************ end of jumping code **********************/
   //*******************************************************/
 
@@ -192,38 +205,33 @@ export class Player extends Scene {
     }
 
     if (left) {
-      
       if (onFloor) {
-        // player.setOffset(133, 20);
         player.body.setVelocityX(-200);
         player.anims.play("player_move", true);
         player.anims.msPerFrame = 100;
         player.setFlipX(false);
-        // this.fixPlayerOffset(true);
       } else {
         player.body.velocity.x -= 10;
       }
     } else if (right) {
       if (onFloor) {
         player.body.setVelocityX(200);
-        // player.setOffset(40, 20);
+
         player.anims.play("player_move", true);
         player.anims.msPerFrame = 100;
         player.setFlipX(true);
-        // this.fixPlayerOffset(false);
       } else {
         player.body.velocity.x += 10;
       }
     } else {
       if (onFloor) {
-        player.anims.stop("player_move", true);;
-        player.anims.msPerFrame = 500;
         player.body.setVelocityX(0);
+        player.anims.msPerFrame = 500;
       }
     }
 
-    this.executeJumpLogic()
-    
+    this.executeJumpLogic();
+
     player.body.velocity.x = Phaser.Math.Clamp(
       player.body.velocity.x,
       -10000,
@@ -248,16 +256,19 @@ export class Player extends Scene {
   setPlayerSize(newSize) {
     //we want to reduce the effectiveness of the multiplier by 10
     if (newSize > 1) {
-      this.playerSizeMultiplier = Math.min(2,1 + newSize / 100);
-    } else if ((newSize < 1) && (newSize > 0)) {
+      this.playerSizeMultiplier = Math.min(2, 1 + newSize / 100);
+    } else if (newSize < 1 && newSize > 0) {
       let inverse = 1 / newSize;
-      this.playerSizeMultiplier = Math.max(0.25, 1 - inverse / 100); 
+      this.playerSizeMultiplier = Math.max(0.25, 1 - inverse / 100);
     } else {
       this.playerSizeMultiplier = 1;
     }
-    this.player.setScale(this._PLAYERDEFAULTSCALE * Math.round(this.playerSizeMultiplier*100)/100);
+    this.player.setScale(
+      (this._PLAYERDEFAULTSCALE * Math.round(this.playerSizeMultiplier * 100)) /
+        100
+    );
   }
-  
+
   setPassKey(newPassKey) {
     this.passKey = newPassKey;
   }
@@ -268,29 +279,35 @@ export class Player extends Scene {
 
   //key events stored for app.jsx to consume
   sendKeyEvents = [];
-      
+
   ///send keypress to the event bus (for App.jsx)
   // thhis is done using an array for App.jsx to read because
   // even though this gets called once, we end up with two messages on the event bus 🤷‍♂️
-  sendKeyPressMessage = function(keyCode, isDown) {
-    this.sendKeyEvents.push({keyCode: keyCode, isDown: isDown})
-    EventBus.emit('keyEvent', {scene: this, keyCode: keyCode, isDown: isDown});
-  }
-  
+  sendKeyPressMessage = function (keyCode, isDown) {
+    this.sendKeyEvents.push({ keyCode: keyCode, isDown: isDown });
+    EventBus.emit("keyEvent", {
+      scene: this,
+      keyCode: keyCode,
+      isDown: isDown,
+    });
+  };
+
   inventory = [];
   sendItemPickup = [];
-  
-  sendItemColllectionMessage = function(keyCode, isDown) {
-    this.sendKeyEvents.push({keyCode: keyCode, isDown: isDown})
-    EventBus.emit('keyEvent', {scene: this, keyCode: keyCode, isDown: isDown});
-  }
 
-  sendNewItemMessage = function(item) {
-    const itemWithSceneName = {sceneName: this.sceneName, item: item};
-    this.sendItemPickup.push(itemWithSceneName)
-    EventBus.emit('add-inventory-item', itemWithSceneName);
-  }
+  sendItemColllectionMessage = function (keyCode, isDown) {
+    this.sendKeyEvents.push({ keyCode: keyCode, isDown: isDown });
+    EventBus.emit("keyEvent", {
+      scene: this,
+      keyCode: keyCode,
+      isDown: isDown,
+    });
+  };
 
-
-
+  sendNewItemMessage = function (item) {
+    const itemWithSceneName = { sceneName: this.sceneName, item: item };
+    this.sendItemPickup.push(itemWithSceneName);
+    EventBus.emit("add-inventory-item", itemWithSceneName);
+  };
 }
+
