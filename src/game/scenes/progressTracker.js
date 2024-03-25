@@ -30,7 +30,7 @@ export class ProgressTracker {
 
   // adds items to item array
   updateItems(item) {
-    this.progressData.items.push({ name: item.name, item: item });
+    this.progressData.items.push({ uniqueItemName: item.name, item: item });
     console.log("IN TRACKER Items", this.progressData.items);
     return false;
   }
@@ -43,7 +43,7 @@ export class ProgressTracker {
   //   },
   //   this
   // );
-  
+
   collectCoins(player, coin) {
     coin.destroy();
     this.updateScore(this.progressData.score + 1);

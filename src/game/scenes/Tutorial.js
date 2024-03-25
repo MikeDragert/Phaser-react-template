@@ -107,10 +107,10 @@ export class Tutorial extends Player {
     coinObjects.forEach((obj) => {
       const coinId = `coin-tutorial-${coinIdCounter++}`;
 
-      if (this.progressData.items.some((item) => item.name === coinId)) {
-        console.log("Item Removed");
+      if (this.progressData.items.some((item) => item.uniqueItemName === coinId)) {
         return;
       }
+
       const coin = this.physics.add
         .sprite(obj.x, obj.y, "spinning_coin")
         .setName(coinId);
