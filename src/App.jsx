@@ -35,7 +35,8 @@ import Login from "./components/Login.jsx";
 import Register from "./components/Register.jsx";
 
 export function App() {
-    const { workBench, workbenchOpen, closeWorkbench, phaserRef, currentScene, showGame, openWorkbench, changeScene, getInventory, inventoryList, gameOpen, highscores, allAchievements, playerAchievements } = HooksGame();
+    const { workBench, workbenchOpen, closeWorkbench, phaserRef, currentScene, showGame, openWorkbench, changeScene, getInventory, inventoryList, gameOpen, highscores, allAchievements, playerAchievements, handleLogin, handleRegister, setUsername, setPassword, error, isLoggedIn, isRegistered, handleCheckEmail } = HooksGame();
+
     // State to manage the active page
     const [activePage, setActivePage] = useState("home");
 
@@ -54,10 +55,10 @@ export function App() {
             pageContent = <Achievements allAchievements={allAchievements} playerAchievements={playerAchievements} />;
             break;
         case "login":
-            pageContent = <Login />;
+            pageContent = <Login handleLogin={handleLogin} setUsername={setUsername} setPassword={setPassword} isLoggedIn={isLoggedIn} />;
             break;
         case "register":
-            pageContent = <Register />;
+            pageContent = <Register handleRegister={handleRegister} setUsername={setUsername} setPassword={setPassword} isLoggedIn={isRegistered} handleCheckEmail={handleCheckEmail} />;
             break;
         default:
             pageContent = <Home workBench={workBench} workbenchOpen={workbenchOpen} closeWorkbench={closeWorkbench} phaserRef={phaserRef} currentScene={currentScene} showGame={showGame} openWorkbench={openWorkbench} changeScene={changeScene} getInventory={getInventory} inventoryList={inventoryList} gameOpen={gameOpen} />;
