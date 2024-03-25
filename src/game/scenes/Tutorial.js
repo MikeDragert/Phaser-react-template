@@ -28,12 +28,13 @@ export class Tutorial extends Player {
       [],
       this.sceneName
     );
+    
     this.progressData = this.progressTracker.loadProgress();
 
     const position = this.progressData.spritePosition;
 
     this.add.image(400, 300, "sky").setScale(20);
-    // this._PLAYERDEFAULTSCALE
+  
     // create player
     this.player = this.physics.add
       .sprite(position.x, position.y, "lilGreenGuy")
@@ -62,6 +63,7 @@ export class Tutorial extends Player {
       "stone_packed",
       "stone_packed"
     );
+    const iconSpriteSheet = this.map.addTilesetImage("iconSpriteSheet", "iconSpriteSheet")
 
     // map layers
     const floorLayers = [tilemap_packed, sand_packed, stone_packed];
@@ -77,8 +79,9 @@ export class Tutorial extends Player {
       0,
       0
     );
-
     const workBench = this.map.createLayer("workBench", tilemap_packed, 0, 0);
+    console.log("ICON SHEET", iconSpriteSheet);
+    const codeItems = this.map.createLayer("codeItems", iconSpriteSheet, 0,0)
 
     // Render Object Layers:
     const tutorialObjects =
@@ -133,6 +136,7 @@ export class Tutorial extends Player {
     this.physics.add.overlap(this.player, checkPoints);
     this.physics.add.overlap(this.player, water);
     this.physics.add.overlap(this.player, workBench);
+    this.physics.add.overlap(this.player, codeItems);
 
     this.cameras.main.setBounds(0, 0, ground.width, ground.height);
     this.cameras.main.setZoom(1.5, 1.5);
@@ -171,6 +175,16 @@ export class Tutorial extends Player {
       },
       this
     );
+
+    codeItems.setTileIndexCallback(
+      [410,419,414,413,412,416,418,415],
+      (sprite, tile) => {
+        console.log("CODEITEM: ", tile);
+        this.progressTracker.collectItems(sprite, tile, codeItems)
+        this.sendNewItemMessage(tile);
+      },
+      this
+    )
 
     this.one = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
     this.e = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);

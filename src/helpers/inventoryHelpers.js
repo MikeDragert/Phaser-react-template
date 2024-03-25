@@ -1,5 +1,4 @@
-import React, {useReducer} from 'react';
-
+import React, { useReducer } from "react";
 
 export const ITEMTYPES = {
   ALL: 0,
@@ -8,11 +7,10 @@ export const ITEMTYPES = {
   CODEFUNCTION: 3,
   CODEITEMMAX: 9,
   DUCK: 10,
-  COIN: 11
-}
+  COIN: 11,
+};
 
 export const inventoryHelpers = () => {
-
   const ITEMTYPES = {
     ALL: 0,
     CODENUMBER: 1,
@@ -20,14 +18,14 @@ export const inventoryHelpers = () => {
     CODEFUNCTION: 3,
     CODEITEMMAX: 9,
     DUCK: 10,
-    COIN: 11
-  }
+    COIN: 11,
+  };
 
   const INVENTORYACTION = {
-    ADDITEM: 'addItem',
-    CLEAR: 'clear',
-    LOADLIST: 'loadList'
-  }
+    ADDITEM: "addItem",
+    CLEAR: "clear",
+    LOADLIST: "loadList",
+  };
 
   const initialInventoryState = [];
 
@@ -45,148 +43,169 @@ export const inventoryHelpers = () => {
     "Number_8": ITEMTYPES.CODENUMBER,
     "Number_9": ITEMTYPES.CODENUMBER,
     "Number_10": ITEMTYPES.CODENUMBER,
-  }
+  };
 
   const inventoryReducer = (state, action) => {
-    let newState = [...state]
+    let newState = [...state];
     switch (action.type) {
       case INVENTORYACTION.ADDITEM:
-        newState.push(action.data)
+        newState.push(action.data);
         break;
       case INVENTORYACTION.CLEAR:
         if (action.data.mapId) {
-          newState = newState.filter(item => item.map_id !== action.data.mapId);
+          newState = newState.filter(
+            (item) => item.map_id !== action.data.mapId
+          );
         } else {
           newState = [];
         }
         break;
-      case INVENTORYACTION.LOADLIST: 
+      case INVENTORYACTION.LOADLIST:
         newState = action.data;
-        break
+        break;
       default:
         break;
     }
-    return newState
-  }
+    return newState;
+  };
 
-  const getAllCodeItems = function() {
-    return inventoryList.filter( item => item.item_type < ITEMTYPES.CODEITEMMAX);
-  }
+  const getAllCodeItems = function () {
+    return inventoryList.filter(
+      (item) => item.item_type < ITEMTYPES.CODEITEMMAX
+    );
+  };
 
   //get a list of items in the inventory, as per passed in options
   const getInventory = function (type = ITEMTYPES.ALL) {
     if (type === ITEMTYPES.ALL) {
       return inventoryList;
     }
-    return inventoryList.filter( item => item.item_type === type);
-  }
+    return inventoryList.filter((item) => item.item_type === type);
+  };
 
-  const getInventoryForMap = function(type, mapId) {
+  const getInventoryForMap = function (type, mapId) {
     if (type === ITEMTYPES.ALL) {
-      return inventoryList.filter( item => item.map_id === mapId);
+      return inventoryList.filter((item) => item.map_id === mapId);
     }
-    
-    return inventoryList.filter( item => item.item_type === type && item.map_id === mapId);
-  }
+
+    return inventoryList.filter(
+      (item) => item.item_type === type && item.map_id === mapId
+    );
+  };
 
   //get count of item, as per passed in options
-  const getItemCountByType = function(type) {
-    return inventoryList.filter( item => item.item_type === type).length;
-  } 
+  const getItemCountByType = function (type) {
+    return inventoryList.filter((item) => item.item_type === type).length;
+  };
 
-  const getItemCountById = function(itemId) {
-    return inventoryList.filter( item => item.id === itemId).length;
-  } 
+  const getItemCountById = function (itemId) {
+    return inventoryList.filter((item) => item.id === itemId).length;
+  };
 
-  const getItemCountByName = function(itemName) {
-    return inventoryList.filter( item => item.item_name === itemName).length;
-  } 
+  const getItemCountByName = function (itemName) {
+    return inventoryList.filter((item) => item.item_name === itemName).length;
+  };
 
-  const getItemCountByMap = function(mapId) {
-    return inventoryList.filter( item => item.map_id === mapId).length;
-  } 
+  const getItemCountByMap = function (mapId) {
+    return inventoryList.filter((item) => item.map_id === mapId).length;
+  };
 
   //add item to inventory, update state
-  const addFullItemToInventory = function(fullItem) {
-    return inventoryDispatch({type: INVENTORYACTION.ADDITEM, data: fullItem});
-  }
+  const addFullItemToInventory = function (fullItem) {
+    return inventoryDispatch({ type: INVENTORYACTION.ADDITEM, data: fullItem });
+  };
 
-  const addItemToInventory = function(playerItem, item){
+  const addItemToInventory = function (playerItem, item) {
     if (playerItem.item_id === item.id) {
-      fullItem = {...playerItem};
+      fullItem = { ...playerItem };
       fullItem.item_name = item.name;
       fullItem.item_type = item.type;
-      return inventoryDispatch({type: INVENTORYACTION.ADDITEM, data: fullItem})
+      return inventoryDispatch({
+        type: INVENTORYACTION.ADDITEM,
+        data: fullItem,
+      });
     }
-  }
+  };
 
-  const addItemFromSceneToInventory = function(sceneItem) {
+  const addItemFromSceneToInventory = function (sceneItem) {
     let newItem = generateItem(sceneItem);
     // todo, extra things we should set if they are available
-    // newItem.player_id = 1, 
+    // newItem.player_id = 1,
     // newItem.item_id = 0;
     // newItem.save_id = 0;
     addFullItemToInventory(newItem);
-  }
+  };
 
-const generateItem = function(sceneItem) {
-  let name = sceneItem.item.name.split("-")[0];
+  const generateItem = function (sceneItem) {
+    console.log("ITEM: ", sceneItem);
+    let name = "";
+    let unique_item_name = "";
+    if (sceneItem.item.name === undefined) {
+      name = sceneItem.item.properties.name;
+      unique_item_name = sceneItem.item.properties.name;
+    } else {
+      name = sceneItem.item.name.split("-")[0];
+      unique_item_name = sceneItem.item.name
+    }
 
-  return {
-    player_id: undefined, 
-    item_id: undefined,
-    save_id: undefined,
-    container_item_id: 0,
-    location_x: sceneItem.item.x,
-    location_y: sceneItem.item.y,
-    map_id: sceneItem.sceneName,
-    unique_item_name: sceneItem.item.name,
-    // name must be Number_1 ...
-    item_name: name,
-    item_type: itemMap[name]
-  }
-}
+    console.log("NAME IN GEN ITEM: ", name);
+    console.log("ITEM TYPE: ", itemMap[name]);
+    return {
+      player_id: undefined,
+      item_id: undefined,
+      save_id: undefined,
+      container_item_id: 0,
+      location_x: sceneItem.item.x,
+      location_y: sceneItem.item.y,
+      map_id: sceneItem.sceneName,
+      unique_item_name: unique_item_name,
+      // name must be Number_1 ...
+      item_name: name,
+      item_type: itemMap[name],
+    };
+  };
 
-  //save all given items 
-  const loadPlayerInventory = function(playerItemsList, itemsList) {
-    let fullItemList = Object.values(playerItemsList).map( playerItem => {
+  //save all given items
+  const loadPlayerInventory = function (playerItemsList, itemsList) {
+    let fullItemList = Object.values(playerItemsList).map((playerItem) => {
       if (itemsList[playerItem.item_id]) {
         playerItem.item_name = itemsList[playerItem.item_id].name;
         playerItem.item_type = itemsList[playerItem.item_id].type;
       } else {
-        playerItem.item_name = 'UNKNOWN';
+        playerItem.item_name = "UNKNOWN";
         playerItem.item_type = 0;
       }
-      return playerItem
-    })
-    return inventoryDispatch({type: INVENTORYACTION.LOADLIST, data: fullItemList})
-  }
+      return playerItem;
+    });
+    return inventoryDispatch({
+      type: INVENTORYACTION.LOADLIST,
+      data: fullItemList,
+    });
+  };
 
   //empty the inventory
-  const clearInventory = function() {
-    return inventoryDispatch({type: INVENTORYACTION.CLEAR, data: {}});
-  }
+  const clearInventory = function () {
+    return inventoryDispatch({ type: INVENTORYACTION.CLEAR, data: {} });
+  };
 
-  const clearInventoryForScene = function(mapId) {
-    return inventoryDispatch({type: INVENTORYACTION.CLEAR, data: {mapId} });
-  }
+  const clearInventoryForScene = function (mapId) {
+    return inventoryDispatch({ type: INVENTORYACTION.CLEAR, data: { mapId } });
+  };
 
-  const getInventoryForScene = function(mapId){
-    return inventoryList.filter(item => item.map_id === mapId);
-  }
+  const getInventoryForScene = function (mapId) {
+    return inventoryList.filter((item) => item.map_id === mapId);
+  };
 
   //todo: we will want to use this to push inventory to game on change
   //   need to figure out what the game needs from the inventory list
-  const pushInventory = function(map_id, callback) {
+  const pushInventory = function (map_id, callback) {
     return callback(getInventoryForMap(ITEMTYPES.ALL, map_id));
-  }
-
+  };
 
   const [inventoryList, inventoryDispatch] = useReducer(
     inventoryReducer,
     initialInventoryState
   );
-
 
   return {
     ITEMTYPES,
@@ -205,6 +224,7 @@ const generateItem = function(sceneItem) {
     clearInventory,
     clearInventoryForScene,
     getInventoryForScene,
-    pushInventory
+    pushInventory,
   };
-}
+};
+
