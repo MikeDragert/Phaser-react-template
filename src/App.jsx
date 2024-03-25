@@ -35,7 +35,7 @@ import Login from "./components/Login.jsx";
 import Register from "./components/Register.jsx";
 
 export function App() {
-    const { workBench, workbenchOpen, closeWorkbench, phaserRef, currentScene, showGame, openWorkbench, changeScene, getInventory, inventoryList, gameOpen, highscores, allAchievements, playerAchievements, handleLogin, handleRegister, setUsername, setPassword, error, isLoggedIn, isRegistered, handleCheckEmail } = HooksGame();
+    const { workBench, workbenchOpen, closeWorkbench, phaserRef, currentScene, showGame, openWorkbench, changeScene, getInventory, inventoryList, gameOpen, highscores, allAchievements, playerAchievements, handleLogin, handleRegister, setUsername, setPassword, isLoggedIn, isRegistered, handleCheckEmail } = HooksGame();
 
     // State to manage the active page
     const [activePage, setActivePage] = useState("home");
@@ -49,7 +49,7 @@ export function App() {
     let pageContent;
     switch (activePage) {
         case "highscores":
-            pageContent = <Highscores highscores={highscores}/>;
+            pageContent = <Highscores highscores={highscores} />;
             break;
         case "achievements":
             pageContent = <Achievements allAchievements={allAchievements} playerAchievements={playerAchievements} />;
@@ -67,7 +67,7 @@ export function App() {
     return (
         <div>
             <header>
-                <TopNavigationBar />
+                <TopNavigationBar isLoggedIn={isLoggedIn} />
             </header>
 
             <body>{pageContent}</body>
