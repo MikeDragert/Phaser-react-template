@@ -59,16 +59,16 @@ export const dbSavePlayerItems = function (
         });
 };
 
-// export const dbGetHighscores = function (callback) {
-//     axios
-//         .get(`/api/players/scores`)
-//         .then((response) => {
-//                 callback(response.data);
-//             })
-//             .catch((error) => {
-//                 console.error("Error retrieving achievements:", error);
-//             });
-// };
+export const dbGetHighscores = function (callback) {
+    axios
+        .get(`/api/players/scores`)
+        .then((response) => {
+                callback(response.data);
+            })
+            .catch((error) => {
+                console.error("Error retrieving achievements:", error);
+            });
+};
 
 export const dbGetAchievements = () => {
     return axios.get(`/api/achievements`)

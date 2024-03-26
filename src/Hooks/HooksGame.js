@@ -14,6 +14,7 @@ import {
     dbSavePlayerItems,
     dbGetAchievements,
     dbGetPlayerAchievements,
+    dbGetHighscores,
 } from "../routes/dbRoutes.js";
 
 //mocks
@@ -126,13 +127,13 @@ export const HooksGame = () => {
     // };
 
     //highscores
-    // const [highscores, setHighscores] = useState([]);
+    const [highscores, setHighscores] = useState([]);
 
-    // useEffect(() => {
-    //     dbGetHighscores((data) => {
-    //         setHighscores(data);
-    //     });
-    // }, []);
+    useEffect(() => {
+        dbGetHighscores((data) => {
+            setHighscores(data);
+        });
+    }, []);
 
     //achievements
     const [playerAchievements, setPlayerAchievements] = useState([]);
@@ -406,7 +407,7 @@ export const HooksGame = () => {
         clearInventoryForScene,
         getInventoryForScene,
         getItemCountByType,
-        // highscores,
+        highscores,
         allAchievements,
         playerAchievements,
         // handleLogin,
