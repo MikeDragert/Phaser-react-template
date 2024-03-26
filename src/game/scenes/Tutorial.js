@@ -182,7 +182,7 @@ export class Tutorial extends Player {
     codeItems.setTileIndexCallback(
       [
         424, 410, 420, 418, 417, 423, 411, 422, 412, 413, 416, 419, 414, 415,
-        421, 420, 426, 425, 427
+        421, 420, 426, 425, 427, 428
       ],
       (sprite, tile) => {
         console.log("CODEITEM: ", tile);
