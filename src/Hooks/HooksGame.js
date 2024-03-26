@@ -12,6 +12,8 @@ import {
     dbGetPlayerItems,
     dbCreateNewPlayerSave,
     dbSavePlayerItems,
+    dbGetAchievements,
+    dbGetPlayerAchievements,
 } from "../routes/dbRoutes.js";
 
 //mocks
@@ -74,85 +76,80 @@ export const HooksGame = () => {
     };
 
     // Login && Register State and Logic
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [email, setEmail] = useState("");
-    const [error, setError] = useState(null);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [isRegistered, setIsRegistered] = useState(false);
-    const [isEmailChecked, setIsEmailChecked] = useState(false);
-    const [emailExists, setEmailExists] = useState(false);
-    const [usernameExists, setUsernameExists] = useState(false);
+    // const [username, setUsername] = useState("");
+    // const [password, setPassword] = useState("");
+    // const [email, setEmail] = useState("");
+    // const [error, setError] = useState(null);
+    // const [isLoggedIn, setIsLoggedIn] = useState(false);
+    // const [isRegistered, setIsRegistered] = useState(false);
+    // const [isEmailChecked, setIsEmailChecked] = useState(false);
+    // const [emailExists, setEmailExists] = useState(false);
+    // const [usernameExists, setUsernameExists] = useState(false);
 
-    const handleLogin = () => {
-        dbLogin(username, password, (data) => {
-            if (data.error) {
-                setError(data.error);
-            } else {
-                console.log("Login successful", data);
-                setIsLoggedIn(true);
-            }
-        });
-    };
+    // const handleLogin = () => {
+    //     dbLogin(username, password, (data) => {
+    //         if (data.error) {
+    //             setError(data.error);
+    //         } else {
+    //             console.log("Login successful", data);
+    //             setIsLoggedIn(true);
+    //         }
+    //     });
+    // };
 
-    const handleCheckEmail = () => {
-        dbCheckEmailExists(email, (data) => {
-            setIsEmailChecked(true);
-            setEmailExists(data.exists);
-        });
-    };
+    // const handleCheckEmail = () => {
+    //     dbCheckEmailExists(email, (data) => {
+    //         setIsEmailChecked(true);
+    //         setEmailExists(data.exists);
+    //     });
+    // };
 
-    const handleRegister = () => {
-        if (password !== confirmPassword) {
-            setError("Passwords do not match");
-            return;
-        }
+    // const handleRegister = () => {
+    //     if (password !== confirmPassword) {
+    //         setError("Passwords do not match");
+    //         return;
+    //     }
 
-        if (emailExists) {
-            setError("Email already exists");
-            return;
-        }
+    //     if (emailExists) {
+    //         setError("Email already exists");
+    //         return;
+    //     }
 
-        dbRegister(username, email, password, (data) => {
-            if (data.error) {
-                setError(data.error);
-            } else {
-                console.log("Registration successful:", data);
-                setIsRegistered(true);
-            }
-        });
-    };
+    //     dbRegister(username, email, password, (data) => {
+    //         if (data.error) {
+    //             setError(data.error);
+    //         } else {
+    //             console.log("Registration successful:", data);
+    //             setIsRegistered(true);
+    //         }
+    //     });
+    // };
 
     //highscores
-    const [highscores, setHighscores] = useState([]);
+    // const [highscores, setHighscores] = useState([]);
 
-    useEffect(() => {
-        dbGetHighscores((data) => {
-            setHighscores(data);
-        });
-    }, []);
+    // useEffect(() => {
+    //     dbGetHighscores((data) => {
+    //         setHighscores(data);
+    //     });
+    // }, []);
 
     //achievements
     const [playerAchievements, setPlayerAchievements] = useState([]);
     const [allAchievements, setAllAchievements] = useState([]);
 
+    
     useEffect(() => {
         let playerId = 2;
-        dbGetPlayerAchievements(playerId)
-            .then((data) => {
-                setPlayerAchievements(data);
-            })
-            .catch((error) => {
-                console.error("Error retrieving player achievements:", error);
-            });
-        dbGetAchievements()
-            .then((data) => {
-                setAllAchievements(data);
-            })
-            .catch((error) => {
-                console.error("Error fetching all achievements:", error);
-            });
-    }, []);
+        Promise.all([dbGetPlayerAchievements(playerId), dbGetAchievements()])
+        .then(([playerAchievementsData, allAchievementsData]) => {
+            setPlayerAchievements(playerAchievementsData);
+            setAllAchievements(allAchievementsData);
+        })
+        .catch((error) => {
+            console.error("Error fetching achievements:", error);
+        });
+}, []);
 
     //todo: get out of inventory
     let workBench = new WorkBench(
@@ -409,15 +406,15 @@ export const HooksGame = () => {
         clearInventoryForScene,
         getInventoryForScene,
         getItemCountByType,
-        highscores,
+        // highscores,
         allAchievements,
         playerAchievements,
-        handleLogin,
-        handleRegister,
-        setUsername,
-        setPassword,
-        isLoggedIn,
-        isRegistered,
-        handleCheckEmail,
+        // handleLogin,
+        // handleRegister,
+        // setUsername,
+        // setPassword,
+        // isLoggedIn,
+        // isRegistered,
+        // handleCheckEmail,
     };
 };

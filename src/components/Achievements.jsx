@@ -2,22 +2,17 @@ import React from "react";
 //import "./Achievements.css";
 
 const Achievements = ({ allAchievements, playerAchievements }) => {
-    // const isAchievementObtained = (achievementId) => {
-    //     return playerAchievements.some(
-    //         (achievement) => achievement.achievement_id === achievementId
-    //     );
-    // };
+    const isAchievementObtained = (achievementId) => {
+        return playerAchievements.some(
+            (achievement) => achievement.achievement_id === achievementId
+        );
+    };
 
-const achievements = [ 
-    "Larry"
-]
     return (
         <div>
             <h1>Achievements</h1>
             <ul>
-                <li>
-                    {achievements}
-                {/* {allAchievements.map((achievement) => (
+                {allAchievements.map((achievement) => (
                     <li
                         key={achievement.id}
                         style={{
@@ -26,9 +21,9 @@ const achievements = [
                                 : "grey",
                         }}
                     >
-                        {achievement.name} */}
+                        {achievement.name} - {achievement.description}
                     </li>
-                {/* ))} */}
+                ))}
             </ul>
         </div>
     );

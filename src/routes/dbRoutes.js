@@ -59,82 +59,68 @@ export const dbSavePlayerItems = function (
         });
 };
 
-export const dbGetHighscores = function (callback) {
-    axios
-        .get("/players/scores")
-        .then(function (response) {
-            console.log("Scores:", response.data);
+// export const dbGetHighscores = function (callback) {
+//     axios
+//         .get(`/api/players/scores`)
+//         .then((response) => {
+//                 callback(response.data);
+//             })
+//             .catch((error) => {
+//                 console.error("Error retrieving achievements:", error);
+//             });
+// };
 
-            response.data.forEach(function (playerScore) {
-                console.log(
-                    "Player ID:",
-                    playerScore.player_id,
-                    "Score:",
-                    playerScore.score
-                );
-            });
-        })
-        .catch(function (error) {
-            console.error("Error:", error);
-        });
-};
-
-export const dbGetAchievements = function (callback) {
-    axios
-        .get(`/api/achievements`)
-        .then((response) => {
-            console.log("got", response.data);
-            callback(response.data);
-        })
+export const dbGetAchievements = () => {
+    return axios.get(`/api/achievements`)
+        .then((response) => response.data)
         .catch((error) => {
             console.error("Error retrieving achievements:", error);
+            throw error;
         });
 };
 
-export const dbGetPlayerAchievements = function (playerId, callback) {
-    axios
-        .get(`/api/player_achievements?player_id=${playerId}`)
-        .then((response) => {
-            console.log("got", response.data);
-            callback(response.data);
-        })
+export const dbGetPlayerAchievements = (playerId) => {
+    return axios.get(`/api/player_achievements?player_id=${playerId}`)
+        .then((response) => response.data)
         .catch((error) => {
             console.error("Error retrieving player achievements:", error);
+            throw error;
         });
 };
 
-export const dbLogin = function (username, password, callback) {
-    axios
-        .post("/api/login", { username, password })
-        .then((response) => {
-            console.log("Login successful");
-            callback(response.data);
-        })
-        .catch((error) => {
-            console.error("Error logging in:", error);
-        });
-};
 
-export const dbRegister = function (username, password, callback) {
-    axios
-        .post("/api/register", { username, password, email })
-        .then((response) => {
-            console.log("Register successful");
-            callback(response.data);
-        })
-        .catch((error) => {
-            console.error("Error registering:", error);
-        });
-};
+// export const dbLogin = function (username, password, callback) {
+//     axios
+//         .post("/api/login", { username, password })
+//         .then((response) => {
+//             console.log("Login successful");
+//             callback(response.data);
+//         })
+//         .catch((error) => {
+//             console.error("Error logging in:", error);
+//         });
+// };
 
-export const logout = function (callback) {
-    axios
-        .post("/api/logout")
-        .then((response) => {
-            console.log("Logout successful");
-            callback(response.data);
-        })
-        .catch((error) => {
-            console.error("Error logging out:", error);
-        });
-};
+// export const dbRegister = function (username, password, callback) {
+//     axios
+//         .post("/api/register", { username, password, email })
+//         .then((response) => {
+//             console.log("Register successful");
+//             callback(response.data);
+//         })
+//         .catch((error) => {
+//             console.error("Error registering:", error);
+//         });
+// };
+
+// export const logout = function (callback) {
+//     axios
+//         .post("/api/logout")
+//         .then((response) => {
+//             console.log("Logout successful");
+//             callback(response.data);
+//         })
+//         .catch((error) => {
+//             console.error("Error logging out:", error);
+//         });
+// };
