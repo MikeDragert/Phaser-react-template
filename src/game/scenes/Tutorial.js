@@ -83,7 +83,7 @@ export class Tutorial extends Player {
       0
     );
     const workBench = this.map.createLayer("workBench", tilemap_packed, 0, 0);
-    console.log("ICON SHEET", iconSpriteSheet);
+
     const codeItems = this.map.createLayer("codeItems", iconSpriteSheet, 0, 0);
 
     // Render Object Layers:
@@ -185,7 +185,6 @@ export class Tutorial extends Player {
         421, 420, 426, 425, 427, 428
       ],
       (sprite, tile) => {
-        console.log("CODEITEM: ", tile);
         this.progressTracker.collectItems(sprite, tile, codeItems);
         this.sendNewItemMessage(tile);
         let itemString = tile.properties.name.split("_").join(" ")
@@ -204,9 +203,11 @@ export class Tutorial extends Player {
 
     this.scene.launch("UserInterface");
     this.progressTracker.removeItems(codeItems);
+    console.log("MAP IN CREATE: ", this.map);
   }
 
   update() {
+    console.log("MAPI IN UPDATE: ", this.map);
     this.checkPlayerSize();
 
     let score = this.progressTracker.progressData.score || 0;

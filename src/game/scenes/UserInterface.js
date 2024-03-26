@@ -23,7 +23,6 @@ export class UserInterface extends Scene {
 
     this.miscTextListener = EventBus.on("miscText", (data = "AAAAAAA") => {
       if (data) {
-        console.log("DATA: ", data);
         this.textBox.setVisible(true);
         this.textBox.start(data, 20);
       }
@@ -31,12 +30,11 @@ export class UserInterface extends Scene {
 
     this.scoreListener = EventBus.on("scoreUpdate", (data) => {
       if (data > 0 && data != null) {
-        console.log("SCORE DATA: ", data);
         this.scoreText.setText(`${data}`);
       }
     });
-    
-    this.sacrificialText = this.add.text(0,0, "");
+
+    this.sacrificialText = this.add.text(0, 0, "");
 
     this.scoreText = this.add.text(30, 30, "0", {
       fontFamily: "Quicksand",
