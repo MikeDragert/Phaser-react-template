@@ -74,7 +74,7 @@ export function App() {
             pageContent = <Achievements allAchievements={allAchievements} playerAchievements={playerAchievements} />;
             break;
         case "login":
-            pageContent = <Login handleLogin={handleLogin} setUsername={setUsername} setPassword={setPassword} isLoggedIn={isLoggedIn} />;
+            pageContent = <Login handleLogin={handleLogin} setUsername={setUsername} setPassword={setPassword} isLoggedIn={isLoggedIn} username={username} password={password} error={error}/>;
             break;
         case "register":
             pageContent = <Register handleRegister={handleRegister} setUsername={setUsername} setPassword={setPassword} setEmail={setEmail}isLoggedIn={isRegistered} handleCheckEmail={handleCheckEmail} username={username} password={password} email={email} isEmailChecked={isEmailChecked} error={error} />;

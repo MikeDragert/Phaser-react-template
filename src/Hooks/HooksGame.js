@@ -409,7 +409,7 @@ export const HooksGame = () => {
         highscores,
         allAchievements,
         playerAchievements,
-        // handleLogin,
+        handleLogin,
         handleRegister,
         setUsername,
         setPassword,

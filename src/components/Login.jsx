@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Login = ({handleLogin, setUsername, setPassword, isLoggedIn}) => {
+const Login = ({handleLogin, setUsername, setPassword, isLoggedIn, username, password, error}) => {
     return (
         <div>
           {!isLoggedIn ? (
