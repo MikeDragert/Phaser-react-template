@@ -33,6 +33,7 @@ export class Preloader extends Scene {
     this.load.image("tilemap_packed", "tiles/tilemap_packed.png");
     this.load.image("sand_packed", "tiles/sand_packed.png");
     this.load.image("stone_packed", "tiles/stone_packed.png");
+    this.load.image("iconSpriteSheet", "items/iconSpriteSheet.png");
     this.load.image(
       "tilemap_characters_packed",
       "sprites/tilemap-characters_packed.png"
@@ -41,7 +42,7 @@ export class Preloader extends Scene {
       "nextPage",
       "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/assets/images/arrow-down-left.png"
     );
-    
+
     // Sprite Atlas'
     this.load.atlas(
       "spinning_coin",
@@ -54,7 +55,6 @@ export class Preloader extends Scene {
       "sprites/lilGreenGuy.json",
       { frameWidth: 24, frameHeight: 24 }
     );
-
 
     this.load.tilemapTiledJSON("tilemap", "maps/FirstAttempt.json");
     this.load.tilemapTiledJSON("newTutorial", "maps/newTutorial.json");

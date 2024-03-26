@@ -52,6 +52,16 @@ export class ProgressTracker {
     return false;
   }
 
+  collectItems(player, item, layer) {
+    layer.removeTileAt(item.x, item.y);
+    this.progressData.items.push({
+      uniqueItemName: item.properties.name,
+      item: {x: item.x, y: item.y,},
+    });
+    this.saveProgress(null);
+    return false
+  }
+
   // resets progress:
   // if (Phaser.Input.Keyboard.JustDown(this.s)) {
   //   this.progressTracker.resetProgress();
@@ -84,7 +94,7 @@ export class ProgressTracker {
       JSON.stringify(this.progressData)
     );
   }
-  
+
   // loads progress from local store/db call :
   // this.progressData = this.progressTracker.loadProgress();
   // const position = this.progressData.spritePosition;
@@ -104,7 +114,7 @@ export class ProgressTracker {
   die(player) {
     if (!this.died) {
       this.died = true;
-      
+
       setTimeout(() => {
         player.visible = false;
         player.body.moves = false;
@@ -120,6 +130,13 @@ export class ProgressTracker {
     level.scene.restart();
     level.player.visible = true;
     level.player.body.moves = true;
+  }
+
+  removeItems(layer) {
+    for (let item of this.progressData.items) {
+      console.log(item);
+      layer.removeTileAt(item.item.x, item.item.y)
+    }
   }
 }
 

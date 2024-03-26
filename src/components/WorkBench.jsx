@@ -131,7 +131,7 @@ class WorkBench extends React.Component {
     }
   }
 
-  removeInventoryItemFromBench = function(inventoryItemsToRemove) {
+  removeInventoryItemFromBench = function(inventoryItemsToRemove, functionCallbackList) {
     let currencyChange = 0;
     inventoryItemsToRemove.forEach(inventoryItem => {
       if (inventoryItem.item_type === ITEMTYPES.COIN) {
