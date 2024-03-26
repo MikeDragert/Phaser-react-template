@@ -215,8 +215,8 @@ export class Player extends Scene {
         player.anims.msPerFrame = 100;
         player.setFlipX(false);
       } else {
-        if (this.airMove < 12) {
-          player.body.velocity.x -= 8;
+        if (this.airMove < 15) {
+          player.body.velocity.x -= 5;
           this.airMove++;
         }
       }
@@ -228,8 +228,8 @@ export class Player extends Scene {
         player.anims.msPerFrame = 100;
         player.setFlipX(true);
       } else {
-        if (this.airMove < 12) {
-          player.body.velocity.x += 8;
+        if (this.airMove < 15) {
+          player.body.velocity.x += 5;
           this.airMove++;
         }
       }

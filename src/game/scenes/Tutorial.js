@@ -188,6 +188,8 @@ export class Tutorial extends Player {
         console.log("CODEITEM: ", tile);
         this.progressTracker.collectItems(sprite, tile, codeItems);
         this.sendNewItemMessage(tile);
+        let itemString = tile.properties.name.split("_").join(" ")
+        EventBus.emit("miscText", `${itemString} Get!`);
       },
       this
     );
