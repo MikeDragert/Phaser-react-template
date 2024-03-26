@@ -35,6 +35,7 @@ export class UserInterface extends Scene {
     });
 
     this.sacrificialText = this.add.text(0, 0, "");
+    this.sacrificialText2 = this.add.text(0, 0, "");
 
     this.scoreText = this.add.text(30, 30, "0", {
       fontFamily: "Quicksand",
