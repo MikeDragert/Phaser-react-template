@@ -14,7 +14,7 @@ import ItemContainer from "./ItemContainer.jsx";
 // import player_items from "../mock_data/player_items";
 // import items from "../mock_data/items";
 
-export const Home = ( {workBench, workbenchOpen, closeWorkbench, phaserRef, currentScene, showGame, openWorkbench, changeScene, getInventory, gameOpen} ) => {
+export const Home = ( {workBench, workbenchOpen, closeWorkbench, phaserRef, currentScene, showGame, openWorkbench, changeScene, getInventory, gameOpen, getItemCountByType} ) => {
     return (
         <div id="app">
             {workbenchOpen && <div>{workBench.getReactBench()}</div>}
@@ -24,11 +24,18 @@ export const Home = ( {workBench, workbenchOpen, closeWorkbench, phaserRef, curr
                 </button>
             )}
             <div>
-                <PhaserGame
-                    ref={phaserRef}
-                    currentActiveScene={currentScene}
-                    className={showGame ? "" : "appHidden"}
-                />
+                <div className="gameDiv">
+                  <PhaserGame
+                      ref={phaserRef}
+                      currentActiveScene={currentScene}
+                      className={showGame ? "" : "appHidden"}
+                  />
+                  {showGame &&
+                  <ItemContainer 
+                    items={getInventory()} 
+                    getItemCountByType={getItemCountByType}                    
+                  />}
+                </div>
                 {gameOpen && (
                     <button className="button" onClick={openWorkbench}>
                         Open Workbench
@@ -44,9 +51,6 @@ export const Home = ( {workBench, workbenchOpen, closeWorkbench, phaserRef, curr
                         Run 1
                     </button>
                 )}
-            </div>
-            <div>
-                <ItemContainer items={getInventory()} />
             </div>
         </div>
     );

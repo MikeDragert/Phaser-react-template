@@ -1,11 +1,8 @@
 .grid-item {
-    border: 1px solid black;
-    border-radius: 5px;
     padding: 10px;
-    color: black;
-    display: none; 
+    color: rgb(240, 240, 240);
 }
 
-.grid-item.has-item {
-    display: block; 
+.white-text {
+  color: rgb(240, 240, 240);
 }
