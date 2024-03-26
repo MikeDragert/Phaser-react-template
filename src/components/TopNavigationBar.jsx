@@ -1,7 +1,7 @@
 import React from "react";
 //import "./styles/TopNavigationBar.css";
 
-const TopNavigationBar = ({ isLoggedIn, setActivePage }) => {
+const TopNavigationBar = ({ isLoggedIn, setActivePage, handleLogout }) => {
 
     return (
         <nav className="top-navigation-bar">
@@ -32,7 +32,7 @@ const TopNavigationBar = ({ isLoggedIn, setActivePage }) => {
                 </div>
             ) : (
                 <div className="logout-link">
-                    <div onClick={()=>setActivePage("logout")}>Logout</div>
+                    <div onClick={handleLogout}>Logout</div>
                 </div>
             )}
         </nav>

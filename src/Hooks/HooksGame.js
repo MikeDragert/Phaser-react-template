@@ -101,6 +101,10 @@ export const HooksGame = () => {
         });
     };
 
+    const handleLogout = () => {
+        setIsLoggedIn(false);
+    };
+
     const handleCheckEmail = () => {
         dbCheckEmailExists(email, (data) => {
             setIsEmailChecked(true);
@@ -410,6 +414,7 @@ export const HooksGame = () => {
         allAchievements,
         playerAchievements,
         handleLogin,
+        handleLogout,
         handleRegister,
         setUsername,
         setPassword,

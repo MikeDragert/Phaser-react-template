@@ -42,6 +42,7 @@ export function App() {
         allAchievements,
         playerAchievements,
         handleLogin,
+        handleLogout,
         handleRegister,
         setUsername,
         setPassword,
@@ -90,6 +91,7 @@ export function App() {
                 <TopNavigationBar
                     isLoggedIn={isLoggedIn}
                     setActivePage={setActivePage}
+                    handleLogout={handleLogout}
                 />
             </header>
             {pageContent}
