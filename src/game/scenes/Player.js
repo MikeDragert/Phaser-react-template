@@ -240,7 +240,7 @@ export class Player extends Scene {
         player.anims.msPerFrame = 500;
       }
 
-      console.log(this.airMove);
+
     }
 
     this.executeJumpLogic();
