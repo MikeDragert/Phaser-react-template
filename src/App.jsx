@@ -55,6 +55,7 @@ export function App() {
         isEmailChecked,
         password,
         error,
+        getItemCountByType,
     } = HooksGame();
 
     // State to manage the active page
