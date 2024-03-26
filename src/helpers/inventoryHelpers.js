@@ -50,7 +50,8 @@ export const inventoryHelpers = () => {
     "Operator_%": ITEMTYPES.CODEOPERATOR,
     "Function_jumpPower": ITEMTYPES.CODEFUNCTION,
     "Function_playerSize": ITEMTYPES.CODEFUNCTION,
-    "Function_passKey": ITEMTYPES.CODEFUNCTION
+    "Function_passKey": ITEMTYPES.CODEFUNCTION,
+    "Larry": ITEMTYPES.DUCK
   };
 
   const inventoryReducer = (state, action) => {
