@@ -8,13 +8,37 @@ export class MainMenu extends Scene {
     super("MainMenu");
   }
 
+  changeScene() {
+    if (this.logoTween) {
+      this.logoTween.stop();
+      this.logoTween = null;
+    }
+
+    this.scene.start("Tutorial");
+  }
+
   create() {
     this.add.image(512, 384, "background");
 
-    this.logo = this.add.image(512, 300, "logo").setDepth(100);
+    this.logo = this.add.image(512, 400, "Labber_Logo").setDepth(100);
 
-    this.add
-      .text(512, 460, "Labber", {
+    // this.add
+    //   .text(512, 300, "Labber", {
+    //     fontFamily: "Arial Black",
+    //     fontSize: 38,
+    //     color: "#ffffff",
+    //     stroke: "#000000",
+    //     strokeThickness: 8,
+    //     align: "center",
+    //   })
+    //   .setDepth(100)
+    //   .setOrigin(0.5);
+
+    this.add.text(0,0, "")
+    this.add.text(0,0, "")
+
+    this.playButton = this.add
+      .text(100, 50, "Play!", {
         fontFamily: "Arial Black",
         fontSize: 38,
         color: "#ffffff",
@@ -23,18 +47,21 @@ export class MainMenu extends Scene {
         align: "center",
       })
       .setDepth(100)
-      .setOrigin(0.5);
+      .setOrigin(0.5)
+      .setInteractive()
+      .on("pointerdown", () => { this.changeScene() })
+      .on("pointerover", () => {
+        this.playButton.setStyle({
+          strokeThickness: 12
+        })
+      })
+      .on("pointerout", () => {
+        this.playButton.setStyle({
+          strokeThickness: 8
+        })
+      });
 
     EventBus.emit("current-scene-ready", this);
-  }
-
-  changeScene() {
-    if (this.logoTween) {
-      this.logoTween.stop();
-      this.logoTween = null;
-    }
-
-    this.scene.start("Tutorial");
   }
 
   moveLogo(reactCallback) {

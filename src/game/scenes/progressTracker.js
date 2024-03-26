@@ -56,10 +56,10 @@ export class ProgressTracker {
     layer.removeTileAt(item.x, item.y);
     this.progressData.items.push({
       uniqueItemName: item.properties.name,
-      item: {x: item.x, y: item.y,},
+      item: { x: item.x, y: item.y },
     });
     this.saveProgress(null);
-    return false
+    return false;
   }
 
   // resets progress:
@@ -134,8 +134,7 @@ export class ProgressTracker {
 
   removeItems(layer) {
     for (let item of this.progressData.items) {
-      console.log(item);
-      layer.removeTileAt(item.item.x, item.item.y)
+      layer.removeTileAt(item.item.x, item.item.y);
     }
   }
 }

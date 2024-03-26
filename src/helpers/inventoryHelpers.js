@@ -32,26 +32,26 @@ export const inventoryHelpers = () => {
   const itemMap = {
     //tileNumber : {name: itemName, type: itemType}
     // 158: {name:'Coin', type: ITEMTYPES.COIN}
-    "coin": ITEMTYPES.COIN,
-    "Number_1": ITEMTYPES.CODENUMBER,
-    "Number_2": ITEMTYPES.CODENUMBER,
-    "Number_3": ITEMTYPES.CODENUMBER,
-    "Number_4": ITEMTYPES.CODENUMBER,
-    "Number_5": ITEMTYPES.CODENUMBER,
-    "Number_6": ITEMTYPES.CODENUMBER,
-    "Number_7": ITEMTYPES.CODENUMBER,
-    "Number_8": ITEMTYPES.CODENUMBER,
-    "Number_9": ITEMTYPES.CODENUMBER,
-    "Number_10": ITEMTYPES.CODENUMBER,
+    coin: ITEMTYPES.COIN,
+    Number_1: ITEMTYPES.CODENUMBER,
+    Number_2: ITEMTYPES.CODENUMBER,
+    Number_3: ITEMTYPES.CODENUMBER,
+    Number_4: ITEMTYPES.CODENUMBER,
+    Number_5: ITEMTYPES.CODENUMBER,
+    Number_6: ITEMTYPES.CODENUMBER,
+    Number_7: ITEMTYPES.CODENUMBER,
+    Number_8: ITEMTYPES.CODENUMBER,
+    Number_9: ITEMTYPES.CODENUMBER,
+    Number_10: ITEMTYPES.CODENUMBER,
     "Operator_+": ITEMTYPES.CODEOPERATOR,
     "Operator_-": ITEMTYPES.CODEOPERATOR,
     "Operator_*": ITEMTYPES.CODEOPERATOR,
     "Operator_/": ITEMTYPES.CODEOPERATOR,
     "Operator_%": ITEMTYPES.CODEOPERATOR,
-    "Function_jumpPower": ITEMTYPES.CODEFUNCTION,
-    "Function_playerSize": ITEMTYPES.CODEFUNCTION,
-    "Function_passKey": ITEMTYPES.CODEFUNCTION,
-    "Larry": ITEMTYPES.DUCK
+    Function_jumpPower: ITEMTYPES.CODEFUNCTION,
+    Function_playerSize: ITEMTYPES.CODEFUNCTION,
+    Function_passKey: ITEMTYPES.CODEFUNCTION,
+    Larry: ITEMTYPES.DUCK,
   };
 
   const inventoryReducer = (state, action) => {
@@ -154,11 +154,9 @@ export const inventoryHelpers = () => {
       unique_item_name = sceneItem.item.properties.name;
     } else {
       name = sceneItem.item.name.split("-")[0];
-      unique_item_name = sceneItem.item.name
+      unique_item_name = sceneItem.item.name;
     }
 
-    console.log("NAME IN GEN ITEM: ", name);
-    console.log("ITEM TYPE: ", itemMap[name]);
     return {
       player_id: undefined,
       item_id: undefined,

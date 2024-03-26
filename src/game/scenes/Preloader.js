@@ -27,6 +27,7 @@ export class Preloader extends Scene {
 
     this.load.setPath("assets");
     // Images
+    this.load.image("Labber_Logo", "Labber_Logo.png" )
     this.load.image("logo", "logo.png");
     this.load.image("sky", "skies/sky.png");
     this.load.image("tutorial_plaque", "items/tile_0086.png");

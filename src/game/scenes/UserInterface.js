@@ -11,6 +11,11 @@ export class UserInterface extends Scene {
     super("UserInterface");
   }
 
+  changeScene() {
+    this.scene.stop("Tutorial");
+    this.scene.start("MainMenu");
+  }
+
   create() {
     message_count = 0;
 
@@ -55,6 +60,30 @@ export class UserInterface extends Scene {
       },
       padding: { left: null },
     });
+
+    this.mainMenuButton = this.add
+      .text(930, 60, "Main Menu", {
+        fontFamily: "Arial Black",
+        fontSize: 24,
+        color: "#ffffff",
+        stroke: "#000000",
+        strokeThickness: 8,
+        align: "center",
+      })
+      .setDepth(100)
+      .setOrigin(0.5)
+      .setInteractive()
+      .on("pointerdown", () => { this.changeScene() })
+      .on("pointerover", () => {
+        this.mainMenuButton.setStyle({
+          strokeThickness: 12
+        })
+      })
+      .on("pointerout", () => {
+        this.mainMenuButton.setStyle({
+          strokeThickness: 8
+        })
+      });
 
     this.scoreText.setScrollFactor(0);
   }
