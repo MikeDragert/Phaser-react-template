@@ -18,7 +18,7 @@ const Highscores = ({ highscores, isLoggedIn }) => {
           {highscores && highscores.map((score, index) => (
             <tr key={score.id}>
               <td>{index + 1}</td>
-              <td>{score.player_name}</td> 
+              <td>{score.username}</td> 
               <td>{score.score}</td>
             </tr>
           ))}
