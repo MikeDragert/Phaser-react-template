@@ -85,6 +85,8 @@ export class Player extends Scene {
     savedJumpAmount: 0,
   };
 
+  airMove = 0;
+  
   addToJumpAmount = function (currentAmount) {
     currentAmount +=
       this.jumpConfig.baseJumpAountIncreasePerAccum +
@@ -152,6 +154,7 @@ export class Player extends Scene {
   executeJumpLogic = function () {
     let player = this.player;
     if (this.startJump()) {
+      this.airMove = 0;
       if (this.initialJumpAmountNotSet()) {
         this.jumpValues.initialJumpAmount = this.jumpConfig.baseJumpAmount;
       }
@@ -206,28 +209,38 @@ export class Player extends Scene {
 
     if (left) {
       if (onFloor) {
+        this.airMove = 0;
         player.body.setVelocityX(-200);
         player.anims.play("player_move", true);
         player.anims.msPerFrame = 100;
         player.setFlipX(false);
       } else {
-        player.body.velocity.x -= 10;
+        if (this.airMove < 12) {
+          player.body.velocity.x -= 8;
+          this.airMove++;
+        }
       }
     } else if (right) {
       if (onFloor) {
+        this.airMove = 0;
         player.body.setVelocityX(200);
-
         player.anims.play("player_move", true);
         player.anims.msPerFrame = 100;
         player.setFlipX(true);
       } else {
-        player.body.velocity.x += 10;
+        if (this.airMove < 12) {
+          player.body.velocity.x += 8;
+          this.airMove++;
+        }
       }
     } else {
       if (onFloor) {
+        this.airMove = 0;
         player.body.setVelocityX(0);
         player.anims.msPerFrame = 500;
       }
+
+      console.log(this.airMove);
     }
 
     this.executeJumpLogic();
