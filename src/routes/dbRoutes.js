@@ -89,29 +89,40 @@ export const dbGetPlayerAchievements = (playerId) => {
 };
 
 
-// export const dbLogin = function (username, password, callback) {
-//     axios
-//         .post("/api/login", { username, password })
-//         .then((response) => {
-//             console.log("Login successful");
-//             callback(response.data);
-//         })
-//         .catch((error) => {
-//             console.error("Error logging in:", error);
-//         });
-// };
+export const dbLogin = function (username, password, callback) {
+    axios
+        .post("/api/login", { username, password })
+        .then((response) => {
+            console.log("Login successful");
+            callback(response.data);
+        })
+        .catch((error) => {
+            console.error("Error logging in:", error);
+        });
+};
 
-// export const dbRegister = function (username, password, callback) {
-//     axios
-//         .post("/api/register", { username, password, email })
-//         .then((response) => {
-//             console.log("Register successful");
-//             callback(response.data);
-//         })
-//         .catch((error) => {
-//             console.error("Error registering:", error);
-//         });
-// };
+export const dbRegister = function (username, email, password, callback) {
+    axios
+        .post("/api/players", { player: { username, email, password } })
+        .then((response) => {
+            console.log("Registration successful");
+            callback(response.data);
+        })
+        .catch((error) => {
+            console.error("Error registering:", error);
+        });
+};
+
+export const dbCheckEmailExists = function (email, callback) {
+    axios
+        .post("/api/players", { player: { email } }) 
+        .then((response) => {
+            callback(response.data);
+        })
+        .catch(() => {
+            console.log("Email doesn't exist in the database")
+        });
+}
 
 // export const logout = function (callback) {
 //     axios

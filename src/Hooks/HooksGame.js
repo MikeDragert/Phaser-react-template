@@ -15,6 +15,9 @@ import {
     dbGetAchievements,
     dbGetPlayerAchievements,
     dbGetHighscores,
+    dbCheckEmailExists,
+    dbRegister,
+    dbLogin,
 } from "../routes/dbRoutes.js";
 
 //mocks
@@ -77,54 +80,50 @@ export const HooksGame = () => {
     };
 
     // Login && Register State and Logic
-    // const [username, setUsername] = useState("");
-    // const [password, setPassword] = useState("");
-    // const [email, setEmail] = useState("");
-    // const [error, setError] = useState(null);
-    // const [isLoggedIn, setIsLoggedIn] = useState(false);
-    // const [isRegistered, setIsRegistered] = useState(false);
-    // const [isEmailChecked, setIsEmailChecked] = useState(false);
-    // const [emailExists, setEmailExists] = useState(false);
-    // const [usernameExists, setUsernameExists] = useState(false);
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("");
+    const [error, setError] = useState(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isRegistered, setIsRegistered] = useState(false);
+    const [isEmailChecked, setIsEmailChecked] = useState(false);
+    const [emailExists, setEmailExists] = useState(false);
+    const [usernameExists, setUsernameExists] = useState(false);
 
-    // const handleLogin = () => {
-    //     dbLogin(username, password, (data) => {
-    //         if (data.error) {
-    //             setError(data.error);
-    //         } else {
-    //             console.log("Login successful", data);
-    //             setIsLoggedIn(true);
-    //         }
-    //     });
-    // };
+    const handleLogin = () => {
+        dbLogin(username, password, (data) => {
+            if (data.error) {
+                setError(data.error);
+            } else {
+                console.log("Login successful", data);
+                setIsLoggedIn(true);
+            }
+        });
+    };
 
-    // const handleCheckEmail = () => {
-    //     dbCheckEmailExists(email, (data) => {
-    //         setIsEmailChecked(true);
-    //         setEmailExists(data.exists);
-    //     });
-    // };
+    const handleCheckEmail = () => {
+        dbCheckEmailExists(email, (data) => {
+            setIsEmailChecked(true);
+            setEmailExists(data.exists);
+        });
+    };
 
-    // const handleRegister = () => {
-    //     if (password !== confirmPassword) {
-    //         setError("Passwords do not match");
-    //         return;
-    //     }
+    const handleRegister = () => {
+        console.log('register button clicked!')
+        if (emailExists) {
+            setError("Email already exists");
+            return;
+        }
 
-    //     if (emailExists) {
-    //         setError("Email already exists");
-    //         return;
-    //     }
-
-    //     dbRegister(username, email, password, (data) => {
-    //         if (data.error) {
-    //             setError(data.error);
-    //         } else {
-    //             console.log("Registration successful:", data);
-    //             setIsRegistered(true);
-    //         }
-    //     });
-    // };
+        dbRegister(username, email, password, (data) => {
+            if (data.error) {
+                setError(data.error);
+            } else {
+                console.log("Registration successful:", data);
+                setIsRegistered(true);
+            }
+        });
+    };
 
     //highscores
     const [highscores, setHighscores] = useState([]);
@@ -411,11 +410,17 @@ export const HooksGame = () => {
         allAchievements,
         playerAchievements,
         // handleLogin,
-        // handleRegister,
-        // setUsername,
-        // setPassword,
-        // isLoggedIn,
-        // isRegistered,
-        // handleCheckEmail,
+        handleRegister,
+        setUsername,
+        setPassword,
+        isLoggedIn,
+        isRegistered,
+        handleCheckEmail,
+        username, 
+        email,
+        isEmailChecked,
+        password,
+        error,
+        setEmail,
     };
 };

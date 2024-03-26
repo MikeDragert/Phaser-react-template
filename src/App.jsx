@@ -45,9 +45,15 @@ export function App() {
         handleRegister,
         setUsername,
         setPassword,
+        setEmail,
         isLoggedIn,
         isRegistered,
         handleCheckEmail,
+        username, 
+        email,
+        isEmailChecked,
+        password,
+        error,
     } = HooksGame();
 
     // State to manage the active page
@@ -71,7 +77,7 @@ export function App() {
             pageContent = <Login handleLogin={handleLogin} setUsername={setUsername} setPassword={setPassword} isLoggedIn={isLoggedIn} />;
             break;
         case "register":
-            pageContent = <Register handleRegister={handleRegister} setUsername={setUsername} setPassword={setPassword} isLoggedIn={isRegistered} handleCheckEmail={handleCheckEmail} />;
+            pageContent = <Register handleRegister={handleRegister} setUsername={setUsername} setPassword={setPassword} setEmail={setEmail}isLoggedIn={isRegistered} handleCheckEmail={handleCheckEmail} username={username} password={password} email={email} isEmailChecked={isEmailChecked} error={error} />;
             break;
         default:
             pageContent = <Home workBench={workBench} workbenchOpen={workbenchOpen} closeWorkbench={closeWorkbench} phaserRef={phaserRef} currentScene={currentScene} showGame={showGame} openWorkbench={openWorkbench} changeScene={changeScene} getInventory={getInventory} inventoryList={inventoryList} gameOpen={gameOpen} />;
