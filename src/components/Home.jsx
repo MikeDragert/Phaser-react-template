@@ -24,11 +24,18 @@ export const Home = ( {workBench, workbenchOpen, closeWorkbench, phaserRef, curr
                 </button>
             )}
             <div>
-                <PhaserGame
-                    ref={phaserRef}
-                    currentActiveScene={currentScene}
-                    className={showGame ? "" : "appHidden"}
-                />
+                <div className="gameDiv">
+                  <PhaserGame
+                      ref={phaserRef}
+                      currentActiveScene={currentScene}
+                      className={showGame ? "" : "appHidden"}
+                  />
+                  {showGame &&
+                  <ItemContainer 
+                    items={getInventory()} 
+                    getItemCountByType={getItemCountByType}                    
+                  />}
+                </div>
                 {gameOpen && (
                     <button className="button" onClick={openWorkbench}>
                         Open Workbench
@@ -44,9 +51,6 @@ export const Home = ( {workBench, workbenchOpen, closeWorkbench, phaserRef, curr
                         Run 1
                     </button>
                 )}
-            </div>
-            <div>
-                <ItemContainer items={getInventory()} getItemCountByType={getItemCountByType} />
             </div>
         </div>
     );

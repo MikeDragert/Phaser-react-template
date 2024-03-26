@@ -1,28 +1,10 @@
 import React from 'react';
 import '../styles/DisplayItem.css';
-import { ITEMTYPES } from '../helpers/inventoryHelpers';
 
-const DisplayItem = ({ items, getItemCountByType }) => {
-  
-  let displayItems = [];
-  
-  let coinCount = getItemCountByType(ITEMTYPES.COIN);
-  let larryCount = getItemCountByType(ITEMTYPES.DUCK)
-  console.log('the coincount is: ', coinCount)
-
-
-  displayItems.push(<article><img src="../assets/icons/coin.png" alt="Coin"></img> <span>{coinCount}</span> </article>)
-  
-  // if (items.includes())
-
-
-
-  console.log(items);
-
-
+const DisplayItem = ({ itemName, itemImage, itemCount, className, subClassName }) => {
   return (
-        <div>683636
-            {displayItems}
+        <div className={className}>
+            <img src={itemImage} alt={itemName} className={subClassName}></img> { (itemCount >= 0) && <h2 className={subClassName+" white-text"}>{itemCount}</h2>}
         </div>
     );
 };
