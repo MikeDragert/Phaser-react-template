@@ -1,15 +1,30 @@
 import React from "react";
 //import "./Achievements.css";
 
-const Achievements = () => {
+const Achievements = ({ allAchievements, playerAchievements }) => {
+    const isAchievementObtained = (achievementId) => {
+        return playerAchievements.some(
+            (achievement) => achievement.achievement_id === achievementId
+        );
+    };
+
     return (
-        <div className="achievements">
+        <div>
             <h1>Achievements</h1>
-            <ol>
-                <li>First Blood</li>
-                <li>Double Kill</li>
-                <li>Triple Kill</li>
-            </ol>
+            <ul>
+                {allAchievements.map((achievement) => (
+                    <li
+                        key={achievement.id}
+                        style={{
+                            color: isAchievementObtained(achievement.id)
+                                ? "black"
+                                : "grey",
+                        }}
+                    >
+                        {achievement.name} - {achievement.description}
+                    </li>
+                ))}
+            </ul>
         </div>
     );
 };
