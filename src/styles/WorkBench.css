@@ -46,7 +46,7 @@
 .workbench {
   background-color: rgba(206, 205, 205, 0.274);
   width: 230px;
-  height: 270px;
+  height: 260px;
   border: 0;
   border-color: black;
   border-style: none;
@@ -54,15 +54,15 @@
 }
 
 .workbench-left {
-  position:absolute;
-  top:460px;
-  left:550px;
+  position:relative;
+  top:136px;
+  left:312px;
 }
 
 .workbench-right {
-  position:absolute;
-  top:460px;
-  left:800px;
+  position:relative;
+  top:136px;
+  left:-312px;
 }
 
 .currency {
@@ -70,9 +70,9 @@
   color: black;
   width : 200px;
   height: 50px;
-  position:absolute;
-  top: 275px;
-  left: 685px;  padding: 2px;
+  position:relative;
+  top: 110px;
+  left: 450px;  padding: 2px;
   display:flex;
   flex-direction: row;
   align-items: center;
@@ -89,11 +89,11 @@
 .noteContainer {
   color: black;
   background-color: rgba(241, 231, 91, 0.897);
-  width : 118px;
+  width : 116px;
   height: 105px;
-  position:absolute;
-  top: 428px;
-  left: 328px;
+  position:relative;
+  top: 213px;
+  left: 86px;
   padding: 5px;
   margin: 0px;
   font-family: Dearkatienbp;
