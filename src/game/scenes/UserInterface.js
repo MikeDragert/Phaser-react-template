@@ -100,7 +100,8 @@ export function triggerWorkbench(sprite, tile) {
     //if (this.e.isDown) {
     EventBus.emit("touch-flag", {
       tile: tile,
-      hint: `Workbench hint: ${this.sceneName}`,
+      //hint: `Workbench hint: ${this.sceneName}`,
+      hint: `If only you were smaller...`,
     }); //this is an example of how to set the hint when you open the workbench!
   }
   return false;
