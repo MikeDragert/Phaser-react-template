@@ -58,15 +58,19 @@ export const HooksGame = () => {
             jumpPower: {
                 name: "jumpPower",
                 callback: (jumpPower) => {
-                    phaserRef.current.scene.setJumpPower(jumpPower);
+                    if (phaserRef.current.scene instanceof Player) {
+                      phaserRef.current.scene.setJumpPower(jumpPower);
+                    }
                     return;
                 },
             },
             playerSize: {
                 name: "playerSize",
                 callback: (newSize) => {
+                  if (phaserRef.current.scene instanceof Player) {
                     phaserRef.current.scene.setPlayerSize(newSize);
-                    return;
+                  }
+                  return;
                 },
             },
             passKey: {
@@ -283,6 +287,11 @@ export const HooksGame = () => {
             openWorkbenchWithHint(data.hint);
         });
 
+        EventBus.removeListener("execute-workbench");
+        EventBus.on("execute-workbench", (data) => {
+          workBench.execute1();
+        });
+
     //todo: on change to inventory, update what is in the workbench
     inventoryList.forEach((inventoryItem) => {
       workBench.addInventoryItemToBench(
@@ -382,6 +391,10 @@ export const HooksGame = () => {
             workBench.execute1();
         });
 
+        EventBus.on("execute-workbench", (data) => {
+          workBench.execute1();
+        });
+
         return () => {
             EventBus.removeListener("touch-flag");
             EventBus.removeListener("keyEvent");
@@ -389,6 +402,7 @@ export const HooksGame = () => {
             EventBus.removeListener("give-me-inventory");
             EventBus.removeListener("clear-inventory");
             EventBus.removeListener("current-scene-ready");
+            EventBus.removeListener("execute-workbench");
         };
     }, [phaserRef]);
 

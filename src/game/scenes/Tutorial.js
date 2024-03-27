@@ -207,7 +207,7 @@ export class Tutorial extends Player {
   }
 
   update() {
-    console.log("MAPI IN UPDATE: ", this.map);
+    //console.log("MAPI IN UPDATE: ", this.map);
     this.checkPlayerSize();
 
     let score = this.progressTracker.progressData.score || 0;
