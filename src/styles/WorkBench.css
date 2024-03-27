@@ -14,28 +14,33 @@
 }
 
 .codeBlock {
-  border: 1px;
-  border-color: rgb(10, 10, 10, 0.1);
+  border: 5px;
+  border-color: rgba(255, 255, 255, 0.774);
   border-style: solid;
-  border-radius: 8px;
+  border-radius:12px;
   min-height: 26px;
   color: whitesmoke;
+  padding: 3px;
+  margin: 0px;
 }
 
 
 .codeBlock-Number {
   background-color: rgb(153, 60, 76);
-  width: 30px;
+  border-color: rgb(231, 185, 193);
+  min-width: 30px;
 }
 
 .codeBlock-Operator {
   background-color: rgb(61, 134, 43);
-  width: 100px; 
+  border-color: rgb(175, 223, 163);
+  min-width: 100px; 
 }
 
 .codeBlock-Function {
   background-color:rgb(15, 104, 145);
-  width: 200px;
+  border-color: rgb(147, 191, 211);
+  min-width: 200px;
 }
 
 .workbench {
@@ -50,14 +55,14 @@
 
 .workbench-left {
   position:absolute;
-  top:500px;
-  left:450px;
+  top:460px;
+  left:550px;
 }
 
 .workbench-right {
   position:absolute;
-  top:500px;
-  left:700px;
+  top:460px;
+  left:800px;
 }
 
 .currency {
@@ -66,9 +71,8 @@
   width : 200px;
   height: 50px;
   position:absolute;
-  top: 320px;
-  left: 590px;
-  padding: 2px;
+  top: 275px;
+  left: 685px;  padding: 2px;
   display:flex;
   flex-direction: row;
   align-items: center;
@@ -85,11 +89,11 @@
 .noteContainer {
   color: black;
   background-color: rgba(241, 231, 91, 0.897);
-  width : 104px;
-  height: 94px;
+  width : 118px;
+  height: 105px;
   position:absolute;
-  top: 476px;
-  left: 233px;
+  top: 428px;
+  left: 328px;
   padding: 5px;
   margin: 0px;
   font-family: Dearkatienbp;
