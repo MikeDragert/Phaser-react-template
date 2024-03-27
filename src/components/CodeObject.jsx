@@ -29,6 +29,15 @@ export class CodeObject {
       return newObject;
   }
 
+  getClassName = function() {
+    if (this._name.indexOf('Operator_-') === 0) {
+      return 'Operator_-';
+    }
+
+    return (this._name.split('-')[0]);
+  }
+
+
   get name() {
     return this._name;
   };

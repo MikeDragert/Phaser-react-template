@@ -236,9 +236,9 @@ export const HooksGame = () => {
     };
 
     const eventHandlerInventoryClear = function (mapId) {
-        let itemsRemoved = getInventoryForScene(mapId);
-        clearInventoryForScene(mapId);
-        workBench.removeInventoryItemFromBench(itemsRemoved);
+      let itemsRemoved = getInventoryForScene(mapId);
+      clearInventoryForScene(mapId);
+      workBench.removeInventoryItemFromBench(itemsRemoved);
     };
 
     useEffect(() => {
