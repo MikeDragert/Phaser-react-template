@@ -39,7 +39,7 @@ export class Tutorial extends Player {
     this.player = this.physics.add
       .sprite(position.x, position.y, "lilGreenGuy")
       .setScale(this._PLAYERDEFAULTSCALE)
-      .setDepth(1);
+      .setDepth(4);
 
     this.player.setBounce(0.2);
     this.player.body.setSize(15, 18);
@@ -67,6 +67,7 @@ export class Tutorial extends Player {
       "iconSpriteSheet",
       "iconSpriteSheet"
     );
+    const workBenchSet = this.map.addTilesetImage("Workbench-Front-36", "Work-Bench")
 
     // map layers
     const floorLayers = [tilemap_packed, sand_packed, stone_packed];
@@ -82,7 +83,7 @@ export class Tutorial extends Player {
       0,
       0
     );
-    const workBench = this.map.createLayer("workBench", tilemap_packed, 0, 0);
+    const workBench = this.map.createLayer("workBench", workBenchSet, 0, 0).setDepth(3);
 
     const codeItems = this.map.createLayer("codeItems", iconSpriteSheet, 0, 0);
 
@@ -160,7 +161,7 @@ export class Tutorial extends Player {
       this
     );
 
-    workBench.setTileIndexCallback(27, triggerWorkbench, this);
+    workBench.setTileIndexCallback(429, triggerWorkbench, this);
 
     let previousSave = false;
 

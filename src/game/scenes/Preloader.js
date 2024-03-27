@@ -43,6 +43,7 @@ export class Preloader extends Scene {
       "nextPage",
       "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/assets/images/arrow-down-left.png"
     );
+    this.load.image("Work-Bench", "items/Workbench-Front-36.png" )
 
     // Sprite Atlas'
     this.load.atlas(
