@@ -1,6 +1,7 @@
 import Sizer from "phaser3-rex-plugins/templates/ui/sizer/Sizer";
 import { EventBus } from "../EventBus";
 import { Scene } from "phaser";
+import { TouchSensor } from "@dnd-kit/core";
 
 export class Player extends Scene {
   constructor(sceneName) {
@@ -14,6 +15,7 @@ export class Player extends Scene {
 
   _PLAYERWIDTHADJUST = 120;
   _PLAYERDEFAULTSCALE = 2;
+  hasWorkbenchRunOnReset = false;
 
   fixPlayerOffset = function (currentDirectionLeft) {
     if (this.lastDirectionLeft !== currentDirectionLeft) {
@@ -46,6 +48,7 @@ export class Player extends Scene {
 
   create() {
     this.cursors = this.input.keyboard.createCursorKeys();
+    this.hasWorkbenchRunOnReset = false;
   }
 
   playerSizeMultiplier = 1;
@@ -198,6 +201,11 @@ export class Player extends Scene {
   //*******************************************************/
 
   update() {
+    if (!this.hasWorkbenchRunOnReset) {
+      EventBus.emit("execute-workbench");
+      this.hasWorkbenchRunOnReset = true;
+    }
+
     let player = this.player;
     const right = this.cursors.right.isDown;
     const left = this.cursors.left.isDown;
