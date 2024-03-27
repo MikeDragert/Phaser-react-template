@@ -54,106 +54,163 @@ const executeOnCodeListParamItem = function(codeObject, arrayIndexMap, callback)
   return (callback(codeObject));
 }
 
-  //reducer for updating the code function state
-  //todo:  this should be refactored...
-  const reducer = (state, action) => {
-
-    let newState = {...state, keys: [...state.keys]};
-    if (action.type === ACTION.MOVECODEOBJECTS) {
-      
-      let {fromIndexArrayMap, toIndexArrayMap, codeObject, currencyCost, indicators, copyCounter} = action.value;
-      
-      let codeObjectToMove = codeObject;
-      if (indicators.fromBench) {{
-        newState.copyCounter = copyCounter + 1;
-        codeObjectToMove = codeObject.clone(`-${newState.copyCounter}`) 
-      }}
-
-      // find the container that it is going to
-      if ((!indicators.toBench) || (indicators.newElement)) {
-        executeOnCodeListItem(newState, toIndexArrayMap, {
-          key: (keyArray) => {
-            let objIndex = keyArray.indexOf(codeObjectToMove);
-            if (objIndex > -1) {
-              keyArray.splice(objIndex, 1)
-            }
-            keyArray.push(codeObjectToMove);
-            return;
-          },
-          codeObject: (foundCodeObject) => {
-            if (foundCodeObject) {
-              if (foundCodeObject instanceof CodeObject) {
-                foundCodeObject.removeParamObject(codeObjectToMove)
-                foundCodeObject.setParamValue(codeObjectToMove)
-              }
-            }
-            return;
-          }
-        });
-      }
-      
-      if (!indicators.fromBench) {
-        // find the container that it came from
-        executeOnCodeListItem(newState, fromIndexArrayMap, {
-          key: (keyArray) => {
-            let objIndex = keyArray.indexOf(codeObject);
-            if (objIndex > -1) {
-              keyArray.splice(objIndex, 1)
-            } 
-            return;
-          },
-          codeObject: (foundCodeObject) => {
-            if (foundCodeObject instanceof CodeObject) {
-              foundCodeObject.removeParamObject(codeObject)
-            }
-            return;
-          }
-        });
-      }
-
-      newState.currentCurrency -= currencyCost;
-      if (newState.currentCurrency > newState.maxCurrency) {
-        newState.currentCurrency = newState.maxCurrency;
-      }
-      //console.log(codeObject, 'move From: ', fromIndexArrayMap, ' To: ', toIndexArrayMap, ' Current Currency: ', newState.currentCurrency, ' Currency cost: ',  currencyCost)
-    };
-
-    if (action.type === ACTION.SETMAX) {
-      let newMax = action.value;
-      let newCurrent = newState.currentCurrency + newMax - newState.maxCurrency; 
-      newState.maxCurrency = newMax;
-      newState.currentCurrency = newCurrent;
-    };
-
-    if (action.type === ACTION.ADDMAX) {
-      let newMax = newState.maxCurrency + action.value;
-      let newCurrent = newState.currentCurrency  + action.value;
-      newState.maxCurrency = newMax;
-      newState.currentCurrency = newCurrent;
-    };
-    
-    if (action.type === ACTION.CLEARITEMS) {
-      newState.currentCurrency = newState.maxCurrency;
-      newState.copyCounter = 1;
-      newState.keys = [
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-        []
-      ];
-    }
-
-    if (action.type === ACTION.SETHINT) {
-      newState.hint = action.value;
-    }
-
-    return newState
+const getCodeItemTypeNumber = function(codeItemName) {
+  switch(codeItemName.toLowerCase()) {
+    case "number":
+      return 1;
+    case "operator":
+      return 2;
+    case "function":
+      return 3;
+    default:
+      return 100;
   }
+}
+
+//inventory sort, to be called from dispatch
+// only for the bench list (keys[0])!!!
+const sortBenchItems = function(newCodeListKeyArray) {
+  return newCodeListKeyArray.sort( (codeItem1, codeItem2) => {
+    let codeItem1NameArray = codeItem1.name.split('_');
+    let codeItem2NameArray = codeItem2.name.split('_');
+
+    if ((codeItem1NameArray.length > 1) &&
+        (codeItem2NameArray.length > 1)) {
+
+      let codeItem1Type = getCodeItemTypeNumber(codeItem1NameArray[0]);
+      let codeItem2Type = getCodeItemTypeNumber(codeItem2NameArray[0]);
+    
+      if (codeItem1Type !== codeItem2Type) {
+        return codeItem1Type - codeItem2Type;
+      }
+
+      if (codeItem1.name.item_name === codeItem2.name.item_name) {
+        return 0;
+      }
+
+      let haveTwoCodeNumbers = (
+        (codeItem1NameArray[0].toLowerCase() === 'number') && 
+        (codeItem2NameArray[0].toLowerCase() === 'number') &&
+        (!Number.isNaN(Number(codeItem1NameArray[1]))) &&
+        (!Number.isNaN(Number(codeItem2NameArray[1])))
+      );
+    
+      if (haveTwoCodeNumbers) {
+        return Number(codeItem1NameArray[1]) - Number(codeItem2NameArray[1]);
+      }
+    } 
+
+    if (codeItem1.name < codeItem2.name) {
+      return -1;
+    }
+
+    return 1;
+  });
+}
+
+//reducer for updating the code function state
+//todo:  this should be refactored...
+const reducer = (state, action) => {
+
+  let newState = {...state, keys: [...state.keys]};
+  if (action.type === ACTION.MOVECODEOBJECTS) {
+    
+    let {fromIndexArrayMap, toIndexArrayMap, codeObject, currencyCost, indicators, copyCounter} = action.value;
+    
+    let codeObjectToMove = codeObject;
+    if (indicators.fromBench) {{
+      newState.copyCounter = copyCounter + 1;
+      codeObjectToMove = codeObject.clone(`-${newState.copyCounter}`) 
+    }}
+
+    // find the container that it is going to
+    if ((!indicators.toBench) || (indicators.newElement)) {
+      executeOnCodeListItem(newState, toIndexArrayMap, {
+        key: (keyArray) => {
+          let objIndex = keyArray.indexOf(codeObjectToMove);
+          if (objIndex > -1) {
+            keyArray.splice(objIndex, 1)
+          }
+          keyArray.push(codeObjectToMove);
+          return;
+        },
+        codeObject: (foundCodeObject) => {
+          if (foundCodeObject) {
+            if (foundCodeObject instanceof CodeObject) {
+              foundCodeObject.removeParamObject(codeObjectToMove)
+              foundCodeObject.setParamValue(codeObjectToMove)
+            }
+          }
+          return;
+        }
+      });
+      if (indicators.toBench) {
+        sortBenchItems(newState.keys[0]);
+      }
+    }
+    
+    if (!indicators.fromBench) {
+      // find the container that it came from
+      executeOnCodeListItem(newState, fromIndexArrayMap, {
+        key: (keyArray) => {
+          let objIndex = keyArray.indexOf(codeObject);
+          if (objIndex > -1) {
+            keyArray.splice(objIndex, 1)
+          } 
+          return;
+        },
+        codeObject: (foundCodeObject) => {
+          if (foundCodeObject instanceof CodeObject) {
+            foundCodeObject.removeParamObject(codeObject)
+          }
+          return;
+        }
+      });
+    }
+
+    newState.currentCurrency -= currencyCost;
+    if (newState.currentCurrency > newState.maxCurrency) {
+      newState.currentCurrency = newState.maxCurrency;
+    }
+    //console.log(codeObject, 'move From: ', fromIndexArrayMap, ' To: ', toIndexArrayMap, ' Current Currency: ', newState.currentCurrency, ' Currency cost: ',  currencyCost)
+  };
+
+  if (action.type === ACTION.SETMAX) {
+    let newMax = action.value;
+    let newCurrent = newState.currentCurrency + newMax - newState.maxCurrency; 
+    newState.maxCurrency = newMax;
+    newState.currentCurrency = newCurrent;
+  };
+
+  if (action.type === ACTION.ADDMAX) {
+    let newMax = newState.maxCurrency + action.value;
+    let newCurrent = newState.currentCurrency  + action.value;
+    newState.maxCurrency = newMax;
+    newState.currentCurrency = newCurrent;
+  };
+  
+  if (action.type === ACTION.CLEARITEMS) {
+    newState.currentCurrency = newState.maxCurrency;
+    newState.copyCounter = 1;
+    newState.keys = [
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      []
+    ];
+  }
+
+  if (action.type === ACTION.SETHINT) {
+    newState.hint = action.value;
+  }
+
+  return newState
+}
   
   const [codeList, dispatch] = useReducer(reducer, initialCodeListState);
   

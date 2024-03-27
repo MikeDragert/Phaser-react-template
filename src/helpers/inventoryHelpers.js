@@ -80,7 +80,7 @@ export const inventoryHelpers = () => {
         return Number(item1NameArray[1]) - Number(item2NameArray[1]);
       }
 
-      if (item1.item_ame < item2.item_name) {
+      if (item1.item_name < item2.item_name) {
         return -1;
       }
 
