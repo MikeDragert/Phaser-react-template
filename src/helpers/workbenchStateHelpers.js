@@ -127,7 +127,7 @@ const reducer = (state, action) => {
     if ((!indicators.toBench) || (indicators.newElement)) {
       executeOnCodeListItem(newState, toIndexArrayMap, {
         key: (keyArray) => {
-          let objIndex = keyArray.indexOf(codeObjectToMove);
+          let objIndex = keyArray.findIndex( codeItem => codeItem.getClassName() === codeObjectToMove.getClassName());
           if (objIndex > -1) {
             keyArray.splice(objIndex, 1)
           }
@@ -149,11 +149,11 @@ const reducer = (state, action) => {
       }
     }
     
-    if (!indicators.fromBench) {
+    if ((!indicators.fromBench) || (indicators.removingElement)) {
       // find the container that it came from
       executeOnCodeListItem(newState, fromIndexArrayMap, {
         key: (keyArray) => {
-          let objIndex = keyArray.indexOf(codeObject);
+          let objIndex = keyArray.findIndex( codeItem => codeItem.getClassName() === codeObjectToMove.getClassName());
           if (objIndex > -1) {
             keyArray.splice(objIndex, 1)
           } 
@@ -325,6 +325,7 @@ const reducer = (state, action) => {
   const executeMoveOfCodeObject = function(codeObject, fromArrayMap, toArrayMap, indicators) {
     let currencyCost = findCurrencyCostOfMove(codeObject, fromArrayMap, toArrayMap, indicators);
       
+    
     if (currencyCost <= codeList.currentCurrency) {
       dispatch({
         type: ACTION.MOVECODEOBJECTS, 

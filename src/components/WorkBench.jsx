@@ -59,17 +59,20 @@ class WorkBench extends React.Component {
     }
 
     if (inventoryItem.item_type < ITEMTYPES.CODEITEMMAX) {
+      let temp=undefined;
       switch (inventoryItem.item_type) {
         case ITEMTYPES.CODENUMBER:
-          return new CodeNumber(inventoryItem.item_name, Number(codeIdentifier));
+          temp = new CodeNumber(inventoryItem.item_name, Number(codeIdentifier));
+          return temp;
         case ITEMTYPES.CODEOPERATOR:
-          return new Operator(inventoryItem.item_name, codeIdentifier);
+          temp = new Operator(inventoryItem.item_name, codeIdentifier);
+          return temp;
         case ITEMTYPES.CODEFUNCTION:
           if (this.functionCallbackList[codeIdentifier] === undefined){
             return new CodeFunction(inventoryItem.item_name, undefined);
           }
-          let temp = new CodeFunction(inventoryItem.item_name, this.functionCallbackList[codeIdentifier].callback);
-          return temp
+          temp = new CodeFunction(inventoryItem.item_name, this.functionCallbackList[codeIdentifier].callback);
+          return temp;
       }
     }
     return undefined;
@@ -131,7 +134,7 @@ class WorkBench extends React.Component {
     }
   }
 
-  removeInventoryItemFromBench = function(inventoryItemsToRemove, functionCallbackList) {
+  removeInventoryItemFromBench = function(inventoryItemsToRemove) {
     let currencyChange = 0;
     inventoryItemsToRemove.forEach(inventoryItem => {
       if (inventoryItem.item_type === ITEMTYPES.COIN) {
@@ -145,7 +148,6 @@ class WorkBench extends React.Component {
     if (currencyChange > 0) {
       this.addToMaxCurrency(-currencyChange);
     }
-    
   }
 
   handleDragEnd = function(event) {
