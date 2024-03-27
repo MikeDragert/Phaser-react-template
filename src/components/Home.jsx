@@ -36,21 +36,21 @@ export const Home = ( {workBench, workbenchOpen, closeWorkbench, phaserRef, curr
                     getItemCountByType={getItemCountByType}                    
                   />}
                 </div>
-                {gameOpen && (
+                {/* {gameOpen && (
                     <button className="button" onClick={openWorkbench}>
                         Open Workbench
                     </button>
-                )}
-                {gameOpen && (
+                )} */}
+                {/* {gameOpen && (
                     <button className="button" onClick={changeScene}>
                         Change Scene
                     </button>
-                )}
-                {gameOpen && (
+                )} */}
+                {/* {gameOpen && (
                     <button type="button" onClick={() => workBench.execute1()}>
                         Run 1
                     </button>
-                )}
+                )} */}
             </div>
         </div>
     );
