@@ -54,11 +54,46 @@ export const inventoryHelpers = () => {
     Larry: ITEMTYPES.DUCK,
   };
 
+  //inventory sort, to be called from dispatch
+  const sortInventory = function(newInventoryList) {
+    return newInventoryList.sort( (item1, item2) => {
+      if (item1.item_type !== item2.item_type) {
+        return item1.item_type - item2.item_type;
+      }
+
+      if (item1.item_name === item2.item_name) {
+        return 0;
+      }
+      let item1NameArray = item1.item_name.split('_');
+      let item2NameArray = item2.item_name.split('_');
+
+      let haveTwoCodeNumbers = (
+        (item1NameArray.length > 1) &&
+        (item2NameArray.length > 1) &&
+        (item1NameArray[0].toLowerCase() === 'number') && 
+        (item2NameArray[0].toLowerCase() === 'number') &&
+        (!Number.isNaN(Number(item1NameArray[1]))) &&
+        (!Number.isNaN(Number(item2NameArray[1])))
+      );
+     
+      if (haveTwoCodeNumbers) {
+        return Number(item1NameArray[1]) - Number(item2NameArray[1]);
+      }
+
+      if (item1.item_ame < item2.item_name) {
+        return -1;
+      }
+
+      return 1;
+    });
+  }
+
   const inventoryReducer = (state, action) => {
     let newState = [...state];
     switch (action.type) {
       case INVENTORYACTION.ADDITEM:
         newState.push(action.data);
+        sortInventory(newState);
         break;
       case INVENTORYACTION.CLEAR:
         if (action.data.mapId) {
@@ -71,6 +106,7 @@ export const inventoryHelpers = () => {
         break;
       case INVENTORYACTION.LOADLIST:
         newState = action.data;
+        sortInventory(newState);
         break;
       default:
         break;
@@ -83,6 +119,7 @@ export const inventoryHelpers = () => {
       (item) => item.item_type < ITEMTYPES.CODEITEMMAX
     );
   };
+
 
   //get a list of items in the inventory, as per passed in options
   const getInventory = function (type = ITEMTYPES.ALL) {
@@ -146,7 +183,6 @@ export const inventoryHelpers = () => {
   };
 
   const generateItem = function (sceneItem) {
-    console.log("ITEM: ", sceneItem);
     let name = "";
     let unique_item_name = "";
     if (sceneItem.item.name === undefined) {
