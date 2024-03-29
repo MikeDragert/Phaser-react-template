@@ -1,4 +1,4 @@
-#Labber
+# Labber
 
 Labber is a 2d platformer game, where a player can collect functions, numbers, and operators that alter those functions. To give their character different abilities which enable the mto move around the map in different ways. 
 
