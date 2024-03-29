@@ -13,7 +13,7 @@ In the future we would like to work some more on the game, and polish some exist
 
 ## Our Githubs
 
-[Ryan Gardener](https://github.com/GardRyan)
+[Ryan Gardner](https://github.com/GardRyan)
 [Mike Dragert](https://github.com/MikeDragert)
 
 ## Screenshots
@@ -45,12 +45,24 @@ This template has been updated for:
 - [React 18.2.0](https://github.com/facebook/react)
 - [Vite 5.1.4](https://github.com/vitejs/vite)
 
-
 ## Requirements
 
-[Node.js](https://nodejs.org) is required to install dependencies and run scripts via `npm`.
-[Axios-http](https://axios-http.com/docs/intro) Is required to communicate with the backend.
-[Our Backend Repo](https://github.com/GardRyan/backend-phaser-game) Is required for saving and loading save progress data.
+- [Node.js](https://nodejs.org) is required to install dependencies and run scripts via `npm`.
+- [Axios-http](https://axios-http.com/docs/intro) Is required to communicate with the backend.
+- [Our Backend Repo](https://github.com/GardRyan/backend-phaser-game) Is required for saving and loading save progress data.
+- React/Javascript
+- NPM
+- Phaser
+- Vite
+- Axios
+- @dnd-kit/core
+
+## How to install
+
+- Clone this Repo
+- Run Npm install
+- Run with ```npm run dev```
+- Go [here](https://github.com/GardRyan/backend-phaser-game) for our backend repository.
 
 ## Available Commands
 
