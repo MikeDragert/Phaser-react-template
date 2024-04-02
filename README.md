@@ -13,6 +13,7 @@ In the future we would like to work some more on the game, and polish some exist
 
 ## Our Githubs
 
+[Jonas Kunz](https://github.com/Jonas-Kunz)
 [Ryan Gardner](https://github.com/GardRyan)
 [Mike Dragert](https://github.com/MikeDragert)
 
